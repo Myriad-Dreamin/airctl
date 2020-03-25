@@ -1,0 +1,27 @@
+{
+  "name": "airctl",
+  "version": "0.1.0",
+  "description": "airc control",
+  "main": "dist/index.js",
+  "repository": "github.com/Myriad-Dreamin/airctl",
+  "author": "Myriad-Dreamin",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "webpack-dev-server --config build/webpack.config.js --mode development"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.25",
+    "@types/react-dom": "^16.9.5",
+    "html-webpack-plugin": "^4.0.1",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
