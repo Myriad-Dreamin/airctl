@@ -1,5 +1,5 @@
-import * as React from "react";
+import * as React from 'react';
 
 export function AdminResourceForm() {
-    return <div> Admin ResourceForm </div>
+    return <div> Admin ResourceForm </div>;
 }

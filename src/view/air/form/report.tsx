@@ -1,5 +1,5 @@
-import * as React from "react";
+import * as React from 'react';
 
 export function Report() {
-    return <div> ReportRepair </div>
+    return <div> ReportRepair </div>;
 }

@@ -1,12 +1,12 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import {AppRouter, AppDependencyContainer} from "./view";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { AppRouter, AppDependencyContainer } from './view';
 
 const deps: AppDependencyContainer = {};
 
 ReactDOM.render(
     <div>
-        <AppRouter {...deps}/>
+        <AppRouter {...deps} />
     </div>,
-    document.querySelector('#app'),
+    document.querySelector('#app')
 );

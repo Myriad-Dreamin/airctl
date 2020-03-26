@@ -1,13 +1,11 @@
-import {FunctionComponent} from "react";
+import { FunctionComponent } from 'react';
 
 export enum RouteType {
     Exact,
     Length,
 }
 
-export interface DependencyContainer {
-
-}
+export interface DependencyContainer {}
 
 export type DC = DependencyContainer;
 
@@ -16,4 +14,3 @@ export interface RouteDesc {
     path: string;
     component: (dependencies: DependencyContainer) => FunctionComponent<any>;
 }
-

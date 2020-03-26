@@ -1,4 +1,4 @@
-import {MResponse, Response} from './protocol';
+import { MResponse, Response } from './protocol';
 import {
     AirID,
     AirState,
@@ -9,9 +9,8 @@ import {
     FullRoom,
     RoomID,
     SettableAirState,
-    User
-} from "./concept";
-
+    User,
+} from './concept';
 
 export interface UserService {
     // 用户注册
@@ -25,6 +24,7 @@ export interface UserService {
     Delete(id: Auth): MResponse;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 interface UserServiceV2 extends UserService {
     // 用户充值
@@ -72,9 +72,9 @@ interface AirServiceV3 extends AirService {
     Revoke(aid: AirID, id: Auth, force?: boolean): MResponse;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 interface AirServiceV4 extends AirServiceV3 {
-
     // 提交检修订单
     // 前台小哥发现空调用不了了，向系统提交检修订单
     RequireRepair(aid: AirID): MResponse;
@@ -107,7 +107,6 @@ export interface RoomService {
 }
 
 interface RoomServiceV2 extends RoomService {
-
     // 授权房间
     // 给用户授权该房间中设备的控制权
     Grant(rid: RoomID, id: Auth): MResponse;
@@ -121,6 +120,7 @@ interface RoomServiceV2 extends RoomService {
     CheckAirState(rid: RoomID): Response<FullAirState[]>;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 interface RoomServiceV3 extends RoomServiceV2 {
     // 授权房间

@@ -1,3 +1,1 @@
-
-
-export {MockAirService as AirService} from './mock/air';
+export { MockAirService as AirService } from './mock/air';

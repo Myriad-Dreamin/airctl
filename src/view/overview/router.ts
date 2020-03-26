@@ -1,26 +1,26 @@
-import {RouteDesc, RouteType} from "../common";
-import {OverviewForm} from "./form/form";
-import {OverviewList} from "./list/list";
-import {Dashboard} from "./dashboard/dashboard";
+import { RouteDesc, RouteType } from '../common';
+import { OverviewForm } from './form/form';
+import { OverviewList } from './list/list';
+import { Dashboard } from './dashboard/dashboard';
 
 function rel(r: string): string {
-    return "/overview/" + r
+    return '/overview/' + r;
 }
 
-export const OverviewRoutes : RouteDesc[] = [
+export const OverviewRoutes: RouteDesc[] = [
     {
         type: RouteType.Exact,
-        path: rel("dashboard"),
+        path: rel('dashboard'),
         component: () => Dashboard,
     },
     {
         type: RouteType.Exact,
-        path: rel("form"),
+        path: rel('form'),
         component: () => OverviewForm,
     },
     {
         type: RouteType.Exact,
-        path: rel("list"),
+        path: rel('list'),
         component: () => OverviewList,
-    }
+    },
 ];

@@ -1,20 +1,20 @@
-import {RouteDesc, RouteType} from "../common";
-import {AdminProfile} from "./profile/profile";
-import {AdminResourceForm} from "./form/resource";
+import { RouteDesc, RouteType } from '../common';
+import { AdminProfile } from './profile/profile';
+import { AdminResourceForm } from './form/resource';
 
 function rel(r: string): string {
-    return "/admin/" + r
+    return '/admin/' + r;
 }
 
-export const AdminRoutes : RouteDesc[] = [
+export const AdminRoutes: RouteDesc[] = [
     {
         type: RouteType.Exact,
-        path: rel("profile/:id"),
+        path: rel('profile/:id'),
         component: () => AdminProfile,
     },
     {
         type: RouteType.Exact,
-        path: rel("resource"),
+        path: rel('resource'),
         component: () => AdminResourceForm,
     },
 ];

@@ -20,6 +20,9 @@ module.exports = {
         }
     },
     rules: {
+        "semi": ['error', 'always'],
+        "camelcase": 0,
+        "@typescript-eslint/camelcase": 0,
         'prettier/prettier': 'error',
         // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
         // e.g. '@typescript-eslint/explicit-function-return-type': 'off',
@@ -45,4 +48,4 @@ module.exports = {
     env: {
         browser: true
     }
-}
+};

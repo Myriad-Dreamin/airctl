@@ -1,16 +1,13 @@
-import {AirID, AirState, Auth, BAuth, FullAirState, FullRoom, RoomID, SettableAirState} from "./concept";
-import {MResponse, Response} from "./protocol";
-import {AirService, RoomService, UserService} from "./service-concept";
+import { AirID, AirState, Auth, BAuth, FullAirState, FullRoom, RoomID, SettableAirState } from './concept';
+import { MResponse, Response } from './protocol';
+import { AirService, RoomService, UserService } from './service-concept';
 
+interface UserRegisterRequest extends BAuth {}
 
-interface UserRegisterRequest extends BAuth {
-}
-
-interface UserDeleteRequest extends Auth {
-}
+interface UserDeleteRequest extends Auth {}
 
 interface UserPayRequest extends Auth {
-    money: number
+    money: number;
 }
 
 export interface RemoteUserService extends UserService {
@@ -43,14 +40,11 @@ interface AirRevokeRequest extends AirModifyContext {
     force: boolean;
 }
 
-interface AirCheckStateRequest extends AirModifyContext {
-}
+interface AirCheckStateRequest extends AirModifyContext {}
 
-interface AirRequireRepairRequest extends AirModifyContext {
-}
+interface AirRequireRepairRequest extends AirModifyContext {}
 
-interface AirSetStateRequest extends AirModifyContext, SettableAirState {
-}
+interface AirSetStateRequest extends AirModifyContext, SettableAirState {}
 
 export interface RemoteAirService extends AirService {
     create(req: AirCreateRequest): Response<AirID>;
@@ -92,9 +86,7 @@ interface RoomRevokeRequest extends RoomModifyContext {
     force: boolean;
 }
 
-interface RoomCheckAirStateRequest extends RoomModifyContext {
-}
-
+interface RoomCheckAirStateRequest extends RoomModifyContext {}
 
 export interface RemoteRoomService extends RoomService {
     create(req: RoomCreateRequest): Response<RoomID>;
