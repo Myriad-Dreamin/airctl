@@ -8,14 +8,24 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "webpack-dev-server --config build/webpack.config.js --mode development"
+    "dev": "webpack-dev-server --config build/webpack.config.js --mode development",
+    "prepublish": "yarn run build && yarn run test",
+    "t": "./node_modules/.bin/mocha.cmd --reporter spec --require ts-node/register",
+    "b": "./node_modules/.bin/mocha.cmd --prof --reporter spec --require ts-node/register",
+    "bench": "yarn run b src/**/*.bench.ts",
+    "test": "yarn run t src/**/*.test.ts"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
     "@types/react": "^16.9.25",
     "@types/react-dom": "^16.9.5",
     "@types/react-router-dom": "^5.1.3",
+    "chai": "^4.2.0",
     "html-webpack-plugin": "^4.0.1",
+    "mocha": "^7.1.1",
     "ts-loader": "^6.2.2",
+    "ts-node": "^8.8.1",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-bundle-analyzer": "^3.6.1",

@@ -1,4 +1,3 @@
 
 
-import {InternalAirService as AirService} from './air';
-export {AirService};
+export {MockAirService as AirService} from './mock/air';
