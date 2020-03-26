@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "add-hook": "git config core.hooksPath .githooks",
     "dev": "webpack-dev-server --config build/webpack.config.js --mode development",
     "prepublish": "yarn run build && yarn run test",
     "t": "./node_modules/.bin/mocha.cmd --reporter spec --require ts-node/register",
