@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "running test"
+yarn run test
