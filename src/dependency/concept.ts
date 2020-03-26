@@ -1,6 +1,6 @@
 // 一个用户可以被哪些字段唯一确认？
 interface FullUserIdentifiers {
-    readonly phone_number: number;
+    phone_number: number;
     // 用户在系统中被分配的增量ID
     // id?: number;
     // 昵称
@@ -31,15 +31,15 @@ export type DegreeUnit = CelsiusDegree;
 
 // 描述一个空调数据对象
 export interface FullAirState {
-    readonly aid: AirID;
-    readonly serialNumber: string;
-    readonly available: boolean;
-    readonly is_on: boolean;
+    aid: AirID;
+    serialNumber: string;
+    available: boolean;
+    is_on: boolean;
     // 在未来的版本中可能会开启
     // repairing: boolean;
     target_degree: CelsiusDegree;
     // 空调造成的环境温度，只读
-    readonly degree: CelsiusDegree;
+    degree: CelsiusDegree;
 }
 
 // 描述一个真实世界的空调对象

@@ -44,9 +44,7 @@ export interface AirService {
     // 获取空调ID
     // 获取空调在系统中的ID
     GetID(serialNumber: string): Response<AirID>;
-}
 
-interface AirServiceV2 extends AirService {
     // 授权空调
     // 给用户授权该空调的控制权
     Grant(aid: AirID, id: Auth): MResponse;
@@ -64,7 +62,7 @@ interface AirServiceV2 extends AirService {
     SetState(aid: AirID, airState: SettableAirState): MResponse;
 }
 
-interface AirServiceV3 extends AirServiceV2 {
+interface AirServiceV3 extends AirService {
     // 授权空调
     // 可以无视用户是否欠费，强制给用户控制空调的权力
     Grant(aid: AirID, id: Auth, force?: boolean): MResponse;

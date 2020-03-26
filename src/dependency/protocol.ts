@@ -1,7 +1,7 @@
 // 一个响应携带唯一的全局标识
 export interface SimplifiedResponse<T> {
     // 标识
-    code: number;
+    readonly code: number;
     data?: T;
 }
 
@@ -11,13 +11,20 @@ export interface Payload<T> extends SimplifiedResponse<T> {
 }
 
 // 一个响应是否携带数据是可选的
-export type Response<T> = Payload<T> | SimplifiedResponse<T>;
+export type Response<T> = Payload<T> | SimplifiedResponse<any>;
 
 // 判断是否是有效负载
 export function isOK<T>(r: Response<T>): r is Payload<T> {
     return r.code === 0
 }
 
+export function OK<T>(t: Payload<T>) {
+    return t
+}
+
+export const JustOK = {
+    code: 0,
+};
 
 // 错误上下文由标识唯一确认，如果不知道标识，data的类型暂时未知
 type Reason = any;
@@ -27,11 +34,22 @@ export type MResponse = SimplifiedResponse<Reason>;
 type dataCallback<T> = (data: T) => void;
 type errCallback = (code: number, data?: any) => void
 
+class MatchError extends Error {
+    public data: any;
+
+    constructor(message: string, data: any) {
+        super(message);
+        this.data = data;
+    }
+}
+
 export function matchResponse<T>(r: Response<T>, onData: dataCallback<T>, onErr?: errCallback) {
     if (isOK(r)) {
         // 我们不会检查在运行时，r.data是否存在
         onData(r.data)
     } else if (onErr !== undefined) {
         onErr(r.code, r.data);
+    } else {
+        throw new MatchError("match error", r);
     }
 }
