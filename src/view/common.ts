@@ -5,13 +5,15 @@ export enum RouteType {
     Length,
 }
 
-export interface Dependencies {
+export interface DependencyContainer {
 
 }
+
+export type DC = DependencyContainer;
 
 export interface RouteDesc {
     type: RouteType;
     path: string;
-    component: (dependencies: Dependencies) => FunctionComponent<any>;
+    component: (dependencies: DependencyContainer) => FunctionComponent<any>;
 }
 

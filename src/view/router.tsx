@@ -3,7 +3,7 @@ import {HashRouter, Route, Switch} from 'react-router-dom';
 import {OverviewRoutes} from "./overview/router";
 import {AirRoutes} from "./air/router";
 import {UserRoutes} from "./user/router";
-import {Dependencies, RouteDesc, RouteType} from "./common";
+import {DC, RouteDesc, RouteType} from "./common";
 import {Welcome} from "./welcome";
 // import {RoomRoutes} from "./room/router";
 import {AdminRoutes} from "./admin/router";
@@ -26,7 +26,7 @@ const Routes: RouteDesc[] = [
 
 checkRoutes(Routes);
 
-export const InternalRouter = (props: Dependencies) => (
+export const InternalRouter = (props: DC) => (
     <HashRouter>
         <Switch>
             {Routes.map((desc) => {

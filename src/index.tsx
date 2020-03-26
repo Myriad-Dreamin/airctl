@@ -1,10 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {AppRouter, Dependencies} from "./view";
+import {AppRouter, AppDependencyContainer} from "./view";
 
-const deps:Dependencies = {
-
-};
+const deps: AppDependencyContainer = {};
 
 ReactDOM.render(
     <div>

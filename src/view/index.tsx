@@ -1,4 +1,2 @@
-
-
 export {InternalRouter as AppRouter} from './router';
-export {Dependencies} from './common';
+export {DependencyContainer as AppDependencyContainer} from './common';
