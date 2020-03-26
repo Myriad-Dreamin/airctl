@@ -1,9 +1,14 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {App} from "./view";
+import {AppRouter, Dependencies} from "./view";
 
+const deps:Dependencies = {
+
+};
 
 ReactDOM.render(
-    <App/>,
+    <div>
+        <AppRouter {...deps}/>
+    </div>,
     document.querySelector('#app'),
 );

@@ -1,5 +1,4 @@
-import * as React from 'react';
 
-export function App() {
-    return <div> Air Control </div>
-}
+
+export {InternalRouter as AppRouter} from './router';
+export {Dependencies} from './common';
