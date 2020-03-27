@@ -1,4 +1,4 @@
-import { RouteDesc, RouteType } from '../common';
+import { RouteDesc, RouteType } from '../../lib/router';
 import { UserRegisterForm } from './form/register';
 import { UserList } from './list/list';
 import { UserProfile } from './profile/profile';
@@ -6,7 +6,7 @@ import { UserPrivilegeForm } from './profile/privilege';
 import { UserPay } from './page/pay';
 
 function rel(r: string): string {
-    return '/user/' + r;
+    return 'user/' + r;
 }
 
 export const UserRoutes: RouteDesc[] = [

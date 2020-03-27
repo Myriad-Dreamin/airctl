@@ -1,10 +1,10 @@
-import { RouteDesc, RouteType } from '../common';
+import { RouteDesc, RouteType } from '../../lib/router';
 import { OverviewForm } from './form/form';
 import { OverviewList } from './list/list';
 import { Dashboard } from './dashboard/dashboard';
 
 function rel(r: string): string {
-    return '/overview/' + r;
+    return 'overview/' + r;
 }
 
 export const OverviewRoutes: RouteDesc[] = [

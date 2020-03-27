@@ -1,10 +1,10 @@
-import { RouteDesc, RouteType } from '../common';
+import { RouteDesc, RouteType } from '../../lib/router';
 import { Report } from './form/report';
 import { AirList } from './list/list';
 import { AirInspect } from './page/inspect';
 
 function rel(r: string): string {
-    return '/air/' + r;
+    return 'air/' + r;
 }
 
 export const AirRoutes: RouteDesc[] = [

@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 export function Welcome() {
     // noinspection HtmlUnknownAnchorTarget
     return (
         <div>
-            Air Control
-            <a href="#/overview/form">表单</a>
+            Welcome To&nbsp;
+            <Link to="/app">AirControlSys</Link>
         </div>
     );
 }

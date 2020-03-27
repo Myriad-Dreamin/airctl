@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { AppRouter, AppDependencyContainer } from './view';
+import { AppDependencyContainer, AppRouter } from './view';
 import { MockAirService } from './service/mock/air';
 import { MockData } from './mock/indes';
 
@@ -15,12 +15,9 @@ async function main() {
         }),
     };
 
-    ReactDOM.render(
-        <div>
-            <AppRouter {...deps} />
-        </div>,
-        document.querySelector('#app')
-    );
+    const App = AppRouter(deps);
+
+    ReactDOM.render(<App />, document.querySelector('#app'));
 }
 
 main().catch(console.error);
