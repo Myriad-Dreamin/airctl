@@ -43,13 +43,21 @@ class MatchError extends Error {
     }
 }
 
-export function matchResponse<T>(r: Response<T>, onData: dataCallback<T>, onErr?: errCallback) {
+export function matchResponse<T>(r: Response<T>, onData: dataCallback<T>, onErr?: errCallback): any {
     if (isOK(r)) {
         // 我们不会检查在运行时，r.data是否存在
-        onData(r.data);
+        return onData(r.data);
     } else if (onErr !== undefined) {
-        onErr(r.code, r.data);
+        return onErr(r.code, r.data);
     } else {
-        throw new MatchError('match error', r);
+        console.error(new MatchError('match error', r), r);
     }
+}
+
+function Id(e: any) {
+    return e;
+}
+
+export function unwrap<T>(r: Response<T>): T {
+    return matchResponse(r, Id);
 }

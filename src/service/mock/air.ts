@@ -37,9 +37,17 @@ export class MockAirService implements AirService {
     protected inc = 0;
 
     constructor(options?: { initialAirs?: FullAirState[] }) {
-        this.airs = options?.initialAirs || [];
-        this.inc = 1;
         this.airMp = new Map<string, FullAirState>();
+        if (options?.initialAirs) {
+            const airs = options?.initialAirs;
+            this.airs = airs;
+            for (const air of airs) {
+                this.airMp.set(air.serialNumber, air);
+            }
+        } else {
+            this.airs = [];
+        }
+        this.inc = this.airs.length + 1;
     }
 
     Create(serialNumber: string): Payload<AirID> | SimplifiedResponse<any> {

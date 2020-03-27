@@ -1,2 +1,4 @@
 export { InternalRouter as AppRouter } from './router';
-export { DependencyContainer as AppDependencyContainer } from './common';
+import { DependencyContainer } from './common';
+
+export type AppDependencyContainer = DependencyContainer;
