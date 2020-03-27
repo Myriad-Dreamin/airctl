@@ -1,0 +1,44 @@
+.logo {
+    height: 32px;
+    margin: 16px;
+    color: white;
+    text-align: center;
+}
+
+.logo-left {
+    font-size: 18px;
+}
+
+.logo-mid {
+    font-size: 20px;
+}
+
+.logo-right {
+    font-size: 18px;
+}
+
+.site-layout-sub-header-background {
+    background: #fff;
+    display: flex;
+    box-shadow:0 1px 4px rgba(0,21,41,.08);
+}
+
+.site-layout-background {
+    background: #f0f2f5;
+}
+
+.trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.trigger:hover {
+    color: #1890ff;
+}
+
+.global-layout {
+    min-height: 100vh;
+}

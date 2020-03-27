@@ -1,5 +1,6 @@
 import { JSXElementConstructor } from 'react';
 import { AsyncComponent } from '../lib/hoc';
+import { Layout, Menu, Modal } from 'antd';
 
 type componentT<T> = () => Promise<{ default: T }>;
 
@@ -12,8 +13,6 @@ function makeComponent<T extends keyof JSX.IntrinsicElements | JSXElementConstru
         return (await component()).default;
     });
 }
-
-import { Modal } from 'antd';
 
 export const antd = {
     Card: makeComponent(
@@ -29,4 +28,6 @@ export const antd = {
         () => import('antd/lib/divider')
     ),
     Modal,
+    Layout,
+    Menu,
 };
