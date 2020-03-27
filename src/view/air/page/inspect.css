@@ -1,0 +1,31 @@
+
+.form-sub-title {
+    margin-bottom: 20px;
+    color: rgba(0,0,0,.85);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.5715;
+}
+
+.form-container {
+    height: 100vh;
+    background: #f0f2f5;
+}
+
+.form-item-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.state-dot {
+    position: relative;
+    top: -1px;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    vertical-align: middle;
+    border-radius: 50%;
+}
+.card {
+    margin: 0 24px;
+}

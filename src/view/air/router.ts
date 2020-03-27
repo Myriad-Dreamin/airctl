@@ -21,6 +21,6 @@ export const AirRoutes: RouteDesc[] = [
     {
         type: RouteType.Exact,
         path: rel('inspect'),
-        component: () => AirInspect,
+        component: AirInspect,
     },
 ];
