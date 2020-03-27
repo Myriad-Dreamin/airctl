@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import queryString from 'query-string';
-import { DependencyContainer } from '../../common';
+import { DependencyContainer } from '../../../lib/common';
 import { SimplifiedResponse, unwrap } from '../../../dependency/protocol';
 import styles from './inspect.css';
 import { AirState } from '../../../dependency/concept';
@@ -21,18 +21,26 @@ function reportError(err: ErrorWithData) {
     }, 3000);
 }
 
+interface QueryState {
+    serial_number?: string;
+    aid?: string;
+    raw?: string;
+}
+
 export function AirInspect({ airService }: DependencyContainer) {
     return (props: RouteComponentProps) => {
         const [, setAirID] = useState(0);
         const [airState, setAirState] = useState<AirState | undefined>(undefined);
+        const [query, setQuery] = useState<QueryState>({});
         const [editing, setEditing] = useState(false);
         const swapEdit = () => setEditing(!editing);
-        console.log('rerender');
+        console.log('rerender', props.location.search);
 
-        const query: {
-            serial_number?: string;
-            aid?: string;
-        } = queryString.parse(props.location.search);
+        if (query.raw !== props.location.search) {
+            let newQuery = queryString.parse(props.location.search);
+            newQuery.raw = props.location.search;
+            setQuery(newQuery);
+        }
 
         const fetchState = useCallback(() => {
             let aid: number;
@@ -54,7 +62,7 @@ export function AirInspect({ airService }: DependencyContainer) {
 
             setAirID(aid);
             setAirState(unwrap(airService.CheckState(aid)));
-        }, []);
+        }, [query]);
         useEffect(fetchState);
 
         const modify = () => console.log('click todo');
