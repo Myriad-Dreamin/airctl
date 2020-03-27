@@ -1,5 +1,9 @@
 export interface I18nStaticVars {
     global: {
+        locale_name: {
+            zh: string;
+            en: string;
+        }
         sidebar_name: {
             overview: {
                 dashboard: string;

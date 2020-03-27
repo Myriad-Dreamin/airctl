@@ -32,17 +32,17 @@ export function AirInspect({ airService }: DependencyContainer) {
         const [, setAirID] = useState(0);
         const [airState, setAirState] = useState<AirState | undefined>(undefined);
         const [query, setQuery] = useState<QueryState>({});
-        const [editing, setEditing] = useState(false);
-        const swapEdit = () => setEditing(!editing);
-        console.log('rerender', props.location.search);
+        const [, setEditing] = useState(false);
+        const swapEdit = () => useCallback(() => setEditing((e) => !e), []);
+        console.log('rerender');
 
         if (query.raw !== props.location.search) {
-            let newQuery = queryString.parse(props.location.search);
+            const newQuery = queryString.parse(props.location.search);
             newQuery.raw = props.location.search;
             setQuery(newQuery);
         }
 
-        const fetchState = useCallback(() => {
+        useEffect(() => {
             let aid: number;
             if (query.aid !== undefined) {
                 aid = Number.parseInt(query.aid);
@@ -63,7 +63,6 @@ export function AirInspect({ airService }: DependencyContainer) {
             setAirID(aid);
             setAirState(unwrap(airService.CheckState(aid)));
         }, [query]);
-        useEffect(fetchState);
 
         const modify = () => console.log('click todo');
 

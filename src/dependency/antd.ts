@@ -1,6 +1,6 @@
 import { JSXElementConstructor } from 'react';
 import { AsyncComponent } from '../lib/hoc';
-import { Layout, Menu, Modal } from 'antd';
+import { Dropdown, Layout, Menu, Modal } from 'antd';
 
 type componentT<T> = () => Promise<{ default: T }>;
 
@@ -27,6 +27,7 @@ export const antd = {
         () => import('antd/lib/divider/style'),
         () => import('antd/lib/divider')
     ),
+    Dropdown,
     Modal,
     Layout,
     Menu,

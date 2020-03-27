@@ -1,18 +1,43 @@
 import * as React from 'react';
-import { FunctionComponent, useCallback, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { antd } from '../../dependency/antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
+import { ApiFilled, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './main-layout.css';
 import { Link } from 'react-router-dom';
 import { context } from '../../context';
 
 export function MainLayout(C: FunctionComponent<any>) {
-    const { I18nContext: i18n } = context;
-    const sidebar_name = i18n.statics.global.sidebar_name;
+    let { I18nContext: i18n } = context;
+    let sidebar_name = i18n.statics.global.sidebar_name;
+    function resetI18n() {
+        i18n  = context.I18nContext;
+        sidebar_name = i18n.statics.global.sidebar_name;
+    }
 
     return function (props: any) {
         const [collapsed, setCollapsed] = useState(false);
         const swapCollapsed = useCallback(() => setCollapsed((c) => !c), []);
+        const [localeDropdownVisible, setLocaleDropdownVisible] = useState(false);
+        const [locale, setLocale] = useState(context.getLocale());
+        useEffect(resetI18n, [locale]);
+        const handleMenuClick = useCallback((e) => {
+            if (e.key != context.getLocale()) {
+                context.dispatchLocale(e.key).then(() => {
+                    setLocale(e.key);
+                    resetI18n();
+                }).catch(console.error);
+            }
+        }, []);
+
+        const menu = (
+            <antd.Menu onClick={handleMenuClick}>
+                <context.ReactContext.Provider value={{locale}}/>
+                <antd.Menu.Item key="zh">
+                    <span>简体中文</span><span className={styles['locale-dropdown-right-item']}>{i18n.statics.global.locale_name.zh}</span></antd.Menu.Item>
+                <antd.Menu.Item key="en"><span>English</span>
+                    <span className={styles['locale-dropdown-right-item']}>{i18n.statics.global.locale_name.en}</span></antd.Menu.Item>
+            </antd.Menu>
+        );
         return (
             <antd.Layout key="global-layout" className={styles['global-layout']}>
                 <antd.Layout.Sider
@@ -128,7 +153,8 @@ export function MainLayout(C: FunctionComponent<any>) {
                                     <UserOutlined />
                                     <span>{sidebar_name.room.title}</span>
                                 </span>
-                            }/>
+                            }
+                        />
                         <antd.Menu.Item key="admin-2">
                             <UserOutlined />
                             <Link to="/app/admin/resource" className="nav-text">
@@ -146,9 +172,22 @@ export function MainLayout(C: FunctionComponent<any>) {
                 <antd.Layout key="global-sub-layout">
                     <antd.Layout.Header className={styles['site-layout-sub-header-background']} style={{ padding: 0 }}>
                         {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                            className: styles['trigger'],
+                            className: styles['trigger'] + ' ' + styles['global-header-item'],
                             onClick: swapCollapsed,
                         })}
+                        <div className={styles['global-header-right-container'] + ' ' + styles['global-header-item']}>
+
+                            <antd.Dropdown
+                                overlay={menu}
+                                visible={localeDropdownVisible}
+                                onVisibleChange={setLocaleDropdownVisible}
+                                className={styles['locale-dropdown'] + ' ' + styles['global-header-item']}
+                            >
+                                <a>
+                                    &nbsp;<ApiFilled />
+                                </a>
+                            </antd.Dropdown>
+                        </div>
                     </antd.Layout.Header>
                     <antd.Layout.Content style={{ margin: '24px 16px 0' }}>
                         <div className={styles['site-layout-background']} style={{ padding: 24, minHeight: 360 }}>

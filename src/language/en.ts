@@ -2,6 +2,7 @@ import { I18nStaticVars } from '../dependency/i18n';
 
 export const I18nEnglishDataProvider: I18nStaticVars = {
     global: {
+        locale_name: { en: 'English', zh: 'Chinese' },
         sidebar_name: {
             admin: { profile: 'Profile', resources: 'Resources' },
             air: { inspect: 'Inspect', list: 'List', report_repair: 'Report Repair', title: 'Air' },
@@ -15,6 +16,6 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
                 register: 'Register',
                 title: 'User',
             },
-        },
+        }
     },
 };

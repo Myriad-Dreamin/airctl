@@ -7,23 +7,23 @@ import { I18nContentProvider } from './service';
 import { I18nSimplifiedChineseDataProvider } from './language/zh';
 import { context } from './context';
 import { I18nEnglishDataProvider } from './language/en';
+import cookie from 'js-cookie';
 
 let deps: AppDependencyContainer;
+
 enum I18nLanguageSupport {
     English,
     SimplifiedChinese,
 }
-// var lang: string = navigator.language || 'en';
-const lang = 'en';
-let parsed: I18nLanguageSupport = 0;
-if (/^zh/.test(lang)) {
-    parsed = I18nLanguageSupport.SimplifiedChinese;
-} else if (/^en/.test(lang)) {
-    parsed = I18nLanguageSupport.English;
-}
 
-async function main() {
-    const { default: airData } = await MockData.airData();
+function provideLocale(locale: string) {
+    let parsed: I18nLanguageSupport = 0;
+
+    if (/^zh/.test(locale)) {
+        parsed = I18nLanguageSupport.SimplifiedChinese;
+    } else if (/^en/.test(locale)) {
+        parsed = I18nLanguageSupport.English;
+    }
     let contentProvider: I18nContentProvider;
     switch (parsed) {
         case I18nLanguageSupport.SimplifiedChinese:
@@ -35,17 +35,30 @@ async function main() {
     }
 
     context.I18nContext = contentProvider;
+    return contentProvider;
+}
+
+async function main() {
+    const { default: airData } = await MockData.airData();
+// var lang: string = navigator.language || 'en';
+    const locale = context.getLocale();
+    const contentProvider = provideLocale(locale);
+
+
+    context.Cookie = cookie;
+    context.I18nContext = contentProvider;
+    context.subscribeLocale(provideLocale);
 
     deps = {
         airService: new MockAirService({
-            initialAirs: airData,
+            initialAirs: airData
         }),
-        i18n: contentProvider,
+        i18n: contentProvider
     };
 
     const App = AppRouter(deps);
 
-    ReactDOM.render(<App />, document.querySelector('#app'));
+    ReactDOM.render(<App/>, document.querySelector('#app'));
 }
 
 main().catch(console.error);
