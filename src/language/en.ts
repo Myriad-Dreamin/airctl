@@ -16,6 +16,6 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
                 register: 'Register',
                 title: 'User',
             },
-        }
+        },
     },
 };

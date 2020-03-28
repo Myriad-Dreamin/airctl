@@ -40,10 +40,9 @@ function provideLocale(locale: string) {
 
 async function main() {
     const { default: airData } = await MockData.airData();
-// var lang: string = navigator.language || 'en';
+    // var lang: string = navigator.language || 'en';
     const locale = context.getLocale();
     const contentProvider = provideLocale(locale);
-
 
     context.Cookie = cookie;
     context.I18nContext = contentProvider;
@@ -51,14 +50,14 @@ async function main() {
 
     deps = {
         airService: new MockAirService({
-            initialAirs: airData
+            initialAirs: airData,
         }),
-        i18n: contentProvider
+        i18n: contentProvider,
     };
 
     const App = AppRouter(deps);
 
-    ReactDOM.render(<App/>, document.querySelector('#app'));
+    ReactDOM.render(<App />, document.querySelector('#app'));
 }
 
 main().catch(console.error);

@@ -5,18 +5,17 @@ import { I18nContentProvider } from '../service';
 import { I18nEnglishDataProvider } from '../language/en';
 import Cookie from 'js-cookie';
 
-let reactContextInner = {locale: 'en'};
-let reactContext = React.createContext(reactContextInner);
-
+const reactContextInner = { locale: 'en' };
+const reactContext = React.createContext(reactContextInner);
 
 type contextType = {
-    I18nContext: I18nProvider,
-    Cookie: CookieX,
-    ReactContext: typeof reactContext,
-    _localeCallbacks: ((locale: string) => void | Promise<string>)[],
-    getLocale(): string,
-    dispatchLocale(locale: string): Promise<void>,
-    subscribeLocale(cb: (locale: string) => void): void,
+    I18nContext: I18nProvider;
+    Cookie: CookieX;
+    ReactContext: typeof reactContext;
+    _localeCallbacks: ((locale: string) => void | Promise<string>)[];
+    getLocale(): string;
+    dispatchLocale(locale: string): Promise<void>;
+    subscribeLocale(cb: (locale: string) => void): void;
 };
 export const context: contextType = {
     I18nContext: new I18nContentProvider(I18nEnglishDataProvider),
@@ -30,11 +29,11 @@ export const context: contextType = {
     async dispatchLocale(locale: string) {
         console.log(locale);
         this.Cookie.set('locale', locale);
-        for (let cb of this._localeCallbacks) {
-            await cb(locale)
+        for (const cb of this._localeCallbacks) {
+            await cb(locale);
         }
     },
     subscribeLocale(cb: (locale: string) => void) {
         this._localeCallbacks.push(cb);
-    }
+    },
 };

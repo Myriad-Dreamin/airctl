@@ -10,7 +10,7 @@ export function MainLayout(C: FunctionComponent<any>) {
     let { I18nContext: i18n } = context;
     let sidebar_name = i18n.statics.global.sidebar_name;
     function resetI18n() {
-        i18n  = context.I18nContext;
+        i18n = context.I18nContext;
         sidebar_name = i18n.statics.global.sidebar_name;
     }
 
@@ -18,24 +18,32 @@ export function MainLayout(C: FunctionComponent<any>) {
         const [collapsed, setCollapsed] = useState(false);
         const swapCollapsed = useCallback(() => setCollapsed((c) => !c), []);
         const [localeDropdownVisible, setLocaleDropdownVisible] = useState(false);
+
         const [locale, setLocale] = useState(context.getLocale());
         useEffect(resetI18n, [locale]);
         const handleMenuClick = useCallback((e) => {
             if (e.key != context.getLocale()) {
-                context.dispatchLocale(e.key).then(() => {
-                    setLocale(e.key);
-                    resetI18n();
-                }).catch(console.error);
+                context
+                    .dispatchLocale(e.key)
+                    .then(() => {
+                        setLocale(e.key);
+                        resetI18n();
+                    })
+                    .catch(console.error);
             }
         }, []);
 
         const menu = (
             <antd.Menu onClick={handleMenuClick}>
-                <context.ReactContext.Provider value={{locale}}/>
+                <context.ReactContext.Provider value={{ locale }} />
                 <antd.Menu.Item key="zh">
-                    <span>简体中文</span><span className={styles['locale-dropdown-right-item']}>{i18n.statics.global.locale_name.zh}</span></antd.Menu.Item>
-                <antd.Menu.Item key="en"><span>English</span>
-                    <span className={styles['locale-dropdown-right-item']}>{i18n.statics.global.locale_name.en}</span></antd.Menu.Item>
+                    <span>简体中文</span>
+                    <span className={styles['locale-dropdown-right-item']}>{i18n.statics.global.locale_name.zh}</span>
+                </antd.Menu.Item>
+                <antd.Menu.Item key="en">
+                    <span>English</span>
+                    <span className={styles['locale-dropdown-right-item']}>{i18n.statics.global.locale_name.en}</span>
+                </antd.Menu.Item>
             </antd.Menu>
         );
         return (
@@ -176,7 +184,6 @@ export function MainLayout(C: FunctionComponent<any>) {
                             onClick: swapCollapsed,
                         })}
                         <div className={styles['global-header-right-container'] + ' ' + styles['global-header-item']}>
-
                             <antd.Dropdown
                                 overlay={menu}
                                 visible={localeDropdownVisible}
@@ -184,7 +191,8 @@ export function MainLayout(C: FunctionComponent<any>) {
                                 className={styles['locale-dropdown'] + ' ' + styles['global-header-item']}
                             >
                                 <a>
-                                    &nbsp;<ApiFilled />
+                                    &nbsp;
+                                    <ApiFilled />
                                 </a>
                             </antd.Dropdown>
                         </div>
