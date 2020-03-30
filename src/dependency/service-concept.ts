@@ -34,18 +34,14 @@ export interface UserService {
     // 用户列表
     // 查看当前所有用户
     Filter(cond?: any): Response<User[]>;
-}
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-interface UserServiceV2 extends UserService {
     // 用户充值
     // 充值的钱用于多种功能，这里只能用来给空调预交款
-    Pay(id: Auth, money: number): MResponse;
+    Pay(id: UserID, money: number): MResponse;
 
     // 检查用户状态
     // 用来给前台小哥判断用户身份、账户余额
-    CheckState(id: Auth): Response<User>;
+    CheckState(id: UserID): Response<User>;
 }
 
 export interface AirService {

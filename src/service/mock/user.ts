@@ -1,6 +1,6 @@
 import { UserService } from '../../dependency/service-concept';
 import { AirID, BAuth, User, UserID, UserIdentifiers } from '../../dependency/concept';
-import { OK, Response, SimplifiedResponse } from '../../dependency/protocol';
+import { OK, Payload, Response, SimplifiedResponse } from '../../dependency/protocol';
 import { MockService, MockServiceIndex, Pick } from './mock';
 import { MockRequiredOneOf } from '../errors';
 
@@ -63,5 +63,15 @@ export class MockUserService extends MockService<User> implements UserService {
             return index.getData(prop);
         }
         return undefined;
+    }
+
+    CheckState(id: UserID): Payload<User> | SimplifiedResponse<any> {
+        return this.Get(id);
+    }
+
+    Pay(id: UserID, money: number): SimplifiedResponse<any> {
+        return this.Update(id, (u: User) => {
+            u.money += money;
+        });
     }
 }

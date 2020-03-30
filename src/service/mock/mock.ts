@@ -45,6 +45,17 @@ export class MockService<T> {
         );
     }
 
+    Update(aid: number, onUpdate: (data: T) => SimplifiedResponse<any> | undefined | void): SimplifiedResponse<any> {
+        return (
+            this.checkExists(aid) ||
+            onUpdate(this.mockData[aid - 1]) ||
+            OK<undefined>({
+                code: 0,
+                data: undefined,
+            })
+        );
+    }
+
     Delete(aid: number): Payload<undefined> | SimplifiedResponse<any> {
         return (
             this.delete(aid) ||

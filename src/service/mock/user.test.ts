@@ -62,7 +62,7 @@ const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
     {
         name: 'get-id-ok',
         testFunc: ({ svcFac }: ASTCCtx) => () => {
-            let aid: number;
+            let userID: number;
             const svc = svcFac();
             const willNotExists = (index: string) =>
                 matchResponse(svc.GetID({ phone_number: index }), assertError, (code, data) => {
@@ -71,13 +71,55 @@ const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
                 });
             willNotExists('qwq');
             matchResponse(svc.Register({ phone_number: 'qwq' }), function (id: number) {
-                aid = id;
+                userID = id;
                 expect(id > 0).to.true;
             });
             matchResponse(svc.GetID({ phone_number: 'qwq' }), function (id: number) {
-                expect(aid).to.be.eq(id);
+                expect(userID).to.be.eq(id);
             });
             willNotExists('QAQ');
+        },
+    },
+    {
+        name: 'check-state-ok',
+        testFunc: ({ svcFac }: ASTCCtx) => () => {
+            let userID = 0;
+            const svc = svcFac();
+            matchResponse(svc.Register({ phone_number: 'qwq' }), function (id: number) {
+                userID = id;
+                expect(id > 0).to.true;
+            });
+            matchResponse(svc.CheckState(userID), function (user) {
+                expect(user.id).to.deep.equal(userID);
+                // expect(user.name).to.deep.equal('qwq');
+                expect(user.phone_number).to.deep.equal('qwq');
+                expect(user.money).to.deep.equal(0);
+            });
+        },
+    },
+    {
+        name: 'pay-ok',
+        testFunc: ({ svcFac }: ASTCCtx) => () => {
+            let userID = 0;
+            const svc = svcFac();
+            matchResponse(svc.Register({ phone_number: 'qwq' }), function (id: number) {
+                userID = id;
+                expect(id > 0).to.true;
+            });
+            matchResponse(svc.Pay(userID, 233));
+            matchResponse(svc.CheckState(userID), function (user) {
+                expect(user.id).to.deep.equal(userID);
+                // expect(user.name).to.deep.equal('qwq');
+                expect(user.phone_number).to.deep.equal('qwq');
+                expect(user.money).to.deep.equal(233);
+            });
+            matchResponse(svc.Pay(userID, 233));
+            matchResponse(svc.CheckState(userID), function (user) {
+                expect(user.id).to.deep.equal(userID);
+                // expect(user.name).to.deep.equal('qwq');
+                expect(user.phone_number).to.deep.equal('qwq');
+                expect(user.money).to.deep.equal(466);
+            });
         },
     },
 ];
