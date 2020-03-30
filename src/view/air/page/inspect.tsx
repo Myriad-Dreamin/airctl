@@ -122,7 +122,7 @@ export function AirInspect({ airService }: DependencyContainer) {
                                 <table className={styles['form-item-table']}>
                                     <tbody>
                                         <tr>
-                                            <td colSpan={1}>空调产品序列号：{airState?.serialNumber}</td>
+                                            <td colSpan={1}>空调产品序列号：{airState?.serial_number}</td>
                                             <td colSpan={1}>能效等级：二级能效</td>
                                         </tr>
                                         <tr>

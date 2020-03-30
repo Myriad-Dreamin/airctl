@@ -6,7 +6,7 @@ const data: FullAirState[] = [
         available: false,
         degree: 1,
         is_on: false,
-        serialNumber: 'KFR-50LW/01NAF12',
+        serial_number: 'KFR-50LW/01NAF12',
         target_degree: 1,
     },
     {
@@ -14,7 +14,7 @@ const data: FullAirState[] = [
         available: true,
         degree: 1,
         is_on: false,
-        serialNumber: 'KFR-50LW/01NAF13',
+        serial_number: 'KFR-50LW/01NAF13',
         target_degree: 1,
     },
     {
@@ -22,7 +22,7 @@ const data: FullAirState[] = [
         available: true,
         degree: 1,
         is_on: true,
-        serialNumber: 'KFR-50LW/01NAF14',
+        serial_number: 'KFR-50LW/01NAF14',
         target_degree: 1,
     },
 ];

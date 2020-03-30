@@ -7,6 +7,7 @@ export interface SimplifiedResponse<T> {
 
 // 一个响应可以携带额外的数据
 export interface Payload<T> extends SimplifiedResponse<T> {
+    readonly code: 0;
     data: T;
 }
 
@@ -43,10 +44,10 @@ class MatchError extends Error {
     }
 }
 
-export function matchResponse<T>(r: Response<T>, onData: dataCallback<T>, onErr?: errCallback): any {
+export function matchResponse<T>(r: Response<T>, onData?: dataCallback<T>, onErr?: errCallback): any {
     if (isOK(r)) {
         // 我们不会检查在运行时，r.data是否存在
-        return onData(r.data);
+        return onData && onData(r.data);
     } else if (onErr !== undefined) {
         return onErr(r.code, r.data);
     } else {

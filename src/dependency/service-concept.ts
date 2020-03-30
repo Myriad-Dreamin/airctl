@@ -3,25 +3,26 @@ import {
     AirID,
     AirState,
     Auth,
-    BAuth,
     DegreeUnit,
     FullAirState,
     FullRoom,
     RoomID,
     SettableAirState,
     User,
+    UserID,
+    UserIdentifiers
 } from './concept';
 
 export interface UserService {
     // 用户注册
     // BAuth即Before Register Auth，标记用户唯一标识，要求BAuth中至少有一个标识非空
     // 生成临时账户或永久账户
-    Register(id: BAuth): MResponse;
+    Register(id: UserIdentifiers): Response<UserID>;
 
     // 用户删除
     // 标记用户唯一标识，要求Auth中至少有一个标识非空
     // 当临时账户离开酒店时，可以强制销毁账户
-    Delete(id: Auth): MResponse;
+    Delete(id: UserID): MResponse;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore

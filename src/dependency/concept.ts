@@ -1,14 +1,27 @@
+
+
+// 用户在系统中被分配的增量ID: number <= 2^61
+export type UserID = number;
+// 房间在系统中被分配的增量ID
+export type RoomID = number;
+// 空调在系统中被分配的增量ID
+export type AirID = number;
+// 摄氏度
+export type CelsiusDegree = number;
+// 温度单位 = 摄氏度 | （如果是美国人，用华氏度，等等）
+export type DegreeUnit = CelsiusDegree;
+
 // 一个用户可以被哪些字段唯一确认？
-interface FullUserIdentifiers {
-    phone_number: number;
+export interface FullUserIdentifiers {
+    phone_number: string;
     // 用户在系统中被分配的增量ID
-    // id?: number;
+    id: UserID;
     // 昵称
     // name?: string;
     // email?: string;
 }
 
-type UserIdentifiers = FullUserIdentifiers;
+export type UserIdentifiers = Pick<FullUserIdentifiers, 'phone_number'>;
 
 // 一个用户可以被哪些字段唯一确认？
 export type BAuth = Partial<UserIdentifiers>;
@@ -20,19 +33,10 @@ export interface User extends FullUserIdentifiers {
     money: number;
 }
 
-// 房间在系统中被分配的增量ID: number <= 2^61
-export type RoomID = number;
-// 空调在系统中被分配的增量ID
-export type AirID = number;
-// 摄氏度
-export type CelsiusDegree = number;
-// 温度单位 = 摄氏度 | （如果是美国人，用华氏度，等等）
-export type DegreeUnit = CelsiusDegree;
-
 // 描述一个空调数据对象
 export interface FullAirState {
     aid: AirID;
-    serialNumber: string;
+    serial_number: string;
     available: boolean;
     is_on: boolean;
     // 在未来的版本中可能会开启
