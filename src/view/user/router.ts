@@ -18,7 +18,7 @@ export const UserRoutes: RouteDesc[] = [
     {
         type: RouteType.Exact,
         path: rel('list'),
-        component: () => UserList,
+        component: UserList,
     },
     {
         type: RouteType.Exact,
