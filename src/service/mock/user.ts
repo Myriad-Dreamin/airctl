@@ -40,6 +40,13 @@ export class MockUserService extends MockService<User> implements UserService {
         return Pick('id', this.pnIndex.getData(phone_number));
     }
 
+    Filter(): Response<User[]> {
+        return OK<User[]>({
+            code: 0,
+            data: this.mockData,
+        });
+    }
+
     Delete(id: UserID): SimplifiedResponse<any> {
         return (
             super.delete(id) ||

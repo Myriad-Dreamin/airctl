@@ -30,6 +30,10 @@ export interface UserService {
     // 标记用户唯一标识，要求Auth中至少有一个标识非空
     // 当临时账户离开酒店时，可以强制销毁账户
     Delete(id: UserID): MResponse;
+
+    // 用户列表
+    // 查看当前所有用户
+    Filter(cond?: any): Response<User[]>;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
