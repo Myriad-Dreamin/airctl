@@ -1,10 +1,10 @@
-// import * as chai from 'chai';
+import * as chai from 'chai';
 import { UserService } from '../../dependency/service-concept';
 import { matchResponse } from '../../dependency/protocol';
-// import { ServiceCode } from '../errors';
+import { ServiceCode } from '../errors';
 import { MockUserService } from './user';
 
-// const expect = chai.expect;
+const expect = chai.expect;
 
 interface TestCase<C> {
     name: string;
@@ -15,15 +15,31 @@ interface ASTCCtx {
     svcFac: () => UserService;
 }
 
+function assertError() {
+    expect.fail('show not be ok');
+}
+
 const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
     {
         name: 'register-ok',
         testFunc: ({ svcFac }: ASTCCtx) => () => {
+            const svc = svcFac();
             matchResponse(
-                svcFac().Register({
+                svc.Register({
                     phone_number: 'qwq',
                 }),
                 () => 0
+            );
+            matchResponse(
+                svc.Register({
+                    phone_number: 'qwq',
+                }),
+                assertError,
+                (code, data) => {
+                    expect(code).to.be.eq(ServiceCode.MockDuplicateKey);
+                    expect(data).to.instanceOf(Array);
+                    data.map((field: string) => expect(typeof field === 'string').to.be.true);
+                }
             );
         },
     },
@@ -43,25 +59,27 @@ const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
             matchResponse(svc.Delete(userID));
         },
     },
-    // {
-    //     name: 'get-id-ok',
-    //     testFunc: ({ svcFac }: ASTCCtx) => () => {
-    //         let userID: number;
-    //         const svc = svcFac();
-    //         matchResponse(svc.Create('qwq'), function(id: number) {
-    //             userID = id;
-    //         });
-    //         matchResponse(svc.GetID('qwq'), function(id: number) {
-    //             expect(userID).to.be.eq(id);
-    //         });
-    //         matchResponse(svc.GetID('QAQ'), function() {
-    //             expect.fail('show not be ok');
-    //         }, (code, data) => {
-    //             expect(code).to.be.eq(ServiceCode.MockNotFound);
-    //             expect(data).to.be.deep.eq({index: 'QAQ'});
-    //         });
-    //     }
-    // }
+    {
+        name: 'get-id-ok',
+        testFunc: ({ svcFac }: ASTCCtx) => () => {
+            let aid: number;
+            const svc = svcFac();
+            const willNotExists = (index: string) =>
+                matchResponse(svc.GetID({ phone_number: index }), assertError, (code, data) => {
+                    expect(code).to.be.eq(ServiceCode.MockNotFound);
+                    expect(data).to.be.deep.eq({ index: index });
+                });
+            willNotExists('qwq');
+            matchResponse(svc.Register({ phone_number: 'qwq' }), function (id: number) {
+                aid = id;
+                expect(id > 0).to.true;
+            });
+            matchResponse(svc.GetID({ phone_number: 'qwq' }), function (id: number) {
+                expect(aid).to.be.eq(id);
+            });
+            willNotExists('QAQ');
+        },
+    },
 ];
 
 describe('MockUserService', () => {

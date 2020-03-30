@@ -3,6 +3,7 @@ import {
     AirID,
     AirState,
     Auth,
+    BAuth,
     DegreeUnit,
     FullAirState,
     FullRoom,
@@ -18,6 +19,12 @@ export interface UserService {
     // BAuth即Before Register Auth，标记用户唯一标识，要求BAuth中至少有一个标识非空
     // 生成临时账户或永久账户
     Register(id: UserIdentifiers): Response<UserID>;
+
+    // 获取用户ID
+    // 获取用户在系统中的ID
+    // 几乎与检测用户是否存在同效
+    // Has === compose(True, GetID)
+    GetID(auth: BAuth): Response<AirID>;
 
     // 用户删除
     // 标记用户唯一标识，要求Auth中至少有一个标识非空

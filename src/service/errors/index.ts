@@ -1,11 +1,12 @@
 import { Response } from '../../dependency/protocol';
 
-export const mockCode: number = 1 << 22;
+export const mockCode = 4000000;
 
 export enum ServiceCode {
     MockDuplicateKey = mockCode + 1,
     MockNotFound = mockCode + 2,
     MockTodo = mockCode + 3,
+    MockRequiredOneOf = mockCode + 4,
 }
 
 export interface NotFoundErrData {
@@ -19,15 +20,17 @@ export function MockNotFound(data: NotFoundErrData): Response<NotFoundErrData> {
     };
 }
 
-export interface DuplicateErrData {
-    field: string;
-    value: any;
-}
-
-export function MockDuplicateKey(data: DuplicateErrData): Response<DuplicateErrData> {
+export function MockDuplicateKey(fields: string[]): Response<string[]> {
     return {
         code: ServiceCode.MockDuplicateKey,
-        data: data,
+        data: fields,
+    };
+}
+
+export function MockRequiredOneOf(fields: string[]): Response<string[]> {
+    return {
+        code: ServiceCode.MockRequiredOneOf,
+        data: fields,
     };
 }
 

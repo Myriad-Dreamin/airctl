@@ -1,7 +1,8 @@
 import { UserService } from '../../dependency/service-concept';
-import { BAuth, User, UserID, UserIdentifiers } from '../../dependency/concept';
+import { AirID, BAuth, User, UserID, UserIdentifiers } from '../../dependency/concept';
 import { OK, Response, SimplifiedResponse } from '../../dependency/protocol';
-import { MockService, MockServiceIndex } from './mock';
+import { MockService, MockServiceIndex, Pick } from './mock';
+import { MockRequiredOneOf } from '../errors';
 
 class PNIndex extends MockServiceIndex<'phone_number', User> {}
 
@@ -23,12 +24,20 @@ export class MockUserService extends MockService<User> implements UserService {
                     ...ids,
                 };
                 this.appendData(user);
+                this.pnIndex.appendData(user);
                 return OK<UserID>({
                     code: 0,
                     data: user.id,
                 });
             })()
         );
+    }
+
+    GetID({ phone_number }: BAuth): Response<AirID> {
+        if (!phone_number) {
+            return MockRequiredOneOf(['phone_number']);
+        }
+        return Pick('id', this.pnIndex.getData(phone_number));
     }
 
     Delete(id: UserID): SimplifiedResponse<any> {

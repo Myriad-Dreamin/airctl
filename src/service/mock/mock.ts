@@ -115,10 +115,7 @@ export class MockServiceIndex<K extends keyof T & string, T> extends Map<T[K], T
 
     shouldNotExist(index: T[K]): SimplifiedResponse<any> | undefined {
         if (this.has(index)) {
-            return MockDuplicateKey({
-                field: this.indexName,
-                value: index,
-            });
+            return MockDuplicateKey([this.indexName]);
         }
         return undefined;
     }
