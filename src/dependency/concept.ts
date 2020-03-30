@@ -15,11 +15,11 @@ export interface FullUserIdentifiers {
     // 用户在系统中被分配的增量ID
     id: UserID;
     // 昵称
-    // name?: string;
+    name?: string;
     // email?: string;
 }
 
-export type UserIdentifiers = Pick<FullUserIdentifiers, 'phone_number'>;
+export type UserIdentifiers = Pick<FullUserIdentifiers, 'phone_number' | 'name'>;
 
 // 一个用户可以被哪些字段唯一确认？
 export type BAuth = Partial<UserIdentifiers>;
