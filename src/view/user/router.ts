@@ -22,8 +22,8 @@ export const UserRoutes: RouteDesc[] = [
     },
     {
         type: RouteType.Exact,
-        path: rel('profile/:id'),
-        component: () => UserProfile,
+        path: rel('profile'),
+        component: UserProfile,
     },
     {
         type: RouteType.Exact,

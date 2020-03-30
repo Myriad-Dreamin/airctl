@@ -109,7 +109,7 @@ export function MainLayout(C: FunctionComponent<any>) {
                             </antd.Menu.Item>
                             <antd.Menu.Item key="user-3">
                                 <UserOutlined />
-                                <Link to="/app/user/profile/:id" className="nav-text">
+                                <Link to="/app/user/profile?id=1" className="nav-text">
                                     {sidebar_name.user.profile}
                                 </Link>
                             </antd.Menu.Item>
