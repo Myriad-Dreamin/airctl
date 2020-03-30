@@ -13,7 +13,7 @@ export const UserRoutes: RouteDesc[] = [
     {
         type: RouteType.Exact,
         path: rel('form/register'),
-        component: () => UserRegisterForm,
+        component: UserRegisterForm,
     },
     {
         type: RouteType.Exact,
