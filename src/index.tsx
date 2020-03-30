@@ -8,6 +8,7 @@ import { I18nSimplifiedChineseDataProvider } from './language/zh';
 import { context } from './context';
 import { I18nEnglishDataProvider } from './language/en';
 import cookie from 'js-cookie';
+import { MockUserService } from './service/mock/user';
 
 let deps: AppDependencyContainer;
 
@@ -40,6 +41,7 @@ function provideLocale(locale: string) {
 
 async function main() {
     const { default: airData } = await MockData.airData();
+    const { default: userData } = await MockData.userData();
     // var lang: string = navigator.language || 'en';
     const locale = context.getLocale();
     const contentProvider = provideLocale(locale);
@@ -51,6 +53,9 @@ async function main() {
     deps = {
         airService: new MockAirService({
             initialAirs: airData,
+        }),
+        userService: new MockUserService({
+            initialUsers: userData,
         }),
         i18n: contentProvider,
     };
