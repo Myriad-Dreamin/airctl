@@ -1,6 +1,5 @@
 import { Response } from '../../dependency/protocol';
 
-
 export const mockCode: number = 1 << 22;
 
 export enum ServiceCode {
@@ -16,7 +15,7 @@ export interface NotFoundErrData {
 export function MockNotFound(data: NotFoundErrData): Response<NotFoundErrData> {
     return {
         code: ServiceCode.MockNotFound,
-        data: data
+        data: data,
     };
 }
 
@@ -28,7 +27,7 @@ export interface DuplicateErrData {
 export function MockDuplicateKey(data: DuplicateErrData): Response<DuplicateErrData> {
     return {
         code: ServiceCode.MockDuplicateKey,
-        data: data
+        data: data,
     };
 }
 

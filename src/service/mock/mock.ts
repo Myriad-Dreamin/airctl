@@ -1,69 +1,81 @@
 import { isOK, OK, Payload, Response, SimplifiedResponse } from '../../dependency/protocol';
 import { MockDuplicateKey, MockNotFound } from '../errors';
 
-export function composeResponse(... fs: any) : Response<any> | undefined {
-    for (let f of fs) {
-        let r = f();
+export function composeResponse(...fs: any): Response<any> | undefined {
+    for (const f of fs) {
+        const r = f();
         if (r !== undefined) {
-            return r
+            return r;
         }
     }
-    return undefined
+    return undefined;
 }
 
 export class MockService<T> {
-    protected readonly mockData: (T & {deleted?: boolean})[];
+    protected readonly mockData: (T & { deleted?: boolean })[];
 
     protected inc = 0;
 
     constructor(initialData?: T[]) {
-        this.mockData = initialData?.
-            map((data) => Object.assign(data, {deleted: false})) || [];
+        this.mockData = initialData?.map((data) => Object.assign(data, { deleted: false })) || [];
 
         this.inc = this.mockData.length + 1;
     }
 
     appendData(d: T) {
-        this.mockData.push(Object.assign(d, {deleted: false}));
+        this.mockData.push(Object.assign(d, { deleted: false }));
     }
 
     checkExists(aid: number): SimplifiedResponse<any> | undefined {
-        if ((aid >= this.inc || aid <= 0) || this.mockData[aid - 1].deleted === true) {
+        if (aid >= this.inc || aid <= 0 || this.mockData[aid - 1].deleted === true) {
             return MockNotFound({
                 index: aid,
             });
         }
-        return undefined
+        return undefined;
     }
 
     Get(aid: number): Payload<T> | SimplifiedResponse<any> {
-        return this.checkExists(aid) || OK<T>({
-            code: 0,
-            data: this.mockData[aid - 1],
-        });
+        return (
+            this.checkExists(aid) ||
+            OK<T>({
+                code: 0,
+                data: this.mockData[aid - 1],
+            })
+        );
     }
 
     Delete(aid: number): Payload<undefined> | SimplifiedResponse<any> {
-        return this.delete(aid) || OK<undefined>({
-            code: 0,
-            data: undefined,
-        });
+        return (
+            this.delete(aid) ||
+            OK<undefined>({
+                code: 0,
+                data: undefined,
+            })
+        );
     }
 
     protected delete(aid: number): SimplifiedResponse<any> | undefined {
-        return this.checkExists(aid) || (() => {this.mockData[aid - 1].deleted = true})() || undefined;
+        return (
+            this.checkExists(aid) ||
+            (() => {
+                this.mockData[aid - 1].deleted = true;
+            })() ||
+            undefined
+        );
     }
 }
 
-
 export function Pick<K extends keyof T, T>(plucking: K, p: Response<T>): Response<T[K]> {
-    return isOK(p) ? OK<T[K]>({
-        code: 0,
-        data: p.data[plucking]
-    }) : p;
+    return isOK(p)
+        ? OK<T[K]>({
+              code: 0,
+              data: p.data[plucking],
+          })
+        : p;
 }
 
-export class MockServiceIndex<K extends (keyof T) & string, T> extends Map<T[K], T> {
+export class MockServiceIndex<K extends keyof T & string, T> extends Map<T[K], T> {
     public readonly indexName: K;
 
     constructor(indexName: K, initialData?: T[]) {
@@ -92,16 +104,16 @@ export class MockServiceIndex<K extends (keyof T) & string, T> extends Map<T[K],
         const maybeData = this.get(index);
         if (maybeData === undefined) {
             return MockNotFound({
-                index
+                index,
             });
         }
         return OK<T>({
             code: 0,
-            data: maybeData
+            data: maybeData,
         });
     }
 
-    shouldNotExist(index: T[K]) : SimplifiedResponse<any> | undefined {
+    shouldNotExist(index: T[K]): SimplifiedResponse<any> | undefined {
         if (this.has(index)) {
             return MockDuplicateKey({
                 field: this.indexName,

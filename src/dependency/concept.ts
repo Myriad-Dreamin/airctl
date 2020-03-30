@@ -1,5 +1,3 @@
-
-
 // 用户在系统中被分配的增量ID: number <= 2^61
 export type UserID = number;
 // 房间在系统中被分配的增量ID

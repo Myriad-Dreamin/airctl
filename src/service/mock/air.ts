@@ -10,27 +10,29 @@ export class MockAirService extends MockService<FullAirState> implements AirServ
 
     constructor(options?: { initialAirs?: FullAirState[] }) {
         super(options?.initialAirs);
-        this.snIndex = new SNIndex(
-            'serial_number', options?.initialAirs);
+        this.snIndex = new SNIndex('serial_number', options?.initialAirs);
     }
 
     Create(serialNumber: string): Payload<AirID> | SimplifiedResponse<any> {
-        return this.snIndex.shouldNotExist(serialNumber) || (() => {
-            const air: FullAirState = {
-                aid: this.inc++,
-                available: false,
-                degree: 0,
-                is_on: false,
-                serial_number: serialNumber,
-                target_degree: 0,
-            };
-            this.snIndex.appendData(air);
-            this.appendData(air);
-            return OK<AirID>({
-                code: 0,
-                data: air.aid,
-            });
-        })()
+        return (
+            this.snIndex.shouldNotExist(serialNumber) ||
+            (() => {
+                const air: FullAirState = {
+                    aid: this.inc++,
+                    available: false,
+                    degree: 0,
+                    is_on: false,
+                    serial_number: serialNumber,
+                    target_degree: 0,
+                };
+                this.snIndex.appendData(air);
+                this.appendData(air);
+                return OK<AirID>({
+                    code: 0,
+                    data: air.aid,
+                });
+            })()
+        );
     }
 
     GetID(serialNumber: string): Response<AirID> {
@@ -38,7 +40,7 @@ export class MockAirService extends MockService<FullAirState> implements AirServ
     }
 
     CheckState(aid: number): Payload<AirState> | SimplifiedResponse<any> {
-        return this.Get(aid)
+        return this.Get(aid);
     }
 
     SetState(aid: number, airState: SettableAirState): SimplifiedResponse<any> {

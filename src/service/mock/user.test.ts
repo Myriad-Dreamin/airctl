@@ -19,23 +19,29 @@ const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
     {
         name: 'register-ok',
         testFunc: ({ svcFac }: ASTCCtx) => () => {
-            matchResponse(svcFac().Register({
-                phone_number: 'qwq',
-            }), () => 0);
-        }
+            matchResponse(
+                svcFac().Register({
+                    phone_number: 'qwq',
+                }),
+                () => 0
+            );
+        },
     },
     {
         name: 'delete-id-ok',
         testFunc: ({ svcFac }: ASTCCtx) => () => {
-            let userID: number = 0;
+            let userID = 0;
             const svc = svcFac();
-            matchResponse(svc.Register({
-                phone_number: 'qwq',
-            }), (id: number) => {
-                userID = id;
-            });
+            matchResponse(
+                svc.Register({
+                    phone_number: 'qwq',
+                }),
+                (id: number) => {
+                    userID = id;
+                }
+            );
             matchResponse(svc.Delete(userID));
-        }
+        },
     },
     // {
     //     name: 'get-id-ok',
@@ -60,7 +66,7 @@ const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
 
 describe('MockUserService', () => {
     const ctx: ASTCCtx = {
-        svcFac: () => new MockUserService()
+        svcFac: () => new MockUserService(),
     };
     for (const tc of StdUserSvcTestCases) {
         it(tc.name, tc.testFunc(ctx));
