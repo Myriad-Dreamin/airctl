@@ -27,12 +27,12 @@ export const UserRoutes: RouteDesc[] = [
     },
     {
         type: RouteType.Exact,
-        path: rel('profile/:id/privilege'),
-        component: () => UserPrivilegeForm,
+        path: rel('pay'),
+        component: UserPay,
     },
     {
         type: RouteType.Exact,
-        path: rel('pay/:id'),
-        component: () => UserPay,
+        path: rel('profile/:id/privilege'),
+        component: () => UserPrivilegeForm,
     },
 ];

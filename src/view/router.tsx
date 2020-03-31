@@ -9,6 +9,7 @@ import { AdminRoutes } from './admin/router';
 import { MainLayout } from '../component/layout/main-layout';
 import { compose } from '../lib/fp';
 import { CreateRouter, RouteDesc, RouteType } from '../lib/router';
+import { UserMockPay } from './user/page/mock-callback';
 
 const Routes: RouteDesc[] = [
     {
@@ -31,6 +32,11 @@ const MainRoutes: RouteDesc[] = [
         type: RouteType.Exact,
         path: '',
         component: () => Welcome,
+    },
+    {
+        type: RouteType.Exact,
+        path: 'mock-pay',
+        component: UserMockPay,
     },
     {
         type: RouteType.NotExact,

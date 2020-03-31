@@ -2,24 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import queryString from 'query-string';
 import { DependencyContainer } from '../../../lib/common';
-import { SimplifiedResponse, unwrap } from '../../../dependency/protocol';
+import { unwrap } from '../../../dependency/protocol';
 import styles from './inspect.css';
 import { AirState } from '../../../dependency/concept';
 import { antd } from '../../../dependency/antd';
 import { SlidersOutlined } from '@ant-design/icons';
-
-interface ErrorWithData extends Error, SimplifiedResponse<any> {}
-
-function reportError(err: ErrorWithData) {
-    console.log(err, err.stack);
-    const modal = antd.Modal.error({
-        title: '错误发生',
-        content: `${err.name}: ${err.message}${err.data === undefined ? '' : ', ' + err.data.toString()}`,
-    });
-    setTimeout(() => {
-        modal.destroy();
-    }, 3000);
-}
+import { reportError } from '../../../component/notify';
 
 interface QueryState {
     serial_number?: string;
@@ -31,11 +19,11 @@ export function AirInspect({ airService }: DependencyContainer) {
     return (props: RouteComponentProps) => {
         const [, setAirID] = useState(0);
         const [airState, setAirState] = useState<AirState | undefined>(undefined);
-        const [query, setQuery] = useState<QueryState>({});
         const [, setEditing] = useState(false);
         const swapEdit = () => useCallback(() => setEditing((e) => !e), []);
         console.log('rerender');
 
+        const [query, setQuery] = useState<QueryState>({});
         if (query.raw !== props.location.search) {
             const newQuery = queryString.parse(props.location.search);
             newQuery.raw = props.location.search;
