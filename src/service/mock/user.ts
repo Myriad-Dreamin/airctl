@@ -1,17 +1,47 @@
 import { UserService } from '../../dependency/service-concept';
-import { AirID, BAuth, User, UserID, UserIdentifiers } from '../../dependency/concept';
+import {
+    AirID,
+    BAuth,
+    Payment,
+    PaymentID,
+    PaymentParam,
+    User,
+    UserID,
+    UserIdentifiers
+} from '../../dependency/concept';
 import { OK, Payload, Response, SimplifiedResponse } from '../../dependency/protocol';
 import { MockService, MockServiceIndex, Pick } from './mock';
 import { MockRequiredOneOf } from '../errors';
 
 class PNIndex extends MockServiceIndex<'phone_number', User> {}
 
+export class MockPaymentService extends MockService<Payment> {
+    constructor(options?: { initialPayment?: Payment[] }) {
+        super(options?.initialPayment);
+    }
+
+    create(user_id: number, params: PaymentParam): Payload<PaymentID> | SimplifiedResponse<any> {
+        const payment: Payment = {
+            payment_id: this.inc++,
+            money: params.money,
+            user_id,
+        };
+        this.appendData(payment);
+        return OK<PaymentID>({
+            code: 0,
+            data: payment.payment_id,
+        });
+    }
+}
+
 export class MockUserService extends MockService<User> implements UserService {
     protected pnIndex: PNIndex;
+    protected paymentService: MockPaymentService;
 
     constructor(options?: { initialUsers?: User[] }) {
         super(options?.initialUsers);
         this.pnIndex = new PNIndex('phone_number', options?.initialUsers);
+        this.paymentService = new MockPaymentService();
     }
 
     Register(ids: UserIdentifiers): Response<UserID> {
@@ -69,9 +99,11 @@ export class MockUserService extends MockService<User> implements UserService {
         return this.Get(id);
     }
 
-    Pay(id: UserID, money: number): SimplifiedResponse<any> {
-        return this.Update(id, (u: User) => {
-            u.money += money;
-        });
+    CheckPayment(payID: number): Payload<Payment> | SimplifiedResponse<any> {
+        return this.paymentService.Get(payID);
+    }
+
+    Pay(id: number, paymentParams: PaymentParam): Payload<PaymentID> | SimplifiedResponse<any> {
+        return this.paymentService.create(id, paymentParams);
     }
 }

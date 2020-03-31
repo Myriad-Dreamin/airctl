@@ -4,6 +4,8 @@ export type UserID = number;
 export type RoomID = number;
 // 空调在系统中被分配的增量ID
 export type AirID = number;
+// 订单在系统中被分配的增量ID
+export type PaymentID = number;
 // 摄氏度
 export type CelsiusDegree = number;
 // 温度单位 = 摄氏度 | （如果是美国人，用华氏度，等等）
@@ -28,6 +30,22 @@ export type Auth = Partial<FullUserIdentifiers>;
 
 // 描述一个真实世界的用户对象
 export interface User extends FullUserIdentifiers {
+    money: number;
+}
+
+export enum PaymentType {
+    AliPay,
+    WeChat,
+}
+
+export interface PaymentParam {
+    payment_type: PaymentType;
+    money: number;
+}
+
+export interface Payment {
+    user_id: UserID;
+    payment_id: PaymentID;
     money: number;
 }
 

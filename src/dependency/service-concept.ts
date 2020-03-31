@@ -7,6 +7,9 @@ import {
     DegreeUnit,
     FullAirState,
     FullRoom,
+    Payment,
+    PaymentID,
+    PaymentParam,
     RoomID,
     SettableAirState,
     User,
@@ -37,7 +40,10 @@ export interface UserService {
 
     // 用户充值
     // 充值的钱用于多种功能，这里只能用来给空调预交款
-    Pay(id: UserID, money: number): MResponse;
+    Pay(id: UserID, paymentParams: PaymentParam): Response<PaymentID>;
+
+    // 用户充值检查
+    CheckPayment(payID: PaymentID): Response<Payment>;
 
     // 检查用户状态
     // 用来给前台小哥判断用户身份、账户余额

@@ -1,12 +1,15 @@
 import { Response } from '../../dependency/protocol';
 
 export const mockCode = 4000000;
+export const validateCode = 5000000;
 
 export enum ServiceCode {
     MockDuplicateKey = mockCode + 1,
     MockNotFound = mockCode + 2,
     MockTodo = mockCode + 3,
     MockRequiredOneOf = mockCode + 4,
+    ValidateUndefinedValue = validateCode + 1,
+    ValidateNaN = validateCode + 1,
 }
 
 export interface NotFoundErrData {
