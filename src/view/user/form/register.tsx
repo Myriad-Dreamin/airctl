@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { Button, Form, Input } from 'antd';
 import { DependencyContainer } from '../../../lib/common';
 import { matchResponse } from '../../../dependency/protocol';
+import { antd } from '../../../dependency/antd';
 
 const layout = {
     labelCol: { span: 4 },
@@ -19,39 +19,41 @@ export function UserRegisterForm({ userService }: DependencyContainer) {
             []
         );
 
+        console.log(antd.FormItem);
+
         return (
             // onFinishFailed={onFinishFailed}
-            <Form {...layout} name="basic" onFinish={onFinish}>
-                <Form.Item
+            <antd.Form {...layout} name="basic" onFinish={onFinish}>
+                <antd.FormItem
                     label="Username"
                     name="name"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Input />
-                </Form.Item>
+                    <antd.Input />
+                </antd.FormItem>
 
-                <Form.Item
+                <antd.FormItem
                     label="phone number"
                     name="phone_number"
                     rules={[{ required: true, message: 'Please input your phone number!' }]}
                 >
-                    <Input />
-                </Form.Item>
+                    <antd.Input />
+                </antd.FormItem>
 
-                <Form.Item
+                <antd.FormItem
                     label="Password"
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
-                    <Input.Password />
-                </Form.Item>
+                    <antd.InputPassword />
+                </antd.FormItem>
 
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
+                <antd.FormItem {...tailLayout}>
+                    <antd.Button type="primary" htmlType="submit">
                         Submit
-                    </Button>
-                </Form.Item>
-            </Form>
+                    </antd.Button>
+                </antd.FormItem>
+            </antd.Form>
         );
     };
 }

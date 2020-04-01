@@ -4,17 +4,16 @@ import { RouteComponentProps } from 'react-router-dom';
 import { useQuery, ValidateType } from '../../../lib/hooks';
 import { antd } from '../../../dependency/antd';
 import { DependencyContainer } from '../../../lib/common';
-import { Button, Descriptions, Form, Input, Radio } from 'antd';
 import { reportError, reportErrorS, reportInfoS } from '../../../component/notify';
 import { matchResponse } from '../../../dependency/protocol';
 import { Payment } from '../../../dependency/concept';
 
 const layout = {
     labelCol: { span: 6 },
-    wrapperCol: { span: 24 },
+    wrapperCol: { span: 18 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 10, span: 20 },
+    wrapperCol: { offset: 6, span: 18 },
 };
 
 export function UserPay({ userService }: DependencyContainer) {
@@ -72,51 +71,51 @@ export function UserPay({ userService }: DependencyContainer) {
         return (
             <React.Fragment>
                 <antd.Card>
-                    <Form {...layout} name="basic" onFinish={onFinish}>
+                    <antd.Form {...layout} name="basic" onFinish={onFinish}>
                         {useID ? (
-                            <Form.Item
+                            <antd.FormItem
                                 label="ID"
                                 name="id"
                                 rules={[{ required: true, message: 'Please input your id!' }]}
                             >
-                                <Input />
-                            </Form.Item>
+                                <antd.Input />
+                            </antd.FormItem>
                         ) : (
-                            <Form.Item
+                            <antd.FormItem
                                 label="PhoneNumber"
                                 name="phone_number"
                                 rules={[{ required: true, message: 'Please input your phone_number!' }]}
                             >
-                                <Input />
-                            </Form.Item>
+                                <antd.Input />
+                            </antd.FormItem>
                         )}
 
-                        <Form.Item
+                        <antd.FormItem
                             label="Money"
                             name="money"
                             rules={[{ required: true, message: 'Please input the amount of money!' }]}
                         >
-                            <Input />
-                        </Form.Item>
+                            <antd.Input />
+                        </antd.FormItem>
 
-                        <Form.Item
+                        <antd.FormItem
                             label="Payment Type"
                             name="payment_type"
                             rules={[{ required: true, message: 'Please select the payment type!' }]}
                         >
-                            <Radio.Group>
-                                <Radio.Button value={0}>AliPay</Radio.Button>
-                                <Radio.Button value={1}>WeChat</Radio.Button>
-                                <Radio.Button value={2}>UnionPay</Radio.Button>
-                                <Radio.Button value={3}>PayPal</Radio.Button>
-                            </Radio.Group>
-                        </Form.Item>
+                            <antd.Radio.Group>
+                                <antd.Radio.Button value={0}>AliPay</antd.Radio.Button>
+                                <antd.Radio.Button value={1}>WeChat</antd.Radio.Button>
+                                <antd.Radio.Button value={2}>UnionPay</antd.Radio.Button>
+                                <antd.Radio.Button value={3}>PayPal</antd.Radio.Button>
+                            </antd.Radio.Group>
+                        </antd.FormItem>
 
-                        <Form.Item {...tailLayout}>
-                            <Button onClick={() => setUseID((prev) => !prev)} disabled={true}>
+                        <antd.FormItem {...tailLayout}>
+                            <antd.Button onClick={() => setUseID((prev) => !prev)} disabled={true}>
                                 {useID ? 'Use Phone Number Indexing' : 'Use ID'}
-                            </Button>
-                            <Button
+                            </antd.Button>
+                            <antd.Button
                                 type="primary"
                                 htmlType="submit"
                                 style={{
@@ -124,17 +123,19 @@ export function UserPay({ userService }: DependencyContainer) {
                                 }}
                             >
                                 Submit
-                            </Button>
-                        </Form.Item>
-                    </Form>
+                            </antd.Button>
+                        </antd.FormItem>
+                    </antd.Form>
                 </antd.Card>
                 {paymentInfo && (
                     <antd.Card>
-                        <Descriptions title="Payment Info">
-                            <Descriptions.Item label="Payment ID">{paymentInfo?.payment_id}</Descriptions.Item>
-                            <Descriptions.Item label="User ID">{paymentInfo?.user_id}</Descriptions.Item>
-                            <Descriptions.Item label="Money">{paymentInfo?.money}</Descriptions.Item>
-                        </Descriptions>
+                        <antd.Descriptions title="Payment Info">
+                            <antd.Descriptions.Item label="Payment ID">
+                                {paymentInfo?.payment_id}
+                            </antd.Descriptions.Item>
+                            <antd.Descriptions.Item label="User ID">{paymentInfo?.user_id}</antd.Descriptions.Item>
+                            <antd.Descriptions.Item label="Money">{paymentInfo?.money}</antd.Descriptions.Item>
+                        </antd.Descriptions>
                     </antd.Card>
                 )}
             </React.Fragment>

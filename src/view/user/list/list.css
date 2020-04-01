@@ -1,3 +1,90 @@
 .demo-load-more-list {
     min-height: 350px;
 }
+
+
+/*.list-item :global(.ant-card-body)*/
+.list-container {
+    display: -webkit-flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    display: flex;
+}
+
+.list-container {
+    margin: 20px 0;
+}
+
+.name a {
+    float: right;
+    margin-right: 5%;
+}
+
+.list-item {
+    max-width: 450px;
+}
+
+
+@media all and (min-width: 1450px) {
+    .list-item {
+        flex: 0 0 24%;
+    }
+    .list-container {
+        justify-content: space-between;
+    }
+}
+
+
+@media all and (max-width: 1450px) {
+    .list-item {
+        flex: 0 0 33%;
+    }
+}
+
+@media all and (max-width: 1250px) {
+    .list-item {
+        flex: 0 0 49%;
+    }
+}
+
+@media all and (max-width: 900px) {
+    .list-item {
+        flex: 0 0 100%;
+    }
+}
+
+
+.list-item :global(.ant-card-body) {
+    padding: 0;
+}
+
+.list-item:global(.ant-card) {
+    margin: 0.618% 0;
+    padding: 16px;
+}
+
+.description {
+}
+
+.name {
+    margin-top: 0;
+    /*flex: 0 0 20%;*/
+}
+
+.phone-number {
+}
+
+.id {
+}
+
+.balance {
+}
+
+.edit {
+
+}
+
+.payment {
+
+}

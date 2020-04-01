@@ -8,10 +8,12 @@ export function AsyncComponent<C extends keyof JSX.IntrinsicElements | JSXElemen
         const [, setLoaded] = useState(false);
 
         useEffect(() => {
-            importComponent().then((c) => {
-                Component = c;
-                setLoaded(true);
-            });
+            importComponent()
+                .then((c) => {
+                    Component = c;
+                    setLoaded(true);
+                })
+                .catch(console.error);
         }, []);
 
         return Component !== null ? <Component {...props} /> : null;

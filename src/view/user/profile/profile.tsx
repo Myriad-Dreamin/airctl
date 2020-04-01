@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { DependencyContainer } from '../../../lib/common';
-import { Descriptions } from 'antd';
 import { User } from '../../../dependency/concept';
+import { antd } from '../../../dependency/antd';
 import { matchResponse } from '../../../dependency/protocol';
 import queryString from 'query-string';
 import { RouteComponentProps } from 'react-router-dom';
@@ -44,20 +44,20 @@ export function UserProfile({ userService }: DependencyContainer) {
         return (
             <div hidden={loading}>
                 {data && (
-                    <Descriptions title="User Info" bordered column={4}>
-                        <Descriptions.Item label="UserName" span={2}>
+                    <antd.Descriptions title="User Info" bordered column={4}>
+                        <antd.Descriptions.Item label="UserName" span={2}>
                             {data.name}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Telephone" span={2}>
+                        </antd.Descriptions.Item>
+                        <antd.Descriptions.Item label="Telephone" span={2}>
                             {data.phone_number}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Identifier" span={2}>
+                        </antd.Descriptions.Item>
+                        <antd.Descriptions.Item label="Identifier" span={2}>
                             {data.id}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Money" span={2}>
-                            {data.money}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Ordering Room" span={4}>
+                        </antd.Descriptions.Item>
+                        <antd.Descriptions.Item label="Balance" span={2}>
+                            {data.balance}
+                        </antd.Descriptions.Item>
+                        <antd.Descriptions.Item label="Ordering Room" span={4}>
                             Room1 <br />
                             Room2 <br />
                             Room3 <br />
@@ -66,8 +66,8 @@ export function UserProfile({ userService }: DependencyContainer) {
                             Room6 <br />
                             Room7 <br />
                             Room8 <br />
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Controlling Devices" span={4}>
+                        </antd.Descriptions.Item>
+                        <antd.Descriptions.Item label="Controlling Devices" span={4}>
                             Device1 <br />
                             Device2 <br />
                             Device3 <br />
@@ -76,8 +76,8 @@ export function UserProfile({ userService }: DependencyContainer) {
                             Device6 <br />
                             Device7 <br />
                             Device8 <br />
-                        </Descriptions.Item>
-                    </Descriptions>
+                        </antd.Descriptions.Item>
+                    </antd.Descriptions>
                 )}
             </div>
         );

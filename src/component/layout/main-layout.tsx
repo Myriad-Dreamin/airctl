@@ -9,15 +9,26 @@ import { context } from '../../context';
 export function MainLayout(C: FunctionComponent<any>) {
     let { I18nContext: i18n } = context;
     let sidebar_name = i18n.statics.global.sidebar_name;
+
     function resetI18n() {
         i18n = context.I18nContext;
         sidebar_name = i18n.statics.global.sidebar_name;
     }
 
     return function (props: any) {
+        console.log('rerender main layout');
+
         const [collapsed, setCollapsed] = useState(false);
         const swapCollapsed = useCallback(() => setCollapsed((c) => !c), []);
         const [localeDropdownVisible, setLocaleDropdownVisible] = useState(false);
+        const [width, setWidth] = useState(200);
+
+        useEffect(() => {
+            if (window.innerWidth < 600) setWidth(window.innerWidth);
+            else {
+                setWidth(200);
+            }
+        }, [window.innerWidth]);
 
         const [locale, setLocale] = useState(context.getLocale());
         useEffect(resetI18n, [locale]);
@@ -52,20 +63,26 @@ export function MainLayout(C: FunctionComponent<any>) {
                     breakpoint="lg"
                     collapsedWidth="0"
                     trigger={null}
-                    onBreakpoint={(broken) => {
-                        console.log(broken);
-                    }}
+                    onBreakpoint={setCollapsed}
                     onCollapse={(collapsed, type) => {
-                        console.log(collapsed, type);
+                        console.log(collapsed, type, window.innerWidth);
                     }}
                     collapsible
                     collapsed={collapsed}
                     key="global-sider"
+                    width={width}
                 >
                     <div className={styles['logo']}>
                         <span className={styles['logo-left']}>Air</span>
                         <span className={styles['logo-mid']}>Control</span>
                         <span className={styles['logo-right']}>Sys</span>
+                        {window.innerWidth <= 600 &&
+                            !collapsed &&
+                            React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                                className: styles['trigger'] + ' ' + styles['global-header-item'],
+                                onClick: swapCollapsed,
+                                style: { float: 'right', padding: '0', marginTop: '10px' },
+                            })}
                     </div>
                     <antd.Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} key="global-menu">
                         <antd.Menu.Item key="overview-1">
@@ -115,13 +132,13 @@ export function MainLayout(C: FunctionComponent<any>) {
                             </antd.Menu.Item>
                             <antd.Menu.Item key="user-4">
                                 <UserOutlined />
-                                <Link to="/app/user/profile/:id/privilege" className="nav-text">
+                                <Link to="/app/user/profile/privilege?id=1" className="nav-text">
                                     {sidebar_name.user.privilege_control}
                                 </Link>
                             </antd.Menu.Item>
                             <antd.Menu.Item key="user-5">
                                 <UserOutlined />
-                                <Link to="/app/user/pay/:id" className="nav-text">
+                                <Link to="/app/user/pay?id=1" className="nav-text">
                                     {sidebar_name.user.payment}
                                 </Link>
                             </antd.Menu.Item>
@@ -179,11 +196,15 @@ export function MainLayout(C: FunctionComponent<any>) {
                 </antd.Layout.Sider>
                 <antd.Layout key="global-sub-layout">
                     <antd.Layout.Header className={styles['site-layout-sub-header-background']} style={{ padding: 0 }}>
-                        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                            className: styles['trigger'] + ' ' + styles['global-header-item'],
-                            onClick: swapCollapsed,
-                        })}
-                        <div className={styles['global-header-right-container'] + ' ' + styles['global-header-item']}>
+                        {(window.innerWidth >= 600 || collapsed) &&
+                            React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                                className: styles['trigger'] + ' ' + styles['global-header-item'],
+                                onClick: swapCollapsed,
+                            })}
+                        <div
+                            className={styles['global-header-right-container'] + ' ' + styles['global-header-item']}
+                            hidden={window.innerWidth < 600 ? !collapsed : false}
+                        >
                             <antd.Dropdown
                                 overlay={menu}
                                 visible={localeDropdownVisible}
@@ -197,12 +218,18 @@ export function MainLayout(C: FunctionComponent<any>) {
                             </antd.Dropdown>
                         </div>
                     </antd.Layout.Header>
-                    <antd.Layout.Content style={{ margin: '24px 16px 0' }}>
+                    <antd.Layout.Content
+                        style={{ margin: '24px 16px 0' }}
+                        hidden={window.innerWidth < 600 ? !collapsed : false}
+                    >
                         <div className={styles['site-layout-background']} style={{ padding: 24, minHeight: 360 }}>
                             <C {...props} />
                         </div>
                     </antd.Layout.Content>
-                    <antd.Layout.Footer style={{ textAlign: 'center' }}>
+                    <antd.Layout.Footer
+                        style={{ textAlign: 'center' }}
+                        hidden={window.innerWidth < 600 ? !collapsed : false}
+                    >
                         power by <a href="https://github.com/Myriad-Dreamin">Myriad Dreamin</a>, Air Control System
                         ©2020 Created by React, Ant Design
                     </antd.Layout.Footer>

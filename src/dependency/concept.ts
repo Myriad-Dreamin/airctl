@@ -6,6 +6,9 @@ export type RoomID = number;
 export type AirID = number;
 // 订单在系统中被分配的增量ID
 export type PaymentID = number;
+
+export type AirDeviceID = number;
+
 // 摄氏度
 export type CelsiusDegree = number;
 // 温度单位 = 摄氏度 | （如果是美国人，用华氏度，等等）
@@ -30,7 +33,7 @@ export type Auth = Partial<FullUserIdentifiers>;
 
 // 描述一个真实世界的用户对象
 export interface User extends FullUserIdentifiers {
-    money: number;
+    balance: number;
 }
 
 export enum PaymentType {
@@ -67,6 +70,8 @@ export type AirState = Omit<FullAirState, 'aid'>;
 
 // 描述一个空调对象中可以修改的字段
 export type SettableAirState = Pick<FullAirState, 'available' | 'is_on' | 'target_degree' /* | 'repairing' */>;
+
+export interface AirDeviceInfo {}
 
 // 描述一个房间数据对象
 export interface FullRoom {

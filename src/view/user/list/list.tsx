@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { Avatar, Button, List, Skeleton } from 'antd';
+import { useEffect, useState } from 'react';
 import styles from './list.css';
 import { User } from '../../../dependency/concept';
 import { DependencyContainer } from '../../../lib/common';
 import { matchResponse } from '../../../dependency/protocol';
+import { antd } from '../../../dependency/antd';
 
 export function UserList({ userService }: DependencyContainer) {
     return function () {
-        const [loading, setLoading] = useState(true);
+        const [, setLoading] = useState(true);
         const [data, setData] = useState<User[]>([]);
         // let [list, setList] = useState([]);
 
@@ -24,70 +24,69 @@ export function UserList({ userService }: DependencyContainer) {
             );
         }, []);
 
-        const onLoadMore = useCallback(() => {
-            console.log('onLoadMore');
-            // this.setState({
-            //     loading: true,
-            //     list: this.state.data.concat([...new Array(count)].map(() => ({ loading: true, name: {} }))),
-            // });
-            // this.getData(res => {
-            //     const data = this.state.data.concat(res.results);
-            //     this.setState(
-            //         {
-            //             data,
-            //             list: data,
-            //             loading: false,
-            //         },
-            //         () => {
-            //             // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-            //             // In real scene, you can using public method of react-virtualized:
-            //             // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-            //             window.dispatchEvent(new Event('resize'));
-            //         },
-            //     );
-            // });
-        }, []);
+        // const onLoadMore = useCallback(() => {
+        //     console.log('onLoadMore');
+        //     // this.setState({
+        //     //     loading: true,
+        //     //     list: this.state.data.concat([...new Array(count)].map(() => ({ loading: true, name: {} }))),
+        //     // });
+        //     // this.getData(res => {
+        //     //     const data = this.state.data.concat(res.results);
+        //     //     this.setState(
+        //     //         {
+        //     //             data,
+        //     //             list: data,
+        //     //             loading: false,
+        //     //         },
+        //     //         () => {
+        //     //             // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
+        //     //             // In real scene, you can using public method of react-virtualized:
+        //     //             // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
+        //     //             window.dispatchEvent(new Event('resize'));
+        //     //         },
+        //     //     );
+        //     // });
+        // }, []);
 
-        const loadMore = !loading ? (
-            <div
-                style={{
-                    textAlign: 'center',
-                    marginTop: 12,
-                    height: 32,
-                    lineHeight: '32px',
-                }}
-            >
-                <Button onClick={onLoadMore}>loading more</Button>
-            </div>
-        ) : null;
+        // const loadMore = !loading ? (
+        //     <div
+        //         style={{
+        //             textAlign: 'center',
+        //             marginTop: 12,
+        //             height: 32,
+        //             lineHeight: '32px',
+        //         }}
+        //     >
+        //         <antd.Button onClick={onLoadMore}>loading more</antd.Button>
+        //     </div>
+        // ) : null;
 
         return (
-            <List
-                className={styles['demo-load-more-list']}
-                loading={loading}
-                itemLayout="horizontal"
-                loadMore={loadMore}
-                dataSource={data}
-                renderItem={(item: User) => (
-                    <List.Item actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}>
-                        <Skeleton avatar title={false} loading={false} active>
-                            <List.Item.Meta
-                                avatar={
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                }
-                                title={<a href="https://ant.design">{item.name}</a>}
-                                description={
-                                    <React.Fragment>
-                                        <div>id：{item.id}</div>
-                                        <div>phone number: {item.phone_number}</div>
-                                        <div>money: {item.money}</div>
-                                    </React.Fragment>
-                                }
-                            />
-                        </Skeleton>
-                    </List.Item>
-                )}
-            />
+            <React.Fragment>
+                <div className={styles['list-container']}>
+                    {data.map((item) => {
+                        return (
+                            <antd.Card key={item.id} className={styles['list-item']}>
+                                <div className={styles['name']}>
+                                    <a href="https://ant.design">{item.name}</a>
+                                </div>
+                                <div style={{ clear: 'both', margin: '5px 0', width: '1px', height: '1px' }}>
+                                    &nbsp;
+                                </div>
+                                <div className={styles['phone-number']}>
+                                    phone number: <span style={{ float: 'right' }}>{item.phone_number}</span>
+                                </div>
+                                <div className={styles['balance']}>
+                                    balance: <span style={{ float: 'right' }}>{item.balance}</span>
+                                </div>
+                                <antd.Divider style={{ margin: '10px 0' }} />
+                                <antd.Button style={{ float: 'left' }}>edit</antd.Button>
+                                <antd.Button style={{ float: 'right' }}>pay</antd.Button>
+                            </antd.Card>
+                        );
+                    })}
+                </div>
+            </React.Fragment>
         );
     };
 }

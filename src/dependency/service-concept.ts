@@ -1,5 +1,7 @@
 import { MResponse, Response } from './protocol';
 import {
+    AirDeviceID,
+    AirDeviceInfo,
     AirID,
     AirState,
     Auth,
@@ -86,8 +88,6 @@ interface AirServiceV3 extends AirService {
     Revoke(aid: AirID, id: Auth, force?: boolean): MResponse;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 interface AirServiceV4 extends AirServiceV3 {
     // 提交检修订单
     // 前台小哥发现空调用不了了，向系统提交检修订单
@@ -104,6 +104,12 @@ interface AirServiceV4 extends AirServiceV3 {
     // 删除空调
     // 空调被淘汰了，将空调从系统中删除
     Delete(aid: AirID): MResponse;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+interface AirServiceV5 extends AirServiceV4 {
+    GetDeviceInfo(airDeviceType: AirDeviceID): Response<AirDeviceInfo>;
 }
 
 export interface RoomService {
