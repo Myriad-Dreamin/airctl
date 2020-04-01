@@ -76,5 +76,5 @@ export interface AirDeviceInfo {}
 // 描述一个房间数据对象
 export interface FullRoom {
     rid: RoomID;
-    roomNumber: string;
+    room_number: string;
 }
