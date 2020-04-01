@@ -4,14 +4,13 @@ import { AirService, RoomService } from '../../dependency/service-concept';
 import { OK, Payload, SimplifiedResponse } from '../../dependency/protocol';
 import { MockAirService } from './air';
 
-
 class RNIndex extends MockServiceIndex<'room_number', FullRoom> {}
 
 export class MockRoomService extends MockService<FullRoom> implements RoomService {
     protected rnIndex: RNIndex;
     protected airService: AirService;
 
-    constructor(options?: { initialRooms?: FullRoom[], airService: AirService }) {
+    constructor(options?: { initialRooms?: FullRoom[]; airService: AirService }) {
         super(options?.initialRooms);
         this.rnIndex = new RNIndex('room_number', options?.initialRooms);
         this.airService = options?.airService || new MockAirService();

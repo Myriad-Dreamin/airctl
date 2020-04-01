@@ -50,7 +50,7 @@ export class MockUserService extends MockService<User> implements UserService {
             (() => {
                 const user: User = {
                     id: this.inc++,
-                    money: 0,
+                    balance: 0,
                     ...ids,
                 };
                 this.appendData(user);
@@ -103,7 +103,13 @@ export class MockUserService extends MockService<User> implements UserService {
         return this.paymentService.Get(payID);
     }
 
-    Pay(id: number, paymentParams: PaymentParam): Payload<PaymentID> | SimplifiedResponse<any> {
-        return this.paymentService.create(id, paymentParams);
+    Pay(userID: number, paymentParams: PaymentParam): Payload<PaymentID> | SimplifiedResponse<any> {
+        return (
+            this.checkExists(userID) ||
+            (() => {
+                this.mockData[userID - 1].balance += paymentParams.money;
+                return this.paymentService.create(userID, paymentParams);
+            })()
+        );
     }
 }

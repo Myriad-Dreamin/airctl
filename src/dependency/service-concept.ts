@@ -123,7 +123,7 @@ export interface RoomService {
 
     // 查看多个房间
     // 管理系统，根据条件查询房间
-    List(cond: any): Response<FullRoom[]>;
+    Filter(cond: any): Response<FullRoom[]>;
 }
 
 interface RoomServiceV2 extends RoomService {

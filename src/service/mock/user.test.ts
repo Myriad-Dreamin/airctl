@@ -93,7 +93,7 @@ const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
                 expect(user.id).to.deep.equal(userID);
                 // expect(user.name).to.deep.equal('qwq');
                 expect(user.phone_number).to.deep.equal('qwq');
-                expect(user.money).to.deep.equal(0);
+                expect(user.balance).to.deep.equal(0);
             });
         },
     },
@@ -106,19 +106,22 @@ const StdUserSvcTestCases: TestCase<ASTCCtx>[] = [
                 userID = id;
                 expect(id > 0).to.true;
             });
-            matchResponse(svc.Pay(userID, 233));
+            matchResponse(svc.Pay(userID, { payment_type: 0, money: 233 }));
             matchResponse(svc.CheckState(userID), function (user) {
                 expect(user.id).to.deep.equal(userID);
                 // expect(user.name).to.deep.equal('qwq');
                 expect(user.phone_number).to.deep.equal('qwq');
-                expect(user.money).to.deep.equal(233);
+                expect(user.balance).to.deep.equal(233);
             });
-            matchResponse(svc.Pay(userID, 233));
+            matchResponse(svc.Pay(userID, { payment_type: 0, money: 233 }));
             matchResponse(svc.CheckState(userID), function (user) {
                 expect(user.id).to.deep.equal(userID);
                 // expect(user.name).to.deep.equal('qwq');
                 expect(user.phone_number).to.deep.equal('qwq');
-                expect(user.money).to.deep.equal(466);
+                expect(user.balance).to.deep.equal(466);
+            });
+            matchResponse(svc.Pay(-1, { payment_type: 0, money: 233 }), undefined, (code, data) => {
+                expect(code).to.be.eq(ServiceCode.MockNotFound);
             });
         },
     },
