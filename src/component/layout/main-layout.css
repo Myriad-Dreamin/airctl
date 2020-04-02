@@ -25,7 +25,11 @@
 
 .site-layout-background {
     position: relative;
-    background: #f0f2f5;
+    /*background: #f0f2f5;*/
+}
+
+:global(.ant-layout), :global(.ant-layout-footer) {
+    background: #fff;
 }
 
 .global-header-item {

@@ -218,11 +218,11 @@ export function MainLayout(C: FunctionComponent<any>) {
                             </antd.Dropdown>
                         </div>
                     </antd.Layout.Header>
-                    <antd.Layout.Content
-                        style={{ margin: '24px 16px 0' }}
-                        hidden={window.innerWidth < 600 ? !collapsed : false}
-                    >
-                        <div className={styles['site-layout-background']} style={{ padding: 24, minHeight: 360 }}>
+                    <antd.Layout.Content hidden={window.innerWidth < 600 ? !collapsed : false}>
+                        <div
+                            className={styles['site-layout-background']}
+                            style={{ padding: '16px 24px', minHeight: 360 }}
+                        >
                             <C {...props} />
                         </div>
                     </antd.Layout.Content>

@@ -1,0 +1,164 @@
+
+@media all and (max-width: 700px) {
+    .form-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+}
+
+@media all and (min-width: 700px) {
+    .form-title {
+        font-size: 30px;
+        margin-bottom: 25px;
+    }
+}
+
+@media all and (min-width: 850px) {
+    .form-title {
+        font-size: 38px;
+        margin-bottom: 30px;
+    }
+}
+
+
+.form-title {
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+    height: 100%;
+    vertical-align: center;
+}
+
+
+.form-title, .form-container {
+    display: -webkit-flex;
+    flex-flow: row wrap;
+    align-items: flex-end;
+    display: flex;
+    width: 100%;
+}
+
+.form-title {
+    justify-content: space-between;
+}
+
+.form-container {
+    justify-content: space-around;
+}
+
+.cell-1, .cell-2, .cell-3, .cell-4, .cell-5, .cell-6, .cell-7, .cell-8, .cell-9, .cell-20,
+.cell-11, .cell-12, .cell-13, .cell-14, .cell-15, .cell-16, .cell-17, .cell-18, .cell-19, .cell-10,
+.cell-21, .cell-22, .cell-23, .cell-24 {
+    margin-bottom: 30px;
+}
+
+.cell-1 {
+    flex: 0 0 4.17%;
+}
+
+.cell-2 {
+    flex: 0 0 8.33%;
+}
+
+.cell-3 {
+    flex: 0 0 12.5%;
+}
+
+.cell-4 {
+    flex: 0 0 16.67%;
+}
+
+.cell-5 {
+    flex: 0 0 20.83%;
+}
+
+.cell-6 {
+    flex: 0 0 25%;
+}
+
+.cell-7 {
+    flex: 0 0 29.17%;
+}
+
+.cell-8 {
+    flex: 0 0 33.33%;
+}
+
+.cell-9 {
+    flex: 0 0 37.5%;
+}
+
+.cell-10 {
+    flex: 0 0 41.67%;
+}
+
+.cell-11 {
+    flex: 0 0 45.83%;
+}
+
+.cell-12 {
+    flex: 0 0 50%;
+}
+
+.cell-13 {
+    flex: 0 0 54.17%;
+}
+
+.cell-14 {
+    flex: 0 0 58.33%;
+}
+
+.cell-15 {
+    flex: 0 0 62.5%;
+}
+
+.cell-16 {
+    flex: 0 0 66.67%;
+}
+
+.cell-17 {
+    flex: 0 0 70.83%;
+}
+
+.cell-18 {
+    flex: 0 0 75%;
+}
+
+.cell-19 {
+    flex: 0 0 79.17%;
+}
+
+.cell-20 {
+    flex: 0 0 83.33%;
+}
+
+.cell-21 {
+    flex: 0 0 87.5%;
+}
+
+.cell-22 {
+    flex: 0 0 91.67%;
+}
+
+.cell-23 {
+    flex: 0 0 95.83%;
+}
+
+.cell-24 {
+    flex: 0 0 100%;
+}
+
+.label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.tip {
+    margin-left: 0.5em;
+    color: #525252;
+}
+
+
+.submit {
+    text-align: center;
+}
