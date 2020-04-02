@@ -69,7 +69,7 @@ export interface FullAirState {
 export type AirState = Omit<FullAirState, 'aid'>;
 
 // 描述一个空调对象中可以修改的字段
-export type SettableAirState = Pick<FullAirState, 'available' | 'is_on' | 'target_degree' /* | 'repairing' */>;
+export type SettableAirState = Partial<Pick<FullAirState, 'available' | 'is_on' | 'target_degree' /* | 'repairing' */>>;
 
 export interface AirDeviceInfo {}
 

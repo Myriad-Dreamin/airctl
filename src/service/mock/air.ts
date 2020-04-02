@@ -62,4 +62,22 @@ export class MockAirService extends MockService<FullAirState> implements AirServ
     Revoke(aid: number, id: Auth): SimplifiedResponse<any> {
         return MockTodo();
     }
+
+    Filter(cond: any): Payload<FullAirState[]> | SimplifiedResponse<any> {
+        return OK<FullAirState[]>({
+            code: 0,
+            data: this.mockData,
+        });
+    }
+
+    RequireRepair(aid: number): SimplifiedResponse<any> {
+        return OK<undefined>({
+            code: 0,
+            data: undefined,
+        });
+    }
+
+    SetTargetDegree(aid: number, tDeg: number): SimplifiedResponse<any> {
+        return this.SetState(aid, { target_degree: tDeg });
+    }
 }

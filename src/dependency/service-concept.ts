@@ -61,14 +61,6 @@ export interface AirService {
     // 获取空调在系统中的ID
     GetID(serialNumber: string): Response<AirID>;
 
-    // 授权空调
-    // 给用户授权该空调的控制权
-    Grant(aid: AirID, id: Auth): MResponse;
-
-    // 回收空调权力
-    // 回收授予给用户的空调的控制权
-    Revoke(aid: AirID, id: Auth): MResponse;
-
     // 检查空调状态
     // 方便前台在旅客未进入房门的时候告知空调状态
     CheckState(aid: AirID): Response<AirState>;
@@ -76,9 +68,7 @@ export interface AirService {
     // 设置空调状态
     // 方便前台小哥帮忙远程操作空调
     SetState(aid: AirID, airState: SettableAirState): MResponse;
-}
 
-interface AirServiceV3 extends AirService {
     // 授权空调
     // 可以无视用户是否欠费，强制给用户控制空调的权力
     Grant(aid: AirID, id: Auth, force?: boolean): MResponse;
@@ -86,16 +76,14 @@ interface AirServiceV3 extends AirService {
     // 回收空调权力
     // 可以无视用户是否欠费，强制回收授予给用户的空调的控制权
     Revoke(aid: AirID, id: Auth, force?: boolean): MResponse;
-}
 
-interface AirServiceV4 extends AirServiceV3 {
     // 提交检修订单
     // 前台小哥发现空调用不了了，向系统提交检修订单
     RequireRepair(aid: AirID): MResponse;
 
     // 查看多个空调
     // 管理系统，根据条件查询空调
-    List(cond: any): Response<FullAirState[]>;
+    Filter(cond?: any): Response<FullAirState[]>;
 
     // 设置目标温度
     // 是SetState的包装接口，无需单独说明
@@ -108,7 +96,7 @@ interface AirServiceV4 extends AirServiceV3 {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
-interface AirServiceV5 extends AirServiceV4 {
+interface AirServiceV5 extends AirService {
     GetDeviceInfo(airDeviceType: AirDeviceID): Response<AirDeviceInfo>;
 }
 
