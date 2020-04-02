@@ -24,7 +24,7 @@ const cfg = {
         splitChunks: {
             cacheGroups: {
                 vendor: {
-                    test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|@ant-design)[\\/]/,
+                    test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|@ant-design|@material-ui)[\\/]/,
                     name: 'vendor',
                     chunks: 'all'
                 }
@@ -109,8 +109,8 @@ const cfg = {
 };
 
 // if (config.build.bundleAnalyzerReport) {
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// cfg.plugins.push(new BundleAnalyzerPlugin());
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+cfg.plugins.push(new BundleAnalyzerPlugin());
 // }
 
 
