@@ -29,7 +29,7 @@ export function useFormData<T>(
     return { state: rs[0], dispatch: rs[1], info };
 }
 
-export  function TextField<T>(prop: { controller: FormController<T>; field: keyof T & string }) {
+export function TextField<T>(prop: { controller: FormController<T>; field: keyof T & string }) {
     const { controller, field } = prop;
     console.log('qwq', field);
 
@@ -44,5 +44,5 @@ export  function TextField<T>(prop: { controller: FormController<T>; field: keyo
             />
         );
     }
-    return <MaterialUITextField name={field} style={{ width: '100%' }} onBlur={controller.dispatch}/>;
+    return <MaterialUITextField name={field} style={{ width: '100%' }} onBlur={controller.dispatch} />;
 }

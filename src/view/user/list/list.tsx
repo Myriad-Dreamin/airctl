@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import styles from './list.css';
 import { User } from '../../../dependency/concept';
 import { DependencyContainer } from '../../../lib/common';
 import { matchResponse } from '../../../dependency/protocol';
-import { antd } from '../../../dependency/antd';
+import MaterialTable from 'material-table';
+import { RouteComponentProps } from 'react-router-dom';
 
 export function UserList({ userService }: DependencyContainer) {
-    return function () {
+    return function (props: RouteComponentProps) {
         const [, setLoading] = useState(true);
         const [data, setData] = useState<User[]>([]);
         // let [list, setList] = useState([]);
@@ -60,33 +60,40 @@ export function UserList({ userService }: DependencyContainer) {
         //         <antd.Button onClick={onLoadMore}>loading more</antd.Button>
         //     </div>
         // ) : null;
-
+        //
         return (
-            <React.Fragment>
-                <div className={styles['list-container']}>
-                    {data.map((item) => {
-                        return (
-                            <antd.Card key={item.id} className={styles['list-item']}>
-                                <div className={styles['name']}>
-                                    <a href="https://ant.design">{item.name}</a>
-                                </div>
-                                <div style={{ clear: 'both', margin: '5px 0', width: '1px', height: '1px' }}>
-                                    &nbsp;
-                                </div>
-                                <div className={styles['phone-number']}>
-                                    phone number: <span style={{ float: 'right' }}>{item.phone_number}</span>
-                                </div>
-                                <div className={styles['balance']}>
-                                    balance: <span style={{ float: 'right' }}>{item.balance}</span>
-                                </div>
-                                <antd.Divider style={{ margin: '10px 0' }} />
-                                <antd.Button style={{ float: 'left' }}>edit</antd.Button>
-                                <antd.Button style={{ float: 'right' }}>pay</antd.Button>
-                            </antd.Card>
-                        );
-                    })}
-                </div>
-            </React.Fragment>
+            <MaterialTable
+                title="User List Preview"
+                columns={[
+                    { title: 'ID', field: 'id' },
+                    { title: 'Name', field: 'name' },
+                    { title: 'Phone Number', field: 'phone_number' },
+                    { title: 'Balance', field: 'balance', type: 'numeric' },
+                    // {
+                    //     title: 'Birth Place',
+                    //     field: 'birthCity',
+                    //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
+                    // },
+                ]}
+                data={data}
+                actions={[
+                    {
+                        icon: 'more_vert',
+                        tooltip: 'Inspect User',
+                        onClick: (event: any, rowData: User | User[]) => {
+                            console.log(event);
+                            if (rowData instanceof Array) {
+                            } else {
+                                props.history.push(`/app/user/profile?id=${rowData.id}`);
+                            }
+                        },
+                    },
+                ]}
+                options={{
+                    sorting: true,
+                    actionsColumnIndex: -1,
+                }}
+            />
         );
     };
 }

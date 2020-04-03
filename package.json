@@ -63,6 +63,7 @@
     "antd": "^4.0.4",
     "core-js": "^3.6.4",
     "js-cookie": "^2.2.1",
+    "material-table": "^1.57.2",
     "query-string": "^6.11.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
