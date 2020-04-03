@@ -1,0 +1,48 @@
+import { TextField as MaterialUITextField } from '@material-ui/core';
+import * as React from 'react';
+import { Dispatch, ReducerState, useReducer, useState } from 'react';
+
+export interface FormController<T> {
+    state: ReducerState<(state: T, event: React.ChangeEvent<{ value: string; name: string }>) => T>;
+    dispatch: Dispatch<React.ChangeEvent<{ value: string; name: string }>>;
+    info: { [K in keyof T]?: string };
+}
+
+export function useFormData<T>(
+    data: T,
+    validators?: { [K in keyof T]?: (data: T[K]) => string | undefined }
+): FormController<T> {
+    const [info, setInfo] = useState<{ [K in keyof T]?: string }>({});
+    const rs = useReducer((state: T, event: React.ChangeEvent<{ value: string; name: string }>) => {
+        event.persist();
+        if (event.target) {
+            if (validators && (validators as any)[event.target.name]) {
+                (info as any)[event.target.name] = (validators as any)[event.target.name](event.target.value);
+                setInfo(info);
+            }
+            (state as any)[event.target.name] = event.target.value;
+            return { ...state };
+        }
+        return state;
+    }, data);
+
+    return { state: rs[0], dispatch: rs[1], info };
+}
+
+export  function TextField<T>(prop: { controller: FormController<T>; field: keyof T & string }) {
+    const { controller, field } = prop;
+    console.log('qwq', field);
+
+    if (controller.info[field]) {
+        return (
+            <MaterialUITextField
+                error
+                helperText={controller.info[field]}
+                name={field}
+                style={{ width: '100%' }}
+                onBlur={controller.dispatch}
+            />
+        );
+    }
+    return <MaterialUITextField name={field} style={{ width: '100%' }} onBlur={controller.dispatch}/>;
+}

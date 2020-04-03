@@ -109,8 +109,8 @@ const cfg = {
 };
 
 // if (config.build.bundleAnalyzerReport) {
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-cfg.plugins.push(new BundleAnalyzerPlugin());
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// cfg.plugins.push(new BundleAnalyzerPlugin());
 // }
 
 

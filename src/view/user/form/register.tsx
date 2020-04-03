@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Dispatch, FormEvent, ReducerState, useCallback, useReducer, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { DependencyContainer } from '../../../lib/common';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import styles from './register.css';
 import { Tooltip } from 'antd';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { ButtonGroup, TextField } from '@material-ui/core';
+import { ButtonGroup } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { TextField, useFormData } from '../../../component/form';
 
 function RadioButtonGroup(props: {
     currentValue: string;
@@ -40,53 +41,6 @@ function RadioButtonGroup(props: {
         </ButtonGroup>
     );
 }
-
-interface FormController<T> {
-    state: ReducerState<(state: T, event: React.ChangeEvent<{ value: string; name: string }>) => T>;
-    dispatch: Dispatch<React.ChangeEvent<{ value: string; name: string }>>;
-    info: { [K in keyof T]?: string };
-}
-
-function useFormData<T>(
-    data: T,
-    validators?: { [K in keyof T]?: (data: T[K]) => string | undefined }
-): FormController<T> {
-    const [info, setInfo] = useState<{ [K in keyof T]?: string }>({});
-    const rs = useReducer((state: T, event: React.ChangeEvent<{ value: string; name: string }>) => {
-        event.persist();
-        if (event.target) {
-            if (validators && (validators as any)[event.target.name]) {
-                (info as any)[event.target.name] = (validators as any)[event.target.name](event.target.value);
-                setInfo(info);
-            }
-            (state as any)[event.target.name] = event.target.value;
-            return { ...state };
-        }
-        return state;
-    }, data);
-
-    return { state: rs[0], dispatch: rs[1], info };
-}
-
-const formControllerMethods = {
-    TextField<T>(prop: { controller: FormController<T>; field: keyof T & string }) {
-        const { controller, field } = prop;
-        console.log('qwq', field);
-
-        if (controller.info[field]) {
-            return (
-                <TextField
-                    error
-                    helperText={controller.info[field]}
-                    name={field}
-                    style={{ width: '100%' }}
-                    onBlur={controller.dispatch}
-                />
-            );
-        }
-        return <TextField name={field} style={{ width: '100%' }} onBlur={controller.dispatch} />;
-    },
-};
 
 function notNull(value: string) {
     if (value === '') {
@@ -128,7 +82,7 @@ export function UserRegisterForm({ userService }: DependencyContainer) {
                         </Tooltip>
                     </span>{' '}
                 </div>
-                <formControllerMethods.TextField controller={formController} field="phone_number" />
+                <TextField controller={formController} field="phone_number" />
             </div>
         );
 
@@ -145,21 +99,21 @@ export function UserRegisterForm({ userService }: DependencyContainer) {
                         </Tooltip>
                     </span>{' '}
                 </div>
-                <formControllerMethods.TextField controller={formController} field="room_number" />
+                <TextField controller={formController} field="room_number" />
             </div>
         );
 
         const formLN = (
             <div className={matches ? styles['cell-5'] : styles['cell-11']}>
                 <div className={styles['label']}>Last Name</div>
-                <formControllerMethods.TextField controller={formController} field="last_name" />
+                <TextField controller={formController} field="last_name" />
             </div>
         );
 
         const formFN = (
             <div className={matches ? styles['cell-5'] : styles['cell-11']}>
                 <div className={styles['label']}>First Name</div>
-                <formControllerMethods.TextField controller={formController} field="first_name" />
+                <TextField controller={formController} field="first_name" />
             </div>
         );
 
@@ -181,7 +135,7 @@ export function UserRegisterForm({ userService }: DependencyContainer) {
                     <RadioButtonGroup groupDesc={options} currentValue={currentIN} onValueChanged={handleINChanged} />{' '}
                     Number
                 </div>
-                <formControllerMethods.TextField controller={formController} field="identity" />
+                <TextField controller={formController} field="identity" />
             </div>
         );
 
