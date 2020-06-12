@@ -29,7 +29,7 @@ export interface UserService {
     // 获取用户在系统中的ID
     // 几乎与检测用户是否存在同效
     // Has === compose(True, GetID)
-    GetID(auth: BAuth): Response<AirID>;
+    GetID(auth: BAuth): Response<UserID>;
 
     // 用户删除
     // 标记用户唯一标识，要求Auth中至少有一个标识非空

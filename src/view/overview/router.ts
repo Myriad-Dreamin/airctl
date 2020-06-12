@@ -11,7 +11,7 @@ export const OverviewRoutes: RouteDesc[] = [
     {
         type: RouteType.Exact,
         path: rel('dashboard'),
-        component: () => Dashboard,
+        component: Dashboard,
     },
     {
         type: RouteType.Exact,

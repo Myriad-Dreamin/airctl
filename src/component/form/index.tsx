@@ -1,6 +1,6 @@
 import { TextField as MaterialUITextField } from '@material-ui/core';
 import * as React from 'react';
-import { Dispatch, ReducerState, useReducer, useState } from 'react';
+import { CSSProperties, Dispatch, ReducerState, useReducer, useState } from 'react';
 
 export interface FormController<T> {
     state: ReducerState<(state: T, event: React.ChangeEvent<{ value: string; name: string }>) => T>;
@@ -29,20 +29,28 @@ export function useFormData<T>(
     return { state: rs[0], dispatch: rs[1], info };
 }
 
-export function TextField<T>(prop: { controller: FormController<T>; field: keyof T & string }) {
-    const { controller, field } = prop;
-    console.log('qwq', field);
+export function TextField<T>(prop: {
+    controller: FormController<T>;
+    field: keyof T & string;
+    style?: CSSProperties;
+    className?: string;
+}) {
+    const { controller, field, style, className } = prop;
+    console.log('qwq', field, className);
 
     if (controller.info[field]) {
         return (
             <MaterialUITextField
                 error
+                className={className}
                 helperText={controller.info[field]}
                 name={field}
-                style={{ width: '100%' }}
+                style={style ? Object.assign({ width: '100%' }, style) : { width: '100%' }}
                 onBlur={controller.dispatch}
             />
         );
     }
-    return <MaterialUITextField name={field} style={{ width: '100%' }} onBlur={controller.dispatch} />;
+    return <MaterialUITextField name={field}
+                                style={style ? Object.assign({ width: '100%' }, style) : { width: '100%' }}
+                                onBlur={controller.dispatch}/>;
 }
