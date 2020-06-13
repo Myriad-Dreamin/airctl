@@ -4,31 +4,35 @@ import { CSSProperties, Dispatch, ReducerState, useReducer, useState } from 'rea
 
 export interface FormController<T> {
     state: ReducerState<(state: T, event: React.ChangeEvent<{ value: string; name: string }>) => T>;
-    dispatch: Dispatch<React.ChangeEvent<{ value: string; name: string }>>;
+    dispatch: Dispatch<React.ChangeEvent<{ value: string; name: string }> | Array<any>>;
     info: { [K in keyof T]?: string };
     ok: boolean;
 }
 
 export function useFormData<T>(
     data: T,
-    validators?: { [K in keyof T]?: (data: T[K]) => string | undefined }
+    validators?: { [K in keyof T]?: (data: string) => string | undefined }
 ): FormController<T> {
     const [info, setInfo] = useState<{ [K in keyof T]?: string }>({});
     let ok = true;
-    const rs = useReducer((state: T, event: React.ChangeEvent<{ value: string; name: string }>) => {
-        event.persist();
-        if (event.target) {
-            if (validators && (validators as any)[event.target.name]) {
-                (info as any)[event.target.name] = (validators as any)[event.target.name](event.target.value);
-                setInfo(info);
-                if ((info as any)[event.target.name] !== undefined) {
-                    ok = false;
+    const rs = useReducer((state: T, event: React.ChangeEvent<{ value: string; name: string }> | Array<any>) => {
+        if (event instanceof Array) {
+            return event[1];
+        } else {
+            event.persist();
+            if (event.target) {
+                if (validators && (validators as any)[event.target.name]) {
+                    (info as any)[event.target.name] = (validators as any)[event.target.name](event.target.value);
+                    setInfo(info);
+                    if ((info as any)[event.target.name] !== undefined) {
+                        ok = false;
+                    }
                 }
+                (state as any)[event.target.name] = event.target.value;
+                return { ...state };
             }
-            (state as any)[event.target.name] = event.target.value;
-            return { ...state };
+            return state;
         }
-        return state;
     }, data);
 
     return { state: rs[0], dispatch: rs[1], info, ok };
@@ -49,6 +53,7 @@ export function TextField<T>(prop: {
                 error
                 className={className}
                 helperText={controller.info[field]}
+                defaultValue={controller.state[field]}
                 name={field}
                 style={style ? Object.assign({ width: '100%' }, style) : { width: '100%' }}
                 onBlur={controller.dispatch}
@@ -59,6 +64,7 @@ export function TextField<T>(prop: {
         <MaterialUITextField
             name={field}
             style={style ? Object.assign({ width: '100%' }, style) : { width: '100%' }}
+            defaultValue={controller.state[field]}
             onBlur={controller.dispatch}
         />
     );

@@ -50,12 +50,11 @@ function notNull(value: string) {
     return undefined;
 }
 
-export function Welcome({daemonAdminService}: DependencyContainer) {
-    return function(props: RouteComponentProps) {
+export function Welcome({ daemonAdminService }: DependencyContainer) {
+    return function (props: RouteComponentProps) {
         if (context.Cookie.get('admin_token')) {
             props.history.push(`/app/overview/dashboard`);
         }
-
 
         const classes = useStyles();
         const formController = useFormData(
@@ -64,7 +63,6 @@ export function Welcome({daemonAdminService}: DependencyContainer) {
                 admin_token: notNull,
             }
         );
-
         const submitButton = (
             <Button
                 variant="outlined"
@@ -85,11 +83,15 @@ export function Welcome({daemonAdminService}: DependencyContainer) {
                 if (!formController.ok) {
                     return;
                 }
-                matchResponse<string>(await daemonAdminService.AdminLogin(formController.state.admin_token), (jwt_token) => {
-                    context.dispatchToken(jwt_token);
-                    console.log(props.location);
-                    props.history.push(`/app/overview/dashboard`);
-                }, console.error);
+                matchResponse<string>(
+                    await daemonAdminService.AdminLogin(formController.state.admin_token),
+                    (jwt_token) => {
+                        context.dispatchToken(jwt_token);
+                        console.log(props.location);
+                        props.history.push(`/app/overview/dashboard`);
+                    },
+                    console.error
+                );
             },
             [formController]
         );
@@ -112,5 +114,5 @@ export function Welcome({daemonAdminService}: DependencyContainer) {
                 </form>
             </div>
         );
-    }
+    };
 }

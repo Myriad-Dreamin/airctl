@@ -11,6 +11,7 @@ import cookie from 'js-cookie';
 import { MockUserService } from './service/mock/user';
 import axios from 'axios';
 import { DaemonAdminServiceAxiosImpl } from './service/axios/daemon';
+import { AdminServiceAxiosImpl } from './service/axios/admin';
 
 let deps: AppDependencyContainer;
 
@@ -52,25 +53,34 @@ async function main() {
     context.I18nContext = contentProvider;
     context.subscribeLocale(provideLocale);
 
-    let ai = axios.create();
+    const ai = axios.create();
 
     context.subscribeToken((event) => {
         context.Cookie.set('admin_token', event.detail);
         console.log('set');
     });
 
-    ai.interceptors.request.use((config) => {
-        if (context.Cookie.get('admin_token')) {
-            config.headers.Authorization = context.Cookie.get('admin_token');
-            console.log("getting", context.Cookie.get('admin_token'));
+    ai.interceptors.request.use(
+        (config) => {
+            if (context.Cookie.get('admin_token')) {
+                config.headers.Authorization = context.Cookie.get('admin_token');
+                console.log('getting', context.Cookie.get('admin_token'));
+            }
+            return config;
+        },
+        (error: any) => {
+            return Promise.reject(error);
         }
-        return config;
-    }, (error: any) => {
-        return Promise.reject(error);
-    });
+    );
 
-    let urlProvider = {
-        AdminLogin: 'http://localhost:23102/v1/admin/login'
+    const urlProvider = {
+        AdminLogin: 'http://localhost:23102/v1/admin/login',
+        PingDaemon: 'http://localhost:23102/ping',
+        PingMaster: 'http://localhost:23101/ping',
+        GetConnectedSlaves: 'http://localhost:23101/v1/admin/pool',
+        GetServerStatus: 'http://localhost:23101/v1/admin/status',
+        SetCurrentTemperature: 'http://localhost:23101/v1/admin/current-temp',
+        SetMode: 'http://localhost:23101/v1/admin/mode',
     };
 
     deps = {
@@ -80,10 +90,8 @@ async function main() {
         userService: new MockUserService({
             initialUsers: userData,
         }),
-        daemonAdminService: new DaemonAdminServiceAxiosImpl (
-            ai,
-            urlProvider,
-        ),
+        daemonAdminService: new DaemonAdminServiceAxiosImpl(ai, urlProvider),
+        adminService: new AdminServiceAxiosImpl(ai, urlProvider),
         i18n: contentProvider,
     };
 

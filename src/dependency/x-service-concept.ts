@@ -5,8 +5,11 @@ export type ReportType = 'day' | 'week' | 'month';
 export type FanSpeed = 'low' | 'mid' | 'high';
 
 export interface ServerStatus {
-    server_state: 'busy' | 'working' | 'idle';
     mode: Mode;
+    work_state: 'busy' | 'working' | 'idle';
+    current_temperature: number;
+    metric_delay: number;
+    update_delay: number;
 }
 
 export interface SlaveStatistics {
@@ -20,31 +23,33 @@ export interface Report {
     room_list: todo;
 }
 
-export interface Report {
-    id: number;
-    room_id: string;
-    connected: boolean;
-    current_temperature: number;
-    need_fan: boolean;
-    fan_speed: FanSpeed;
-}
-
-
 export interface DaemonAdminService {
+    Ping(): Promise<Response<void>>;
+
     AdminLogin(admin_token: string): Promise<Response<string>>;
 }
 
+export interface Connection {
+    id: number;
+    room_id: string;
+    connected: boolean;
+    current_temperature?: number;
+    need_fan?: boolean;
+    fan_speed?: FanSpeed;
+}
 
 export interface AdminService {
-    SetMode(mode: Mode): Response<undefined>;
+    Ping(): Promise<Response<void>>;
 
-    SetCurrentTemperature(temperature: number): Response<undefined>;
+    SetMode(mode: Mode): Promise<Response<undefined>>;
 
-    GetServerStatus(): Response<ServerStatus>;
+    SetCurrentTemperature(temperature: number): Promise<Response<undefined>>;
 
-    GetSlaveStatistics(room_id: number, start_time: Date, stop_time: Date): Response<SlaveStatistics>;
+    GetServerStatus(): Promise<Response<ServerStatus>>;
 
-    GetReport(room_id: number, report_type: ReportType, stop_time: Date): Response<Report>;
+    GetSlaveStatistics(room_id: number, start_time: Date, stop_time: Date): Promise<Response<SlaveStatistics>>;
 
-    GetConnectedSlaves(page_number: number, page_size: number): Response<SlaveStatistics>;
+    GetReport(room_id: number, report_type: ReportType, stop_time: Date): Promise<Response<Report>>;
+
+    GetConnectedSlaves(page_number: number, page_size: number): Promise<Response<Connection[]>>;
 }

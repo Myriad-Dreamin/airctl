@@ -26,7 +26,7 @@ export const context: contextType = {
     Cookie: Cookie,
     ReactContext: reactContext,
     dispatchToken(token: string) {
-        let event = new CustomEvent<string>('jwt_token_updated', { detail: token });
+        const event = new CustomEvent<string>('jwt_token_updated', { detail: token });
 
         window.dispatchEvent(event);
     },
@@ -50,5 +50,5 @@ export const context: contextType = {
     },
     subscribeLocale(cb: (locale: string) => void) {
         this._localeCallbacks.push(cb);
-    }
+    },
 };

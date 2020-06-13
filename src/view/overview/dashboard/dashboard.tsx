@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -9,6 +9,12 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import { Chart, registerShape } from '@antv/g2';
 import MaterialTable from 'material-table';
 import styles from '../../air/page/inspect.css';
+import { DependencyContainer } from '../../../lib/common';
+import { matchResponse } from '../../../dependency/protocol';
+import { Connection, Mode } from '../../../dependency/x-service-concept';
+import { RouteComponentProps } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import { TextField, useFormData } from '../../../component/form';
 
 // 自定义Shape 部分
 registerShape('point', 'pointer', {
@@ -196,11 +202,183 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
     chart.render();
 }
 
-export function Dashboard() {
-    return function () {
+function checkDegree(deg: string) {
+    if (deg === '') {
+        return 'required';
+    }
+    if (isNaN(parseFloat(deg))) {
+        return 'not a valid float number';
+    }
+    return;
+}
+
+function checkMode(mode: string) {
+    if (mode === '') {
+        return 'required';
+    }
+    if (mode !== 'heat' && mode !== 'cool') {
+        return '\'heat\' or \'cool\' value required';
+    }
+    return;
+}
+
+function checkDelay(delay: string) {
+    if (delay === '') {
+        return 'required';
+    }
+    console.log(isNaN(parseInt(delay)));
+    if (isNaN(parseInt(delay))) {
+        return 'not a valid integer number';
+    }
+    return;
+}
+
+export function Dashboard({ daemonAdminService, adminService }: DependencyContainer) {
+    return function (props: RouteComponentProps) {
         const classes = useStyles();
 
+        const [airState, setAirState] = useState<{
+            is_on: boolean;
+            available: boolean;
+            current_degree: number;
+            metrics_delay: number;
+            update_delay: number;
+            mode: Mode;
+            work_state: string;
+        }>({
+            is_on: false,
+            available: false,
+            current_degree: 27.0,
+            metrics_delay: 0,
+            update_delay: 0,
+            mode: 'heat',
+            work_state: 'unknown',
+        });
+        const [edit, setEditing] = useState(false);
+
+        const formController = useFormData(
+            {
+                current_degree: airState.current_degree,
+                mode: airState.mode,
+                metrics_delay: airState.metrics_delay,
+                update_delay: airState.update_delay,
+            },
+            {
+                current_degree: checkDegree,
+                mode: checkMode,
+                metrics_delay: checkDelay,
+                update_delay: checkDelay,
+            }
+        );
+
+        const onSave = useCallback(() => {
+            if (formController.state.current_degree !== airState.current_degree) {
+                console.log(formController.state.current_degree, airState.current_degree);
+                adminService
+                    .SetCurrentTemperature(formController.state.current_degree)
+                    .then((resp) => {
+                        matchResponse(resp, () =>
+                            setAirState((state) => {
+                                state.current_degree = formController.state.current_degree;
+                                return { ...state };
+                            })
+                        );
+                    })
+                    .catch(console.error);
+            }
+
+            if (formController.state.mode !== airState.mode) {
+                console.log(formController.state.mode, airState.mode);
+                adminService
+                    .SetMode(formController.state.mode)
+                    .then((resp) => {
+                        matchResponse(resp, () =>
+                            setAirState((state) => {
+                                state.mode = formController.state.mode;
+                                return { ...state };
+                            })
+                        );
+                    })
+                    .catch(console.error);
+            }
+
+            if (formController.state.metrics_delay !== airState.metrics_delay) {
+                console.log(formController.state.metrics_delay, airState.metrics_delay);
+            }
+
+            if (formController.state.update_delay !== airState.update_delay) {
+                console.log(formController.state.update_delay, airState.update_delay);
+            }
+            setEditing(false);
+        }, [formController, airState]);
+
+        const swapEdit = useCallback(() => {
+            setEditing((e) => {
+                if (!e) {
+                    formController.dispatch([
+                        'all',
+                        {
+                            current_degree: airState.current_degree,
+                            mode: airState.mode,
+                            metrics_delay: airState.metrics_delay,
+                            update_delay: airState.update_delay,
+                        },
+                    ]);
+                }
+                return !e;
+            });
+        }, [airState]);
+
         useEffect(() => {
+            daemonAdminService
+                .Ping()
+                .then(async (resp) => {
+                    matchResponse(resp, () => {
+                        setAirState((state) => {
+                            state.is_on = true;
+                            return { ...state };
+                        });
+                    });
+                })
+                .catch((err) => {
+                    setAirState((state) => {
+                        state.is_on = false;
+                        return { ...state };
+                    });
+                });
+
+            adminService
+                .Ping()
+                .then(async (resp) => {
+                    matchResponse(resp, () => {
+                        setAirState((state) => {
+                            state.available = true;
+                            return { ...state };
+                        });
+                    });
+                    await adminService
+                        .GetServerStatus()
+                        .then(async (resp) => {
+                            matchResponse(resp, (data) => {
+                                setAirState((state) => {
+                                    state.current_degree = data.current_temperature;
+                                    state.metrics_delay = data.metric_delay;
+                                    state.update_delay = data.update_delay;
+                                    state.mode = data.mode;
+                                    state.work_state = data.work_state;
+                                    return { ...state };
+                                });
+                            });
+                        })
+                        .catch(console.error);
+                })
+                .catch((err) => {
+                    setAirState((state) => {
+                        state.available = false;
+                        return { ...state };
+                    });
+                });
+
             const connChart = document.getElementById('conn-chart');
             if (connChart === null) {
                 return;
@@ -215,11 +393,16 @@ export function Dashboard() {
             chartMain(connChart2, 3, 2);
         }, []);
 
-        const airState = {
-            is_on: false,
-            available: false,
-            current_degree: 27.0,
-        };
+        const queryHandler = useCallback((query) => {
+            return adminService.GetConnectedSlaves(query.page + 1, query.pageSize).then((resp) => {
+                console.log(resp);
+                return {
+                    data: resp.data,
+                    page: 1,
+                    totalCount: 10,
+                };
+            });
+        }, []);
 
         return (
             <Grid container spacing={3}>
@@ -259,25 +442,29 @@ export function Dashboard() {
                         title={''}
                         columns={[
                             { title: 'ID', field: 'id' },
-                            { title: 'RoomID', field: 'name' },
-                            { title: 'Status', field: 'status' },
+                            { title: 'RoomID', field: 'room_id' },
+                            { title: 'Connected', field: 'connected' },
                             // {
                             //     title: 'Birth Place',
                             //     field: 'birthCity',
                             //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
                             // },
                         ]}
-                        data={[]}
+                        data={queryHandler}
                         actions={[
                             {
                                 icon: 'more_vert',
-                                tooltip: 'Inspect User',
-                                onClick: (event: any, rowData: any[]) => {
-                                    console.log(event);
-                                    // if (rowData instanceof Array) {
-                                    // } else {
-                                    //     props.history.push(`/app/user/profile?id=${rowData.id}`);
-                                    // }
+                                tooltip: 'Inspect Slave',
+                                onClick: (
+                                    _: any,
+                                    rowData:
+                                        | Pick<Connection, 'id' | 'room_id' | 'connected'>
+                                        | Pick<Connection, 'id' | 'room_id' | 'connected'>[]
+                                ) => {
+                                    if (rowData instanceof Array) {
+                                    } else {
+                                        props.history.push(`/app/air/inspect?room_id=${rowData.id}`);
+                                    }
                                 },
                             },
                         ]}
@@ -289,6 +476,31 @@ export function Dashboard() {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
+                    <div>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={swapEdit}
+                            type="button"
+                            style={{
+                                marginRight: '1em',
+                                float: 'right',
+                            }}
+                        >{edit ? 'Cancel' : 'Edit'}</Button>
+                        {edit && (
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={onSave}
+                                type="button"
+                                style={{
+                                    marginRight: '1em',
+                                    float: 'right',
+                                }}
+                            >Save</Button>
+                        )}
+                    </div>
+                    <div style={{ clear: 'both' }} />
                     <Paper className={classes.paper}>
                         <div className={styles['form-sub-title']}>
                             <span
@@ -304,17 +516,69 @@ export function Dashboard() {
                             >
                                 &nbsp;
                             </span>
-                            <span>空调状态</span>
+                            <span>主控状态</span>
                         </div>
                         <table className={styles['form-item-table']}>
                             <tbody>
                                 <tr>
-                                    <td colSpan={1}>当前是否开启：{airState?.is_on ? '是' : '否'}</td>
-                                    <td colSpan={1}>当前是否可用：{airState?.available ? '是' : '否'}</td>
+                                    <td colSpan={1}>服务器是否开启：{airState?.is_on ? '是' : '否'}</td>
+                                    <td colSpan={1}>服务器守护是否开启：{airState?.available ? '是' : '否'}</td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={1}>当前空调温度：{airState?.current_degree}℃</td>
+                                    <td colSpan={1}>主控工作状态：{airState?.work_state}</td>
                                     <td colSpan={1} />
+                                </tr>
+                                <tr>
+                                    {edit ? (
+                                        <td colSpan={1}>
+                                            设置当前空调温度(℃)：
+                                            <TextField
+                                                style={{ minHeight: '60px', width: '80%' }}
+                                                controller={formController}
+                                                field="current_degree"
+                                            />
+                                        </td>
+                                    ) : (
+                                        <td colSpan={1}>当前空调温度：{airState?.current_degree}℃</td>
+                                    )}
+                                    {edit ? (
+                                        <td colSpan={1}>
+                                            设置当前空调模式：
+                                            <TextField
+                                                style={{ minHeight: '60px', width: '80%' }}
+                                                controller={formController}
+                                                field="mode"
+                                            />
+                                        </td>
+                                    ) : (
+                                        <td colSpan={1}>当前空调模式：{airState?.mode}</td>
+                                    )}
+                                </tr>
+                                <tr>
+                                    {edit ? (
+                                        <td colSpan={1}>
+                                            设置从控更新周期(ms)：
+                                            <TextField
+                                                style={{ minHeight: '60px', width: '80%' }}
+                                                controller={formController}
+                                                field="metrics_delay"
+                                            />
+                                        </td>
+                                    ) : (
+                                        <td colSpan={1}>从控更新周期：{airState?.metrics_delay}ms</td>
+                                    )}
+                                    {edit ? (
+                                        <td colSpan={1}>
+                                            设置从控拉取周期(ms)：
+                                            <TextField
+                                                style={{ minHeight: '60px', width: '80%' }}
+                                                controller={formController}
+                                                field="update_delay"
+                                            />
+                                        </td>
+                                    ) : (
+                                        <td colSpan={1}>从控拉取周期：{airState?.update_delay}ms</td>
+                                    )}
                                 </tr>
                             </tbody>
                         </table>
