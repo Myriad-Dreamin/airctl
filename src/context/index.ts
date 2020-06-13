@@ -13,14 +13,29 @@ type contextType = {
     Cookie: CookieX;
     ReactContext: typeof reactContext;
     _localeCallbacks: ((locale: string) => void | Promise<string>)[];
+    dispatchToken(token: string): void;
+    subscribeToken(cb: (token: CustomEvent<string>) => void): void;
+    removeSubscribeToken(cb: (token: CustomEvent<string>) => void): void;
     getLocale(): string;
     dispatchLocale(locale: string): Promise<void>;
     subscribeLocale(cb: (locale: string) => void): void;
 };
+
 export const context: contextType = {
     I18nContext: new I18nContentProvider(I18nEnglishDataProvider),
     Cookie: Cookie,
     ReactContext: reactContext,
+    dispatchToken(token: string) {
+        let event = new CustomEvent<string>('jwt_token_updated', { detail: token });
+
+        window.dispatchEvent(event);
+    },
+    subscribeToken(cb: (token: CustomEvent<string>) => void) {
+        window.addEventListener('jwt_token_updated', cb as EventListener);
+    },
+    removeSubscribeToken(cb: (token: CustomEvent<string>) => void) {
+        window.removeEventListener('jwt_token_updated', cb as EventListener);
+    },
 
     getLocale() {
         return this.Cookie.get('locale') || 'en';
@@ -35,5 +50,5 @@ export const context: contextType = {
     },
     subscribeLocale(cb: (locale: string) => void) {
         this._localeCallbacks.push(cb);
-    },
+    }
 };

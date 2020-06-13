@@ -31,7 +31,7 @@ const MainRoutes: RouteDesc[] = [
     {
         type: RouteType.Exact,
         path: '',
-        component: () => Welcome,
+        component: Welcome,
     },
     {
         type: RouteType.Exact,

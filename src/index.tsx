@@ -9,6 +9,8 @@ import { context } from './context';
 import { I18nEnglishDataProvider } from './language/en';
 import cookie from 'js-cookie';
 import { MockUserService } from './service/mock/user';
+import axios from 'axios';
+import { DaemonAdminServiceAxiosImpl } from './service/axios/daemon';
 
 let deps: AppDependencyContainer;
 
@@ -50,6 +52,27 @@ async function main() {
     context.I18nContext = contentProvider;
     context.subscribeLocale(provideLocale);
 
+    let ai = axios.create();
+
+    context.subscribeToken((event) => {
+        context.Cookie.set('admin_token', event.detail);
+        console.log('set');
+    });
+
+    ai.interceptors.request.use((config) => {
+        if (context.Cookie.get('admin_token')) {
+            config.headers.Authorization = context.Cookie.get('admin_token');
+            console.log("getting", context.Cookie.get('admin_token'));
+        }
+        return config;
+    }, (error: any) => {
+        return Promise.reject(error);
+    });
+
+    let urlProvider = {
+        AdminLogin: 'http://localhost:23102/v1/admin/login'
+    };
+
     deps = {
         airService: new MockAirService({
             initialAirs: airData,
@@ -57,6 +80,10 @@ async function main() {
         userService: new MockUserService({
             initialUsers: userData,
         }),
+        daemonAdminService: new DaemonAdminServiceAxiosImpl (
+            ai,
+            urlProvider,
+        ),
         i18n: contentProvider,
     };
 
