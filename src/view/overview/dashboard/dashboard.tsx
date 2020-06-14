@@ -15,6 +15,7 @@ import { Connection, Mode } from '../../../dependency/x-service-concept';
 import { RouteComponentProps } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { TextField, useFormData } from '../../../component/form';
+import { context } from '../../../context';
 
 // 自定义Shape 部分
 registerShape('point', 'pointer', {
@@ -236,6 +237,8 @@ function checkDelay(delay: string) {
 export function Dashboard({ daemonAdminService, adminService }: DependencyContainer) {
     return function (props: RouteComponentProps) {
         const classes = useStyles();
+        const { I18nContext: i18n } = context;
+        const dashboard = i18n.statics.global.dashboard;
 
         const [airState, setAirState] = useState<{
             is_on: boolean;
@@ -412,7 +415,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                             <p style={{ margin: '0', height: '5vh' }}>
                                 &nbsp;
                                 <br />
-                                目前处理请求数
+                                {dashboard.current_connection_cnt}
                             </p>
                             <div style={{ width: '20vh', height: '20vh' }}>
                                 <div id={'conn-chart'} style={{ margin: '0' }} />
@@ -420,9 +423,9 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                         </div>
                         <div style={{ width: '20vh', textAlign: 'center' }}>
                             <p style={{ margin: '0', height: '5vh' }}>
-                                最近5分钟
+                                {dashboard.max_connection_cnt_seg_1}
                                 <br />
-                                最大处理请求数
+                                {dashboard.max_connection_cnt_seg_2}
                             </p>
                             <div style={{ width: '20vh', height: '20vh' }}>
                                 <div id={'conn-chart-2'} style={{ margin: '0' }} />
@@ -432,18 +435,19 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Paper className={classes.paper} style={{ height: '25vh' }}>
-                        实时性能监测图
+                        {dashboard.real_time_performance_graph}
                         <br />
-                        （敬请期待）
+                        {dashboard.incoming}
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <MaterialTable
+                        localization={i18n.statics.global.material_table_localization}
                         title={''}
                         columns={[
-                            { title: 'ID', field: 'id' },
-                            { title: 'RoomID', field: 'room_id' },
-                            { title: 'Connected', field: 'connected' },
+                            { title: dashboard.room_inc_id, field: 'id' },
+                            { title: dashboard.room_id, field: 'room_id' },
+                            { title: dashboard.slave_connected, field: 'connected' },
                             // {
                             //     title: 'Birth Place',
                             //     field: 'birthCity',
@@ -454,7 +458,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                         actions={[
                             {
                                 icon: 'more_vert',
-                                tooltip: 'Inspect Slave',
+                                tooltip: dashboard.inspect_slave_tooltip,
                                 onClick: (
                                     _: any,
                                     rowData:
@@ -520,22 +524,35 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                             >
                                 &nbsp;
                             </span>
-                            <span>主控状态</span>
+                            <span>{dashboard.master_state_title}</span>
                         </div>
                         <table className={styles['form-item-table']}>
                             <tbody>
                                 <tr>
-                                    <td colSpan={1}>服务器是否开启：{airState?.is_on ? '是' : '否'}</td>
-                                    <td colSpan={1}>服务器守护是否开启：{airState?.available ? '是' : '否'}</td>
+                                    <td colSpan={1}>
+                                        {dashboard.server_open_label}
+                                        {airState?.is_on
+                                            ? i18n.statics.global.general.yes
+                                            : i18n.statics.global.general.no}
+                                    </td>
+                                    <td colSpan={1}>
+                                        {dashboard.daemon_open_label}
+                                        {airState?.available
+                                            ? i18n.statics.global.general.yes
+                                            : i18n.statics.global.general.no}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={1}>主控工作状态：{airState?.work_state}</td>
+                                    <td colSpan={1}>
+                                        {dashboard.master_working_state_label}
+                                        {airState?.work_state}
+                                    </td>
                                     <td colSpan={1} />
                                 </tr>
                                 <tr>
                                     {edit ? (
                                         <td colSpan={1}>
-                                            设置当前空调温度(℃)：
+                                            {dashboard.set_current_temperature_label}
                                             <TextField
                                                 style={{ minHeight: '60px', width: '80%' }}
                                                 controller={formController}
@@ -543,11 +560,14 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                             />
                                         </td>
                                     ) : (
-                                        <td colSpan={1}>当前空调温度：{airState?.current_degree}℃</td>
+                                        <td colSpan={1}>
+                                            {dashboard.current_temperature_label}
+                                            {airState?.current_degree}℃
+                                        </td>
                                     )}
                                     {edit ? (
                                         <td colSpan={1}>
-                                            设置当前空调模式：
+                                            {dashboard.set_current_air_mode}
                                             <TextField
                                                 style={{ minHeight: '60px', width: '80%' }}
                                                 controller={formController}
@@ -555,13 +575,16 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                             />
                                         </td>
                                     ) : (
-                                        <td colSpan={1}>当前空调模式：{airState?.mode}</td>
+                                        <td colSpan={1}>
+                                            {dashboard.current_air_mode}
+                                            {airState?.mode}
+                                        </td>
                                     )}
                                 </tr>
                                 <tr>
                                     {edit ? (
                                         <td colSpan={1}>
-                                            设置从控更新周期(ms)：
+                                            {dashboard.set_slave_push_metrics_delay_label}
                                             <TextField
                                                 style={{ minHeight: '60px', width: '80%' }}
                                                 controller={formController}
@@ -569,11 +592,14 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                             />
                                         </td>
                                     ) : (
-                                        <td colSpan={1}>从控更新周期：{airState?.metrics_delay}ms</td>
+                                        <td colSpan={1}>
+                                            {dashboard.slave_push_metrics_delay_label}
+                                            {airState?.metrics_delay}
+                                        </td>
                                     )}
                                     {edit ? (
                                         <td colSpan={1}>
-                                            设置从控拉取周期(ms)：
+                                            {dashboard.set_slave_update_statistics_delay_label}
                                             <TextField
                                                 style={{ minHeight: '60px', width: '80%' }}
                                                 controller={formController}
@@ -581,7 +607,10 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                             />
                                         </td>
                                     ) : (
-                                        <td colSpan={1}>从控拉取周期：{airState?.update_delay}ms</td>
+                                        <td colSpan={1}>
+                                            {dashboard.slave_update_statistics_delay_label}
+                                            {airState?.update_delay}
+                                        </td>
                                     )}
                                 </tr>
                             </tbody>
