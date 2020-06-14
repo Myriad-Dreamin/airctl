@@ -39,7 +39,7 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
                 // labelRowsPerPage: '',
                 lastTooltip: '最后一页',
                 // lastAriaLabel: '',
-                labelRowsSelect: '页',
+                labelRowsSelect: '行每页',
             },
             toolbar: {
                 // addRemoveColumns: '',

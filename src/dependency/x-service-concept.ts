@@ -15,6 +15,10 @@ export interface ServerStatus {
 export interface SlaveStatistics {
     energy: number;
     cost: number;
+    start_time: Date;
+    stop_time: Date;
+    fan_speed: string;
+    room_id: number;
 }
 
 export type todo = undefined;
@@ -47,7 +51,7 @@ export interface AdminService {
 
     GetServerStatus(): Promise<Response<ServerStatus>>;
 
-    GetSlaveStatistics(room_id: number, start_time: Date, stop_time: Date): Promise<Response<SlaveStatistics>>;
+    GetSlaveStatistics(room_id: number, start_time: Date, stop_time: Date): Promise<Response<SlaveStatistics[]>>;
 
     GetReport(room_id: number, report_type: ReportType, stop_time: Date): Promise<Response<Report>>;
 

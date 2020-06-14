@@ -82,6 +82,7 @@ async function main() {
         GetServerStatus: 'http://localhost:23101/v1/admin/status',
         SetCurrentTemperature: 'http://localhost:23101/v1/admin/current-temp',
         SetMode: 'http://localhost:23101/v1/admin/mode',
+        GetSlaveStatistics: 'http://localhost:23101/v1/admin/slave/statistics',
     };
 
     deps = {

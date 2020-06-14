@@ -45,8 +45,20 @@ export class AdminServiceAxiosImpl implements AdminService {
         return res.data;
     }
 
-    async GetSlaveStatistics(room_id: number, start_time: Date, stop_time: Date): Promise<Response<SlaveStatistics>> {
-        throw Error('todo');
+    async GetSlaveStatistics(room_id: number, start_time: Date, stop_time: Date): Promise<Response<SlaveStatistics[]>> {
+        const res = await this.sender.get<Response<SlaveStatistics[]>>(this.url_provider['GetSlaveStatistics'], {
+            params: {
+                room_id,
+                start_time,
+                stop_time,
+            }
+        });
+
+        for (let d of res.data.data) {
+            d.start_time = new Date(Date.parse(d.start_time));
+            d.stop_time = new Date(Date.parse(d.stop_time));
+        }
+        return res.data;
     }
 
     async SetCurrentTemperature(target: number): Promise<Response<undefined>> {

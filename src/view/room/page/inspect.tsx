@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import queryString from 'query-string';
 import { DependencyContainer } from '../../../lib/common';
@@ -10,6 +10,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import Paper from '@material-ui/core/Paper';
+import { Divider } from '@material-ui/core';
+import MaterialTable from 'material-table';
+import { context } from '../../../context';
 
 interface QueryState {
     room_id?: string;
@@ -20,20 +23,21 @@ interface QueryState {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            flexGrow: 1,
+            flexGrow: 1
         },
         paper: {
             padding: theme.spacing(2),
             textAlign: 'center',
-            color: theme.palette.text.secondary,
-        },
+            color: theme.palette.text.secondary
+        }
     })
 );
 
 export function RoomInspect({ adminService }: DependencyContainer) {
     return (props: RouteComponentProps) => {
+        const { I18nContext: i18n } = context;
         const classes = useStyles();
-        const [, setAirID] = useState(0);
+        const [roomID, setRoomID] = useState(0);
         const [connection, setConnection] = useState<Connection | undefined>(undefined);
         // const [, setEditing] = useState(false);
         // const swapEdit = () => useCallback(() => setEditing((e) => !e), []);
@@ -54,9 +58,9 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                     console.log('error');
                 }
             }
-            //     if (query.room_id !== undefined)
-            //     {
-            //     id = unwrap(airService.GetID(query.room_id));
+                //     if (query.room_id !== undefined)
+                //     {
+                //     id = unwrap(airService.GetID(query.room_id));
             // } else
             else {
                 // reportError({
@@ -68,12 +72,12 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                 reportError({
                     code: 0,
                     message: '需要一个房间数据库序号(id)',
-                    name: '不合法的参数',
+                    name: '不合法的参数'
                 });
                 return;
             }
 
-            setAirID(id);
+            setRoomID(id);
             adminService
                 .GetConnectedSlave(id)
                 .then((resp) => {
@@ -84,12 +88,27 @@ export function RoomInspect({ adminService }: DependencyContainer) {
 
         // const modify = () => console.log('click');
 
+        const queryHandler = useCallback((query) => {
+
+            return adminService.GetSlaveStatistics(roomID,
+                new Date(Date.now() - 2000000), new Date(Date.now())).then(
+                (resp) => {
+                    let data = unwrap(resp);
+                    console.log(data);
+                    return {
+                        data: data,
+                        page: 0,
+                        totalCount: data.length
+                    };
+                });
+        }, [roomID]);
+
         return (
             <div className={styles['form-container']} key="form-container">
                 <div
                     style={{
                         width: '1px',
-                        height: '24px',
+                        height: '24px'
                     }}
                 >
                     &nbsp;
@@ -104,9 +123,9 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                             background: connection?.connected
                                                 ? '#52c41a'
                                                 : // : connection?.available
-                                                  '#f5222d',
+                                                '#f5222d',
                                             // : '#d9d9d9'
-                                            marginRight: '0.5em',
+                                            marginRight: '0.5em'
                                         }}
                                         className={styles['state-dot']}
                                     >
@@ -125,49 +144,48 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                 </div>
                                 <table className={styles['form-item-table']}>
                                     <tbody>
-                                        <tr>
-                                            <td colSpan={1}>房间编号：{connection?.id}</td>
-                                            <td colSpan={1}>房间名称：{connection?.room_id}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={1}>当前是否已连接：{connection?.connected ? '是' : '否'}</td>
-                                            <td colSpan={1}>
-                                                当前温度：
-                                                {connection?.connected ? connection?.current_temperature : '不可用'}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={1}>
-                                                是否需要调度：{connection?.connected ? connection?.need_fan : '不可用'}
-                                            </td>
-                                            <td colSpan={1}>
-                                                正在调度风速：{connection?.connected ? connection?.fan_speed : '不可用'}
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td colSpan={1}>房间编号：{connection?.id}</td>
+                                        <td colSpan={1}>房间名称：{connection?.room_id}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={1}>当前是否已连接：{connection?.connected ? '是' : '否'}</td>
+                                        <td colSpan={1}>
+                                            当前温度：
+                                            {connection?.connected ? connection?.current_temperature : '不可用'}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={1}>
+                                            是否需要调度：{connection?.connected ? connection?.need_fan : '不可用'}
+                                        </td>
+                                        <td colSpan={1}>
+                                            正在调度风速：{connection?.connected ? connection?.fan_speed : '不可用'}
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                                 {/*<antd.Divider />*/}
-                                {/*<div className={styles['form-sub-title']}>硬件信息</div>*/}
-                                {/*<table className={styles['form-item-table']}>*/}
-                                {/*    <tbody>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={1}>空调产品序列号：{connection?.serial_number}</td>*/}
-                                {/*            <td colSpan={1}>能效等级：二级能效</td>*/}
-                                {/*        </tr>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={1}>冷暖类型：冷暖型</td>*/}
-                                {/*            <td colSpan={1}>能效比：暂无数据</td>*/}
-                                {/*        </tr>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={1}>制冷量：5090W</td>*/}
-                                {/*            <td colSpan={1}>室内机噪音：33-41dB</td>*/}
-                                {/*        </tr>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={1}>制热量：5750W</td>*/}
-                                {/*            <td colSpan={1}>室外机噪音：42-56dB</td>*/}
-                                {/*        </tr>*/}
-                                {/*    </tbody>*/}
-                                {/*</table>*/}
+                                <Divider style={{ margin: '2vh 0' }}/>
+                                <div className={styles['form-sub-title']}>最近更新详单</div>
+                                <MaterialTable
+                                    localization={i18n.statics.global.material_table_localization}
+                                    title={''}
+                                    columns={[
+                                        { title: 'id', field: 'room_id' },
+                                        { title: '开始时间', field: 'start_time', type: 'datetime' },
+                                        { title: '停止时间', field: 'stop_time', type: 'datetime' },
+                                        { title: '消耗能量', field: 'energy' },
+                                        { title: '消耗金额', field: 'cost' },
+                                        { title: '风速', field: 'fan_speed' }
+                                    ]}
+                                    data={queryHandler}
+                                    options={{
+                                        sorting: true,
+                                        actionsColumnIndex: -1,
+                                        toolbar: false
+                                    }}
+                                />
                                 {/*<antd.Divider />*/}
                                 {/*<div className={styles['form-sub-title']}>*/}
                                 {/*    <span>保修信息</span>*/}
