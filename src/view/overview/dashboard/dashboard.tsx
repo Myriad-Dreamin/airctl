@@ -338,14 +338,14 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                 .then(async (resp) => {
                     matchResponse(resp, () => {
                         setAirState((state) => {
-                            state.is_on = true;
+                            state.available = true;
                             return { ...state };
                         });
                     });
                 })
                 .catch((err) => {
                     setAirState((state) => {
-                        state.is_on = false;
+                        state.available = false;
                         return { ...state };
                     });
                 });
@@ -355,7 +355,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                 .then(async (resp) => {
                     matchResponse(resp, () => {
                         setAirState((state) => {
-                            state.available = true;
+                            state.is_on = true;
                             return { ...state };
                         });
                     });
@@ -377,7 +377,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                 })
                 .catch((err) => {
                     setAirState((state) => {
-                        state.available = false;
+                        state.is_on = false;
                         return { ...state };
                     });
                 });

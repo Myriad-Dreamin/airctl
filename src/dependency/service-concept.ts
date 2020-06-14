@@ -16,7 +16,7 @@ import {
     SettableAirState,
     User,
     UserID,
-    UserIdentifiers
+    UserIdentifiers,
 } from './concept';
 
 export interface UserService {

@@ -41,7 +41,9 @@ export class AdminServiceAxiosImpl implements AdminService {
 
     async GetServerStatus(): Promise<Response<ServerStatus>> {
         const res = await this.sender.get<Response<ServerStatus>>(this.url_provider['GetServerStatus']);
-        res.data.data = res.data;
+        if (res.data.code == 0) {
+            res.data.data = res.data;
+        }
         return res.data;
     }
 
@@ -51,10 +53,10 @@ export class AdminServiceAxiosImpl implements AdminService {
                 room_id,
                 start_time,
                 stop_time,
-            }
+            },
         });
 
-        for (let d of res.data.data) {
+        for (const d of res.data.data) {
             d.start_time = new Date(Date.parse(d.start_time));
             d.stop_time = new Date(Date.parse(d.stop_time));
         }

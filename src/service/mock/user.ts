@@ -7,7 +7,7 @@ import {
     PaymentParam,
     User,
     UserID,
-    UserIdentifiers
+    UserIdentifiers,
 } from '../../dependency/concept';
 import { OK, Payload, Response, SimplifiedResponse } from '../../dependency/protocol';
 import { MockService, MockServiceIndex, Pick } from './mock';

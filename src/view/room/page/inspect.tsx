@@ -23,13 +23,13 @@ interface QueryState {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            flexGrow: 1
+            flexGrow: 1,
         },
         paper: {
             padding: theme.spacing(2),
             textAlign: 'center',
-            color: theme.palette.text.secondary
-        }
+            color: theme.palette.text.secondary,
+        },
     })
 );
 
@@ -58,9 +58,9 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                     console.log('error');
                 }
             }
-                //     if (query.room_id !== undefined)
-                //     {
-                //     id = unwrap(airService.GetID(query.room_id));
+            //     if (query.room_id !== undefined)
+            //     {
+            //     id = unwrap(airService.GetID(query.room_id));
             // } else
             else {
                 // reportError({
@@ -72,7 +72,7 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                 reportError({
                     code: 0,
                     message: '需要一个房间数据库序号(id)',
-                    name: '不合法的参数'
+                    name: '不合法的参数',
                 });
                 return;
             }
@@ -88,27 +88,29 @@ export function RoomInspect({ adminService }: DependencyContainer) {
 
         // const modify = () => console.log('click');
 
-        const queryHandler = useCallback((query) => {
-
-            return adminService.GetSlaveStatistics(roomID,
-                new Date(Date.now() - 2000000), new Date(Date.now())).then(
-                (resp) => {
-                    let data = unwrap(resp);
-                    console.log(data);
-                    return {
-                        data: data,
-                        page: 0,
-                        totalCount: data.length
-                    };
-                });
-        }, [roomID]);
+        const queryHandler = useCallback(
+            (query) => {
+                return adminService
+                    .GetSlaveStatistics(roomID, new Date(Date.now() - 2000000), new Date(Date.now()))
+                    .then((resp) => {
+                        const data = unwrap(resp);
+                        console.log(data);
+                        return {
+                            data: data,
+                            page: 0,
+                            totalCount: data.length,
+                        };
+                    });
+            },
+            [roomID]
+        );
 
         return (
             <div className={styles['form-container']} key="form-container">
                 <div
                     style={{
                         width: '1px',
-                        height: '24px'
+                        height: '24px',
                     }}
                 >
                     &nbsp;
@@ -123,9 +125,9 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                             background: connection?.connected
                                                 ? '#52c41a'
                                                 : // : connection?.available
-                                                '#f5222d',
+                                                  '#f5222d',
                                             // : '#d9d9d9'
-                                            marginRight: '0.5em'
+                                            marginRight: '0.5em',
                                         }}
                                         className={styles['state-dot']}
                                     >
@@ -144,29 +146,29 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                 </div>
                                 <table className={styles['form-item-table']}>
                                     <tbody>
-                                    <tr>
-                                        <td colSpan={1}>房间编号：{connection?.id}</td>
-                                        <td colSpan={1}>房间名称：{connection?.room_id}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={1}>当前是否已连接：{connection?.connected ? '是' : '否'}</td>
-                                        <td colSpan={1}>
-                                            当前温度：
-                                            {connection?.connected ? connection?.current_temperature : '不可用'}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={1}>
-                                            是否需要调度：{connection?.connected ? connection?.need_fan : '不可用'}
-                                        </td>
-                                        <td colSpan={1}>
-                                            正在调度风速：{connection?.connected ? connection?.fan_speed : '不可用'}
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td colSpan={1}>房间编号：{connection?.id}</td>
+                                            <td colSpan={1}>房间名称：{connection?.room_id}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={1}>当前是否已连接：{connection?.connected ? '是' : '否'}</td>
+                                            <td colSpan={1}>
+                                                当前温度：
+                                                {connection?.connected ? connection?.current_temperature : '不可用'}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={1}>
+                                                是否需要调度：{connection?.connected ? connection?.need_fan : '不可用'}
+                                            </td>
+                                            <td colSpan={1}>
+                                                正在调度风速：{connection?.connected ? connection?.fan_speed : '不可用'}
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                                 {/*<antd.Divider />*/}
-                                <Divider style={{ margin: '2vh 0' }}/>
+                                <Divider style={{ margin: '2vh 0' }} />
                                 <div className={styles['form-sub-title']}>最近更新详单</div>
                                 <MaterialTable
                                     localization={i18n.statics.global.material_table_localization}
@@ -177,13 +179,13 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                         { title: '停止时间', field: 'stop_time', type: 'datetime' },
                                         { title: '消耗能量', field: 'energy' },
                                         { title: '消耗金额', field: 'cost' },
-                                        { title: '风速', field: 'fan_speed' }
+                                        { title: '风速', field: 'fan_speed' },
                                     ]}
                                     data={queryHandler}
                                     options={{
                                         sorting: true,
                                         actionsColumnIndex: -1,
-                                        toolbar: false
+                                        toolbar: false,
                                     }}
                                 />
                                 {/*<antd.Divider />*/}

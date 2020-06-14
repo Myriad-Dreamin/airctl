@@ -72,17 +72,21 @@ async function main() {
             return Promise.reject(error);
         }
     );
+    // const DaemonURL = 'http://localhost:23102';
+    // const MasterURL = 'http://localhost:23101';
+    const DaemonURL = 'http://112.126.65.59:2024';
+    const MasterURL = 'http://112.126.65.59:2022';
 
     const urlProvider = {
-        AdminLogin: 'http://localhost:23102/v1/admin/login',
-        PingDaemon: 'http://localhost:23102/ping',
-        PingMaster: 'http://localhost:23101/ping',
-        GetConnectedSlaves: 'http://localhost:23101/v1/admin/pool-list',
-        GetConnectedSlave: 'http://localhost:23101/v1/admin/pool',
-        GetServerStatus: 'http://localhost:23101/v1/admin/status',
-        SetCurrentTemperature: 'http://localhost:23101/v1/admin/current-temp',
-        SetMode: 'http://localhost:23101/v1/admin/mode',
-        GetSlaveStatistics: 'http://localhost:23101/v1/admin/slave/statistics',
+        AdminLogin: DaemonURL + '/v1/admin/login',
+        PingDaemon: DaemonURL + '/ping',
+        PingMaster: MasterURL + '/ping',
+        GetConnectedSlaves: MasterURL + '/v1/admin/pool-list',
+        GetConnectedSlave: MasterURL + '/v1/admin/pool',
+        GetServerStatus: MasterURL + '/v1/admin/status',
+        SetCurrentTemperature: MasterURL + '/v1/admin/current-temp',
+        SetMode: MasterURL + '/v1/admin/mode',
+        GetSlaveStatistics: MasterURL + '/v1/admin/slave/statistics',
     };
 
     deps = {

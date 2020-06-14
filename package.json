@@ -11,7 +11,7 @@
     "add-hook": "git config core.hooksPath .githooks",
     "eslint:fix": "eslint --fix src/**/*.{ts,js,tsx,jsx}",
     "dev": "webpack-dev-server --config build/webpack.config.js --mode development",
-    "build": "echo todo",
+    "build": "webpack  --config build/webpack.config.js --mode development",
     "prepublish": "yarn run build",
     "t": "./node_modules/.bin/mocha.cmd --reporter spec --require ts-node/register",
     "b": "./node_modules/.bin/mocha.cmd --prof --reporter spec --require ts-node/register",

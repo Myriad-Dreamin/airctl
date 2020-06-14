@@ -23,7 +23,9 @@ export class DaemonAdminServiceAxiosImpl implements DaemonAdminService {
 
     async AdminLogin(admin_token: string): Promise<Response<string>> {
         const res = await this.sender.post<RawAdminLoginResponse>(this.url_provider['AdminLogin'], { admin_token });
-        res.data.data = res.data.jwt_token;
+        if (res.data.code == 0) {
+            res.data.data = res.data.jwt_token;
+        }
         return res.data;
     }
 }
