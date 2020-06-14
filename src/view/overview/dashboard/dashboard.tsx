@@ -463,7 +463,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                 ) => {
                                     if (rowData instanceof Array) {
                                     } else {
-                                        props.history.push(`/app/air/inspect?room_id=${rowData.id}`);
+                                        props.history.push(`/app/room/inspect?id=${rowData.id}`);
                                     }
                                 },
                             },
@@ -486,7 +486,9 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                 marginRight: '1em',
                                 float: 'right',
                             }}
-                        >{edit ? 'Cancel' : 'Edit'}</Button>
+                        >
+                            {edit ? 'Cancel' : 'Edit'}
+                        </Button>
                         {edit && (
                             <Button
                                 variant="outlined"
@@ -497,7 +499,9 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                     marginRight: '1em',
                                     float: 'right',
                                 }}
-                            >Save</Button>
+                            >
+                                Save
+                            </Button>
                         )}
                     </div>
                     <div style={{ clear: 'both' }} />

@@ -52,4 +52,6 @@ export interface AdminService {
     GetReport(room_id: number, report_type: ReportType, stop_time: Date): Promise<Response<Report>>;
 
     GetConnectedSlaves(page_number: number, page_size: number): Promise<Response<Connection[]>>;
+
+    GetConnectedSlave(id: number): Promise<Response<Connection>>;
 }

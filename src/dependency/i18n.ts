@@ -26,6 +26,7 @@ export interface I18nStaticVars {
             };
             room: {
                 title: string;
+                inspect: string;
             };
             admin: {
                 resources: string;

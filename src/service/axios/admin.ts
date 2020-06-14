@@ -23,6 +23,14 @@ export class AdminServiceAxiosImpl implements AdminService {
         ).data;
     }
 
+    async GetConnectedSlave(id: number): Promise<Response<Connection[]>> {
+        return (
+            await this.sender.get<Response<Connection>>(this.url_provider['GetConnectedSlave'], {
+                params: { id },
+            })
+        ).data;
+    }
+
     async GetReport(
         room_id: number,
         report_type: 'day' | 'week' | 'month',

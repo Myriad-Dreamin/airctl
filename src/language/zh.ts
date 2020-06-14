@@ -7,7 +7,7 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
             admin: { profile: '个人中心', resources: '资源表单' },
             air: { inspect: '详情页', list: '列表', report_repair: '报修', title: '空调服务清单' },
             overview: { dashboard: 'Dashboard', forms: '表单汇总', lists: '列表汇总' },
-            room: { title: '房间服务清单' },
+            room: { inspect: '详情页', title: '房间服务清单' },
             user: {
                 list: '列表',
                 payment: '预缴服务费',

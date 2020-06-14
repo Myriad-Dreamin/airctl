@@ -10,6 +10,7 @@ import { MainLayout } from '../component/layout/main-layout';
 import { compose } from '../lib/fp';
 import { CreateRouter, RouteDesc, RouteType } from '../lib/router';
 import { UserMockPay } from './user/page/mock-callback';
+import { RoomRoutes } from './room/router';
 
 const Routes: RouteDesc[] = [
     {
@@ -20,8 +21,7 @@ const Routes: RouteDesc[] = [
     ...OverviewRoutes,
 
     ...AirRoutes,
-    // 将来版本中会发布
-    // ...RoomRoutes,
+    ...RoomRoutes,
 
     ...UserRoutes,
     ...AdminRoutes,

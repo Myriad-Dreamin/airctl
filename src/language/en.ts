@@ -7,7 +7,7 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
             admin: { profile: 'Profile', resources: 'Resources' },
             air: { inspect: 'Inspect', list: 'List', report_repair: 'Report Repair', title: 'Air' },
             overview: { dashboard: 'Dashboard', forms: 'Forms', lists: 'Lists' },
-            room: { title: 'Room' },
+            room: { title: 'Room', inspect: 'Inspect' },
             user: {
                 list: 'List',
                 payment: 'Payment',

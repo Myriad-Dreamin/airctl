@@ -179,7 +179,14 @@ export function MainLayout(C: FunctionComponent<any>) {
                                     <span>{sidebar_name.room.title}</span>
                                 </span>
                             }
-                        />
+                        >
+                            <antd.Menu.Item key="room-1">
+                                <UserOutlined />
+                                <Link to="/app/room/inspect?id=1" className="nav-text">
+                                    {sidebar_name.room.inspect}
+                                </Link>
+                            </antd.Menu.Item>
+                        </antd.Menu.SubMenu>
                         <antd.Menu.Item key="admin-2">
                             <UserOutlined />
                             <Link to="/app/admin/resource" className="nav-text">
