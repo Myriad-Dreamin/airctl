@@ -1,5 +1,6 @@
 import { I18nStaticVars } from '../dependency/i18n';
 
+// 英文I18n
 export const I18nEnglishDataProvider: I18nStaticVars = {
     global: {
         general: {
@@ -11,7 +12,7 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
             admin: { profile: 'Profile', resources: 'Resources' },
             air: { inspect: 'Inspect', list: 'List', report_repair: 'Report Repair', title: 'Air' },
             overview: { dashboard: 'Dashboard', forms: 'Forms', lists: 'Lists' },
-            room: { title: 'Room', inspect: 'Inspect' },
+            room: { title: 'Room', inspect: 'Inspect', report: 'Report' },
             user: {
                 list: 'List',
                 payment: 'Payment',
@@ -33,6 +34,7 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
             inspect_slave_tooltip: 'Inspect Slave',
             master_state_title: 'Master State',
             server_open_label: 'Server Opened:',
+            server_available_label: 'Server Available:',
             daemon_open_label: 'Daemon Opened:',
             master_working_state_label: 'Master Working State:',
             set_current_temperature_label: 'Set Current Temperature (℃):',

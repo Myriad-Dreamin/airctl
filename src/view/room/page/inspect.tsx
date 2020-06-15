@@ -5,7 +5,7 @@ import { DependencyContainer } from '../../../lib/common';
 import { unwrap } from '../../../dependency/protocol';
 import styles from './inspect.css';
 import { reportError } from '../../../component/notify';
-import { Connection } from '../../../dependency/x-service-concept';
+import { Connection, SlaveStatistics } from '../../../dependency/x-service-concept';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import { context } from '../../../context';
+import Button from '@material-ui/core/Button';
 
 interface QueryState {
     room_id?: string;
@@ -88,22 +89,44 @@ export function RoomInspect({ adminService }: DependencyContainer) {
 
         // const modify = () => console.log('click');
 
-        const queryHandler = useCallback(
-            (query) => {
-                return adminService
-                    .GetSlaveStatistics(roomID, new Date(Date.now() - 2000000), new Date(Date.now()))
-                    .then((resp) => {
-                        const data = unwrap(resp);
-                        console.log(data);
-                        return {
-                            data: data,
-                            page: 0,
-                            totalCount: data.length,
-                        };
-                    });
-            },
-            [roomID]
-        );
+        const [exportData, setExportData] = useState<SlaveStatistics[] | undefined>(undefined);
+
+        const queryHandler = useCallback(() => {
+            return adminService
+                .GetSlaveStatistics(roomID, new Date(Date.now() - 2000000), new Date(Date.now()))
+                .then((resp) => {
+                    const data = unwrap(resp);
+                    setExportData(data);
+                    return {
+                        data: data,
+                        page: 0,
+                        totalCount: data.length,
+                    };
+                });
+        }, [roomID]);
+
+        const onExport = useCallback(() => {
+            if (!exportData) {
+                return;
+            }
+            console.log(exportData);
+            const file = new Blob([JSON.stringify(exportData)]),
+                filename = 'export_' + roomID + '.json';
+            if (window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(file, filename);
+            } else {
+                const a = document.createElement('a'),
+                    url = URL.createObjectURL(file);
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function () {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            }
+        }, [exportData, roomID]);
 
         return (
             <div className={styles['form-container']} key="form-container">
@@ -169,7 +192,21 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                 </table>
                                 {/*<antd.Divider />*/}
                                 <Divider style={{ margin: '2vh 0' }} />
-                                <div className={styles['form-sub-title']}>最近更新详单</div>
+                                <div className={styles['form-sub-title']}>
+                                    最近更新详单
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={onExport}
+                                        type="button"
+                                        style={{
+                                            marginRight: '1em',
+                                            float: 'right',
+                                        }}
+                                    >
+                                        Export
+                                    </Button>
+                                </div>
                                 <MaterialTable
                                     localization={i18n.statics.global.material_table_localization}
                                     title={''}
@@ -186,6 +223,7 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                         sorting: true,
                                         actionsColumnIndex: -1,
                                         toolbar: false,
+                                        paging: false,
                                     }}
                                 />
                                 {/*<antd.Divider />*/}

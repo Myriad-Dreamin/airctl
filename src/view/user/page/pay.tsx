@@ -26,7 +26,6 @@ export function UserPay({ userService }: DependencyContainer) {
         const [id, setID] = useState<number | undefined>(undefined);
         const [useID, setUseID] = useState<boolean>(true);
         const [paymentInfo, setPaymentInfo] = useState<Payment | undefined>(undefined);
-        console.log(query);
 
         useEffect(() => {
             if (query?.payment_id !== undefined) {

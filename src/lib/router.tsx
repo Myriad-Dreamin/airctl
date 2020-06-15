@@ -2,18 +2,26 @@ import { DependencyContainer } from './common';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import React, { FunctionComponent } from 'react';
 
+// 将RouteDesc类型的路由描述转化为React Router（将过程式Router转化为声明式Router）
+
 export enum RouteType {
+    // 精准匹配
     Exact,
+    // 模糊匹配
     NotExact,
     Length,
 }
 
 export interface RouteDesc {
+    // 匹配类型
     type: RouteType;
+    // 路由路径
     path: string;
+    // 路由目标组件
     component: (dependencies: DependencyContainer) => FunctionComponent<any>;
 }
 
+// 检查路由数据是否正确
 export function checkRoutes(routes: RouteDesc[]) {
     const checkPathConflict: Set<string> = new Set<string>();
     for (const route of routes) {
@@ -27,6 +35,7 @@ export function checkRoutes(routes: RouteDesc[]) {
     }
 }
 
+// 创建React路由虚拟Dom
 export function CreateRouter(rel: string, routes: RouteDesc[], isRoot: boolean) {
     checkRoutes(routes);
 
@@ -42,7 +51,6 @@ export function CreateRouter(rel: string, routes: RouteDesc[], isRoot: boolean) 
             }
             return desc;
         });
-        console.log(dep);
         const Internal = () => (
             <div>
                 {computed.map((desc) => {

@@ -1,30 +1,8 @@
-import { JSXElementConstructor } from 'react';
-import { AsyncComponent } from '../lib/hoc';
+import { makeComponent } from '../lib/hoc';
+// 一些较小的组件直接打包进主文件中
 import { Descriptions, Divider, Layout, Menu, Modal, Radio } from 'antd';
 
-type componentT<T> = () => Promise<{ default: T }>;
-// type componentTPure<T> = () => Promise<T>;
-
-function makeComponent<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>>(
-    style: () => Promise<any>,
-    component: componentT<T>
-) {
-    return AsyncComponent(async () => {
-        await style();
-        return (await component()).default;
-    });
-}
-
-// function makeComponentPure<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>>(
-//     style: () => Promise<any>,
-//     component: componentTPure<T>
-// ) {
-//     return AsyncComponent(async () => {
-//         await style();
-//         return (await component());
-//     });
-// }
-
+// 注册异步antd加载组件
 export const antd = {
     Card: makeComponent(
         () => import('antd/lib/card/style'),
@@ -46,21 +24,9 @@ export const antd = {
         () => import('antd/lib/input/style'),
         () => import('antd/lib/input')
     ),
-    InputPassword: makeComponent(
-        () => import('antd/lib/input/style'),
-        () => import('antd/lib/input/Password')
-    ),
     Dropdown: makeComponent(
         () => import('antd/lib/dropdown/style'),
         () => import('antd/lib/dropdown')
-    ),
-    Avatar: makeComponent(
-        () => import('antd/lib/avatar/style'),
-        () => import('antd/lib/avatar')
-    ),
-    Skeleton: makeComponent(
-        () => import('antd/lib/skeleton/style'),
-        () => import('antd/lib/skeleton')
     ),
     Divider,
     Descriptions,
@@ -68,5 +34,4 @@ export const antd = {
     Modal,
     Layout,
     Menu,
-    // Avatar,
 };

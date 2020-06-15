@@ -6,6 +6,7 @@ import { antd } from '../../../dependency/antd';
 import { matchResponse } from '../../../dependency/protocol';
 import queryString from 'query-string';
 import { RouteComponentProps } from 'react-router-dom';
+import { reportErrorS } from '../../../component/notify';
 
 interface QueryState {
     raw?: string;
@@ -29,7 +30,7 @@ export function UserProfile({ userService }: DependencyContainer) {
             setLoading(true);
             const id = Number.parseInt(query.id || 'NaN');
             if (isNaN(id)) {
-                console.error(`search id is not a valid number`);
+                reportErrorS(`search id is not a valid number`);
                 return;
             }
             matchResponse(

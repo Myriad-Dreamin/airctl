@@ -5,6 +5,7 @@ export type ReportType = 'day' | 'week' | 'month';
 export type FanSpeed = 'low' | 'mid' | 'high';
 
 export interface ServerStatus {
+    is_boot: boolean;
     mode: Mode;
     work_state: 'busy' | 'working' | 'idle';
     current_temperature: number;
@@ -49,6 +50,14 @@ export interface AdminService {
 
     SetCurrentTemperature(temperature: number): Promise<Response<undefined>>;
 
+    SetUpdateDelay(update_delay: number): Promise<Response<undefined>>;
+
+    SetMetricsDelay(metrics_delay: number): Promise<Response<undefined>>;
+
+    BootMaster(): Promise<Response<undefined>>;
+
+    ShutdownMaster(): Promise<Response<undefined>>;
+
     GetServerStatus(): Promise<Response<ServerStatus>>;
 
     GetSlaveStatistics(room_id: number, start_time: Date, stop_time: Date): Promise<Response<SlaveStatistics[]>>;
@@ -60,4 +69,6 @@ export interface AdminService {
     GetRoomCount(): Promise<Response<number>>;
 
     GetConnectedSlave(id: number): Promise<Response<Connection>>;
+
+    // /v1/admin/boot
 }

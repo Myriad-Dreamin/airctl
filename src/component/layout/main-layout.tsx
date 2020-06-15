@@ -5,24 +5,28 @@ import { ApiFilled, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@
 import styles from './main-layout.css';
 import { Link } from 'react-router-dom';
 import { context } from '../../context';
+import { reportErrorE } from '../notify';
 
 export function MainLayout(C: FunctionComponent<any>) {
+    // 节省对象重组消耗
     let { I18nContext: i18n } = context;
     let sidebar_name = i18n.statics.global.sidebar_name;
 
+    // I18n本地全局对象重置callback
     function resetI18n() {
         i18n = context.I18nContext;
         sidebar_name = i18n.statics.global.sidebar_name;
     }
 
     return function (props: any) {
-        console.log('rerender main layout');
-
+        // State Hooks
         const [collapsed, setCollapsed] = useState(false);
         const swapCollapsed = useCallback(() => setCollapsed((c) => !c), []);
         const [localeDropdownVisible, setLocaleDropdownVisible] = useState(false);
+        const [locale, setLocale] = useState(context.getLocale());
         const [width, setWidth] = useState(200);
 
+        // 响应式布局
         useEffect(() => {
             if (window.innerWidth < 600) setWidth(window.innerWidth);
             else {
@@ -30,8 +34,12 @@ export function MainLayout(C: FunctionComponent<any>) {
             }
         }, [window.innerWidth]);
 
-        const [locale, setLocale] = useState(context.getLocale());
+        // I18n effect
         useEffect(resetI18n, [locale]);
+
+        // 创建侧边栏
+
+        // 侧边栏callback
         const handleMenuClick = useCallback((e) => {
             if (e.key != context.getLocale()) {
                 context
@@ -40,10 +48,11 @@ export function MainLayout(C: FunctionComponent<any>) {
                         setLocale(e.key);
                         resetI18n();
                     })
-                    .catch(console.error);
+                    .catch(reportErrorE);
             }
         }, []);
 
+        // 侧边栏组件
         const menu = (
             <antd.Menu onClick={handleMenuClick}>
                 <context.ReactContext.Provider value={{ locale }} />
@@ -57,6 +66,7 @@ export function MainLayout(C: FunctionComponent<any>) {
                 </antd.Menu.Item>
             </antd.Menu>
         );
+
         return (
             <antd.Layout key="global-layout" className={styles['global-layout']}>
                 <antd.Layout.Sider
@@ -64,9 +74,6 @@ export function MainLayout(C: FunctionComponent<any>) {
                     collapsedWidth="0"
                     trigger={null}
                     onBreakpoint={setCollapsed}
-                    onCollapse={(collapsed, type) => {
-                        console.log(collapsed, type, window.innerWidth);
-                    }}
                     collapsible
                     collapsed={collapsed}
                     key="global-sider"
@@ -184,6 +191,12 @@ export function MainLayout(C: FunctionComponent<any>) {
                                 <UserOutlined />
                                 <Link to="/app/room/inspect?id=1" className="nav-text">
                                     {sidebar_name.room.inspect}
+                                </Link>
+                            </antd.Menu.Item>
+                            <antd.Menu.Item key="room-2">
+                                <UserOutlined />
+                                <Link to="/app/room/report?id=1" className="nav-text">
+                                    {sidebar_name.room.report}
                                 </Link>
                             </antd.Menu.Item>
                         </antd.Menu.SubMenu>

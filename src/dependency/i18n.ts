@@ -1,5 +1,6 @@
 import { Localization as MaterialTableLocalization } from 'material-table';
 
+// I18n接口
 export interface I18nStaticVars {
     global: {
         general: {
@@ -34,6 +35,7 @@ export interface I18nStaticVars {
             room: {
                 title: string;
                 inspect: string;
+                report: string;
             };
             admin: {
                 resources: string;
@@ -52,6 +54,7 @@ export interface I18nStaticVars {
             inspect_slave_tooltip: string;
             master_state_title: string;
             server_open_label: string;
+            server_available_label: string;
             daemon_open_label: string;
             master_working_state_label: string;
             set_current_temperature_label: string;

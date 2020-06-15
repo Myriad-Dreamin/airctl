@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ServiceCode } from '../service/errors';
 import queryString from 'query-string';
 
+// 定时器Hook
 export function useInterval(callback: () => void, delay: number | null) {
     const savedCallback = useRef<() => void>();
 
@@ -25,6 +26,8 @@ export function useInterval(callback: () => void, delay: number | null) {
         }
     }, [delay]);
 }
+
+// 以下为Query String Hook相关定义
 
 interface Rule {
     required?: boolean;
@@ -78,6 +81,7 @@ export function checkQuery<Q>(query: any, errHandler: ErrHandler, rules?: { [K i
     return true;
 }
 
+// Query String Hook
 export function useQuery<Q>(
     search: string,
     rules?: { [K in keyof Q]?: Rule },

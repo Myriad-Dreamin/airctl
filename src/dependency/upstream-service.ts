@@ -1,3 +1,5 @@
+// 服务接口文件，已经弃用，最新使用的接口文件参考x-service.concept.ts文件
+
 import { AirID, AirState, Auth, BAuth, FullAirState, FullRoom, RoomID, SettableAirState } from './concept';
 import { MResponse, Response } from './protocol';
 import { AirService, RoomService, UserService } from './service-concept';

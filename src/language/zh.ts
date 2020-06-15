@@ -1,5 +1,6 @@
 import { I18nStaticVars } from '../dependency/i18n';
 
+// 中文I18n
 export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
     global: {
         general: {
@@ -58,7 +59,7 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
             admin: { profile: '个人中心', resources: '资源表单' },
             air: { inspect: '详情页', list: '列表', report_repair: '报修', title: '空调服务清单' },
             overview: { dashboard: 'Dashboard', forms: '表单汇总', lists: '列表汇总' },
-            room: { inspect: '详情页', title: '房间服务清单' },
+            room: { inspect: '详情页', title: '房间服务清单', report: 'Report' },
             user: {
                 list: '列表',
                 payment: '预缴服务费',
@@ -80,6 +81,7 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
             inspect_slave_tooltip: '查看详情',
             master_state_title: '主控状态',
             server_open_label: '服务器是否开启：',
+            server_available_label: '服务器是否可用：',
             daemon_open_label: '服务器守护是否开启：',
             master_working_state_label: '主控工作状态：',
             set_current_temperature_label: '设置当前空调温度(℃)：',

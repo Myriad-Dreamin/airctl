@@ -18,22 +18,19 @@ export class AdminServiceAxiosImpl implements AdminService {
     async GetConnectedSlaves(page_number: number, page_size: number): Promise<Response<Connection[]>> {
         return (
             await this.sender.get<Response<Connection[]>>(this.url_provider['GetConnectedSlaves'], {
-                params: { page_number, page_size }
+                params: { page_number, page_size },
             })
         ).data;
     }
 
     async GetRoomCount(): Promise<Response<number>> {
-        return (
-            await this.sender.get<Response<Connection[]>>(this.url_provider['GetRoomCount']
-            )
-        ).data;
+        return (await this.sender.get<Response<Connection[]>>(this.url_provider['GetRoomCount'])).data;
     }
 
     async GetConnectedSlave(id: number): Promise<Response<Connection[]>> {
         return (
             await this.sender.get<Response<Connection>>(this.url_provider['GetConnectedSlave'], {
-                params: { id }
+                params: { id },
             })
         ).data;
     }
@@ -43,7 +40,10 @@ export class AdminServiceAxiosImpl implements AdminService {
         report_type: 'day' | 'week' | 'month',
         stop_time: Date
     ): Promise<Response<Report>> {
-        throw Error('todo');
+        const res = await this.sender.get<Response<Report>>(this.url_provider['GetReport'], {
+            params: {},
+        });
+        return res.data;
     }
 
     async GetServerStatus(): Promise<Response<ServerStatus>> {
@@ -59,8 +59,8 @@ export class AdminServiceAxiosImpl implements AdminService {
             params: {
                 room_id,
                 start_time,
-                stop_time
-            }
+                stop_time,
+            },
         });
 
         for (const d of res.data.data) {
@@ -77,5 +77,21 @@ export class AdminServiceAxiosImpl implements AdminService {
 
     async SetMode(mode: 'heat' | 'cool' | 'non'): Promise<Response<undefined>> {
         return (await this.sender.post<Response<undefined>>(this.url_provider['SetMode'], { mode })).data;
+    }
+
+    async SetUpdateDelay(delay: number): Promise<Response<undefined>> {
+        return (await this.sender.post<Response<undefined>>(this.url_provider['SetUpdateDelay'], { delay })).data;
+    }
+
+    async SetMetricsDelay(delay: number): Promise<Response<undefined>> {
+        return (await this.sender.post<Response<undefined>>(this.url_provider['SetMetricsDelay'], { delay })).data;
+    }
+
+    async BootMaster(): Promise<Response<undefined>> {
+        return (await this.sender.post<Response<undefined>>(this.url_provider['MasterBootMaster'], {})).data;
+    }
+
+    async ShutdownMaster(): Promise<Response<undefined>> {
+        return (await this.sender.post<Response<undefined>>(this.url_provider['MasterShutdownMaster'], {})).data;
     }
 }
