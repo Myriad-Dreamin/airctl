@@ -25,7 +25,6 @@ function initContext() {
 
 // 初始化依赖
 const initDependencies: () => Promise<AppDependencyContainer> = async () => {
-
     // 假数据，由于软件工程大作业已经不需要这两个服务了，但为了方便仍然提供测试数据
     const { default: airData } = await MockData.airData();
     const { default: userData } = await MockData.userData();
@@ -47,14 +46,14 @@ const initDependencies: () => Promise<AppDependencyContainer> = async () => {
     // deps: 定义为依赖容器，供所有页面使用
     return {
         airService: new MockAirService({
-            initialAirs: airData
+            initialAirs: airData,
         }),
         userService: new MockUserService({
-            initialUsers: userData
+            initialUsers: userData,
         }),
         daemonAdminService: new DaemonAdminServiceAxiosImpl(ai, config.urlProvider),
         adminService: new AdminServiceAxiosImpl(ai, config.urlProvider),
-        i18n: provideLocale(context.getLocale())
+        i18n: provideLocale(context.getLocale()),
     };
 };
 
@@ -70,7 +69,7 @@ async function main() {
     const App = AppRouter(deps);
 
     // 实例化ReactDom虚拟节点，并绑定到index.html的<div id="app"/>上
-    ReactDOM.render(<App/>, document.querySelector('#app'));
+    ReactDOM.render(<App />, document.querySelector('#app'));
 }
 
 // 运行主函数
