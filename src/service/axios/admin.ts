@@ -18,15 +18,22 @@ export class AdminServiceAxiosImpl implements AdminService {
     async GetConnectedSlaves(page_number: number, page_size: number): Promise<Response<Connection[]>> {
         return (
             await this.sender.get<Response<Connection[]>>(this.url_provider['GetConnectedSlaves'], {
-                params: { page_number, page_size },
+                params: { page_number, page_size }
             })
+        ).data;
+    }
+
+    async GetRoomCount(): Promise<Response<number>> {
+        return (
+            await this.sender.get<Response<Connection[]>>(this.url_provider['GetRoomCount']
+            )
         ).data;
     }
 
     async GetConnectedSlave(id: number): Promise<Response<Connection[]>> {
         return (
             await this.sender.get<Response<Connection>>(this.url_provider['GetConnectedSlave'], {
-                params: { id },
+                params: { id }
             })
         ).data;
     }
@@ -52,8 +59,8 @@ export class AdminServiceAxiosImpl implements AdminService {
             params: {
                 room_id,
                 start_time,
-                stop_time,
-            },
+                stop_time
+            }
         });
 
         for (const d of res.data.data) {

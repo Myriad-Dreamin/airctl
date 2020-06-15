@@ -87,6 +87,7 @@ async function main() {
         SetCurrentTemperature: MasterURL + '/v1/admin/current-temp',
         SetMode: MasterURL + '/v1/admin/mode',
         GetSlaveStatistics: MasterURL + '/v1/admin/slave/statistics',
+        GetRoomCount: MasterURL + '/v1/admin/slave/pool-list-count',
     };
 
     deps = {

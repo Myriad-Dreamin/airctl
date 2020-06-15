@@ -57,5 +57,7 @@ export interface AdminService {
 
     GetConnectedSlaves(page_number: number, page_size: number): Promise<Response<Connection[]>>;
 
+    GetRoomCount(): Promise<Response<number>>;
+
     GetConnectedSlave(id: number): Promise<Response<Connection>>;
 }

@@ -10,7 +10,7 @@ import { Chart, registerShape } from '@antv/g2';
 import MaterialTable from 'material-table';
 import styles from '../../air/page/inspect.css';
 import { DependencyContainer } from '../../../lib/common';
-import { matchResponse } from '../../../dependency/protocol';
+import { matchResponse, unwrap } from '../../../dependency/protocol';
 import { Connection, Mode } from '../../../dependency/x-service-concept';
 import { RouteComponentProps } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -31,8 +31,8 @@ registerShape('point', 'pointer', {
                 y2: cfg.y,
                 stroke: cfg.color,
                 lineWidth: 1,
-                lineCap: 'round',
-            },
+                lineCap: 'round'
+            }
         });
         group.addShape('circle', {
             attrs: {
@@ -41,24 +41,24 @@ registerShape('point', 'pointer', {
                 r: 2,
                 stroke: cfg.color,
                 lineWidth: 1,
-                fill: '#fff',
-            },
+                fill: '#fff'
+            }
         });
 
         return group;
-    },
+    }
 });
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            flexGrow: 1,
+            flexGrow: 1
         },
         paper: {
             padding: theme.spacing(2),
             textAlign: 'center',
-            color: theme.palette.text.secondary,
-        },
+            color: theme.palette.text.secondary
+        }
     })
 );
 
@@ -70,7 +70,7 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
     const chart = new Chart({
         container: hook,
         autoFit: true,
-        padding: [0, 0, 30, 0],
+        padding: [0, 0, 30, 0]
     });
 
     if (totalValue % 3 == 0) {
@@ -83,7 +83,7 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
         chart.scale('value', {
             min: 0,
             max: totalValue,
-            tickInterval: tickScale,
+            tickInterval: tickScale
         });
         chart.data([{ value: actualValue }]);
     } else if (totalValue % 5 == 0) {
@@ -96,7 +96,7 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
         chart.scale('value', {
             min: 0,
             max: maxValue,
-            tickInterval: tickScale,
+            tickInterval: tickScale
         });
         chart.data([{ value: actualValue }]);
     } else {
@@ -106,7 +106,7 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
         chart.scale('value', {
             min: 0,
             max: maxValue,
-            tickInterval: 1,
+            tickInterval: 1
         });
         fmt = (v: unknown) => {
             if ((v as number) & 1) {
@@ -119,7 +119,7 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
     chart.coordinate('polar', {
         startAngle: (-9 / 8) * Math.PI,
         endAngle: (1 / 8) * Math.PI,
-        radius: 0.75,
+        radius: 0.75
     });
 
     chart.axis('1', false);
@@ -130,19 +130,19 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
             style: {
                 fontSize: 12,
                 textAlign: 'center',
-                textBaseline: 'middle',
+                textBaseline: 'middle'
             },
 
-            formatter: fmt,
+            formatter: fmt
         },
         subTickLine: {
             count: 4,
-            length: -4,
+            length: -4
         },
         tickLine: {
-            length: -6,
+            length: -6
         },
-        grid: null,
+        grid: null
     });
     chart.legend(false);
     chart
@@ -152,8 +152,8 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
         .color('#1890FF')
         .animate({
             appear: {
-                animation: 'fade-in',
-            },
+                animation: 'fade-in'
+            }
         });
 
     // 绘制仪表盘背景
@@ -165,8 +165,8 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
             // 底灰色
             stroke: '#CBCBCB',
             lineWidth: 3,
-            lineDash: null,
-        },
+            lineDash: null
+        }
     });
 
     // 绘制指标
@@ -176,8 +176,8 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
         style: {
             stroke: '#1890FF',
             lineWidth: 3,
-            lineDash: null,
-        },
+            lineDash: null
+        }
     });
     // 绘制指标数字
     //     chart.annotation().text({
@@ -195,9 +195,9 @@ function chartMain(hook: HTMLElement, totalValue: number, actualValue: number) {
         style: {
             fontSize: 10,
             fill: '#545454',
-            textAlign: 'center',
+            textAlign: 'center'
         },
-        offsetY: 15,
+        offsetY: 15
     });
 
     chart.render();
@@ -235,7 +235,7 @@ function checkDelay(delay: string) {
 }
 
 export function Dashboard({ daemonAdminService, adminService }: DependencyContainer) {
-    return function (props: RouteComponentProps) {
+    return function(props: RouteComponentProps) {
         const classes = useStyles();
         const { I18nContext: i18n } = context;
         const dashboard = i18n.statics.global.dashboard;
@@ -255,22 +255,23 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
             metrics_delay: 0,
             update_delay: 0,
             mode: 'heat',
-            work_state: 'unknown',
+            work_state: 'unknown'
         });
         const [edit, setEditing] = useState(false);
+
 
         const formController = useFormData(
             {
                 current_degree: airState.current_degree,
                 mode: airState.mode,
                 metrics_delay: airState.metrics_delay,
-                update_delay: airState.update_delay,
+                update_delay: airState.update_delay
             },
             {
                 current_degree: checkDegree,
                 mode: checkMode,
                 metrics_delay: checkDelay,
-                update_delay: checkDelay,
+                update_delay: checkDelay
             }
         );
 
@@ -324,8 +325,8 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                             current_degree: airState.current_degree,
                             mode: airState.mode,
                             metrics_delay: airState.metrics_delay,
-                            update_delay: airState.update_delay,
-                        },
+                            update_delay: airState.update_delay
+                        }
                     ]);
                 }
                 return !e;
@@ -399,13 +400,21 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
         const queryHandler = useCallback((query) => {
             return adminService.GetConnectedSlaves(query.page + 1, query.pageSize).then((resp) => {
                 console.log(resp);
-                return {
-                    data: resp.data,
-                    page: 1,
-                    totalCount: 10,
-                };
+
+                return adminService.GetRoomCount().then((resp2) => {
+                    return {
+                        data: resp.data,
+                        page: query.page,
+                        totalCount: unwrap(resp2)
+                    };
+                });
+
             });
         }, []);
+
+        const onSetBoot = useCallback(() => {
+            console.log(airState.is_on);
+        }, [airState.is_on]);
 
         return (
             <Grid container spacing={3}>
@@ -414,21 +423,21 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                         <div style={{ width: '20vh', textAlign: 'center' }}>
                             <p style={{ margin: '0', height: '5vh' }}>
                                 &nbsp;
-                                <br />
+                                <br/>
                                 {dashboard.current_connection_cnt}
                             </p>
                             <div style={{ width: '20vh', height: '20vh' }}>
-                                <div id={'conn-chart'} style={{ margin: '0' }} />
+                                <div id={'conn-chart'} style={{ margin: '0' }}/>
                             </div>
                         </div>
                         <div style={{ width: '20vh', textAlign: 'center' }}>
                             <p style={{ margin: '0', height: '5vh' }}>
                                 {dashboard.max_connection_cnt_seg_1}
-                                <br />
+                                <br/>
                                 {dashboard.max_connection_cnt_seg_2}
                             </p>
                             <div style={{ width: '20vh', height: '20vh' }}>
-                                <div id={'conn-chart-2'} style={{ margin: '0' }} />
+                                <div id={'conn-chart-2'} style={{ margin: '0' }}/>
                             </div>
                         </div>
                     </div>
@@ -436,7 +445,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                 <Grid item xs={12} sm={6}>
                     <Paper className={classes.paper} style={{ height: '25vh' }}>
                         {dashboard.real_time_performance_graph}
-                        <br />
+                        <br/>
                         {dashboard.incoming}
                     </Paper>
                 </Grid>
@@ -447,7 +456,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                         columns={[
                             { title: dashboard.room_inc_id, field: 'id' },
                             { title: dashboard.room_id, field: 'room_id' },
-                            { title: dashboard.slave_connected, field: 'connected' },
+                            { title: dashboard.slave_connected, field: 'connected' }
                             // {
                             //     title: 'Birth Place',
                             //     field: 'birthCity',
@@ -469,13 +478,13 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                     } else {
                                         props.history.push(`/app/room/inspect?id=${rowData.id}`);
                                     }
-                                },
-                            },
+                                }
+                            }
                         ]}
                         options={{
                             sorting: true,
                             actionsColumnIndex: -1,
-                            toolbar: false,
+                            toolbar: false
                         }}
                     />
                 </Grid>
@@ -488,7 +497,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                             type="button"
                             style={{
                                 marginRight: '1em',
-                                float: 'right',
+                                float: 'right'
                             }}
                         >
                             {edit ? 'Cancel' : 'Edit'}
@@ -501,14 +510,14 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                 type="button"
                                 style={{
                                     marginRight: '1em',
-                                    float: 'right',
+                                    float: 'right'
                                 }}
                             >
                                 Save
                             </Button>
                         )}
                     </div>
-                    <div style={{ clear: 'both' }} />
+                    <div style={{ clear: 'both' }}/>
                     <Paper className={classes.paper}>
                         <div className={styles['form-sub-title']}>
                             <span
@@ -516,9 +525,9 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                     background: airState?.is_on
                                         ? '#52c41a'
                                         : airState?.available
-                                        ? '#f5222d'
-                                        : '#d9d9d9',
-                                    marginRight: '0.5em',
+                                            ? '#f5222d'
+                                            : '#d9d9d9',
+                                    marginRight: '0.5em'
                                 }}
                                 className={styles['state-dot']}
                             >
@@ -528,94 +537,106 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                         </div>
                         <table className={styles['form-item-table']}>
                             <tbody>
-                                <tr>
+                            <tr>
+                                <td colSpan={1}>
+                                    {dashboard.server_open_label}
+                                    {airState?.is_on
+                                        ? i18n.statics.global.general.yes
+                                        : i18n.statics.global.general.no}
+                                </td>
+                                <td colSpan={1}>
+                                    {dashboard.daemon_open_label}
+                                    {airState?.available
+                                        ? i18n.statics.global.general.yes
+                                        : i18n.statics.global.general.no}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={1}>
+                                    {dashboard.master_working_state_label}
+                                    {airState?.work_state}
+                                </td>
+                                <td colSpan={1}/>
+                            </tr>
+                            <tr>
+                                {edit ? (
                                     <td colSpan={1}>
-                                        {dashboard.server_open_label}
-                                        {airState?.is_on
-                                            ? i18n.statics.global.general.yes
-                                            : i18n.statics.global.general.no}
+                                        {dashboard.set_current_temperature_label}
+                                        <TextField
+                                            style={{ minHeight: '60px', width: '80%' }}
+                                            controller={formController}
+                                            field="current_degree"
+                                        />
                                     </td>
+                                ) : (
                                     <td colSpan={1}>
-                                        {dashboard.daemon_open_label}
-                                        {airState?.available
-                                            ? i18n.statics.global.general.yes
-                                            : i18n.statics.global.general.no}
+                                        {dashboard.current_temperature_label}
+                                        {airState?.current_degree}℃
                                     </td>
-                                </tr>
-                                <tr>
+                                )}
+                                {edit ? (
                                     <td colSpan={1}>
-                                        {dashboard.master_working_state_label}
-                                        {airState?.work_state}
+                                        {dashboard.set_current_air_mode}
+                                        <TextField
+                                            style={{ minHeight: '60px', width: '80%' }}
+                                            controller={formController}
+                                            field="mode"
+                                        />
                                     </td>
-                                    <td colSpan={1} />
-                                </tr>
-                                <tr>
-                                    {edit ? (
-                                        <td colSpan={1}>
-                                            {dashboard.set_current_temperature_label}
-                                            <TextField
-                                                style={{ minHeight: '60px', width: '80%' }}
-                                                controller={formController}
-                                                field="current_degree"
-                                            />
-                                        </td>
-                                    ) : (
-                                        <td colSpan={1}>
-                                            {dashboard.current_temperature_label}
-                                            {airState?.current_degree}℃
-                                        </td>
-                                    )}
-                                    {edit ? (
-                                        <td colSpan={1}>
-                                            {dashboard.set_current_air_mode}
-                                            <TextField
-                                                style={{ minHeight: '60px', width: '80%' }}
-                                                controller={formController}
-                                                field="mode"
-                                            />
-                                        </td>
-                                    ) : (
-                                        <td colSpan={1}>
-                                            {dashboard.current_air_mode}
-                                            {airState?.mode}
-                                        </td>
-                                    )}
-                                </tr>
-                                <tr>
-                                    {edit ? (
-                                        <td colSpan={1}>
-                                            {dashboard.set_slave_push_metrics_delay_label}
-                                            <TextField
-                                                style={{ minHeight: '60px', width: '80%' }}
-                                                controller={formController}
-                                                field="metrics_delay"
-                                            />
-                                        </td>
-                                    ) : (
-                                        <td colSpan={1}>
-                                            {dashboard.slave_push_metrics_delay_label}
-                                            {airState?.metrics_delay}
-                                        </td>
-                                    )}
-                                    {edit ? (
-                                        <td colSpan={1}>
-                                            {dashboard.set_slave_update_statistics_delay_label}
-                                            <TextField
-                                                style={{ minHeight: '60px', width: '80%' }}
-                                                controller={formController}
-                                                field="update_delay"
-                                            />
-                                        </td>
-                                    ) : (
-                                        <td colSpan={1}>
-                                            {dashboard.slave_update_statistics_delay_label}
-                                            {airState?.update_delay}
-                                        </td>
-                                    )}
-                                </tr>
+                                ) : (
+                                    <td colSpan={1}>
+                                        {dashboard.current_air_mode}
+                                        {airState?.mode}
+                                    </td>
+                                )}
+                            </tr>
+                            <tr>
+                                {edit ? (
+                                    <td colSpan={1}>
+                                        {dashboard.set_slave_push_metrics_delay_label}
+                                        <TextField
+                                            style={{ minHeight: '60px', width: '80%' }}
+                                            controller={formController}
+                                            field="metrics_delay"
+                                        />
+                                    </td>
+                                ) : (
+                                    <td colSpan={1}>
+                                        {dashboard.slave_push_metrics_delay_label}
+                                        {airState?.metrics_delay}
+                                    </td>
+                                )}
+                                {edit ? (
+                                    <td colSpan={1}>
+                                        {dashboard.set_slave_update_statistics_delay_label}
+                                        <TextField
+                                            style={{ minHeight: '60px', width: '80%' }}
+                                            controller={formController}
+                                            field="update_delay"
+                                        />
+                                    </td>
+                                ) : (
+                                    <td colSpan={1}>
+                                        {dashboard.slave_update_statistics_delay_label}
+                                        {airState?.update_delay}
+                                    </td>
+                                )}
+                            </tr>
                             </tbody>
                         </table>
                     </Paper>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={onSetBoot}
+                        type="button"
+                        style={{
+                            marginRight: '1em',
+                            float: 'right'
+                        }}
+                    >
+                        {airState?.is_on ? '关机' : '开机'}
+                    </Button>
                 </Grid>
                 {/*<Grid item xs={6} sm={3}>*/}
                 {/*    <Paper className={classes.paper}>xs=6 sm=3</Paper>*/}
