@@ -104,7 +104,7 @@ export function RoomReport({ adminService }: DependencyContainer) {
             }
             console.log(totalData);
             const file = new Blob([JSON.stringify(totalData)]),
-                filename = 'report_' + '.json';
+                filename = 'report_' + roomID + '.json';
             if (window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(file, filename);
             } else {
@@ -119,7 +119,7 @@ export function RoomReport({ adminService }: DependencyContainer) {
                     window.URL.revokeObjectURL(url);
                 }, 0);
             }
-        }, [totalData]);
+        }, [roomID, totalData]);
 
         const onChange = useCallback(
             (event) => {
