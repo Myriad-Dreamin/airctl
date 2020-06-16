@@ -134,7 +134,7 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
                 stop_temperature: '停止温度',
                 consumed_energy: '能量消耗',
                 cost: '花费金额',
-            }
-        }
+            },
+        },
     },
 };

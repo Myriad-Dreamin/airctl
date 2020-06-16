@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import MaterialTable from 'material-table';
 import { context } from '../../../context';
-import { Report, ReportType, SlaveStatistics } from '../../../dependency/x-service-concept';
+import { Report, ReportType } from '../../../dependency/x-service-concept';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
@@ -98,14 +98,12 @@ export function RoomReport({ adminService }: DependencyContainer) {
             });
         }, [roomID, reportType]);
 
-        const [exportData] = useState<SlaveStatistics[] | undefined>(undefined);
-
         const onExport = useCallback(() => {
-            if (!exportData) {
+            if (!totalData) {
                 return;
             }
-            console.log(exportData);
-            const file = new Blob([JSON.stringify(exportData)]),
+            console.log(totalData);
+            const file = new Blob([JSON.stringify(totalData)]),
                 filename = 'report_' + '.json';
             if (window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(file, filename);
@@ -121,7 +119,7 @@ export function RoomReport({ adminService }: DependencyContainer) {
                     window.URL.revokeObjectURL(url);
                 }, 0);
             }
-        }, [exportData]);
+        }, [totalData]);
 
         const onChange = useCallback(
             (event) => {
@@ -139,7 +137,11 @@ export function RoomReport({ adminService }: DependencyContainer) {
                 <ButtonGroup
                     variant="text"
                     color="primary"
-                    style={{ margin: '0 auto', display: 'block', width: i18n.statics.global.general.yes == 'Yes' ? '180px' : '140px' }}
+                    style={{
+                        margin: '0 auto',
+                        display: 'block',
+                        width: i18n.statics.global.general.yes == 'Yes' ? '180px' : '140px',
+                    }}
                     aria-label="text primary button group"
                     onClick={onChange}
                 >
@@ -149,9 +151,7 @@ export function RoomReport({ adminService }: DependencyContainer) {
                 </ButtonGroup>
 
                 <div>
-                    <p style={{ margin: '20px 0' }}>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{room_report.slave_report_ps}
-                    </p>
+                    <p style={{ margin: '20px 0' }}>&nbsp;&nbsp;&nbsp;&nbsp;{room_report.slave_report_ps}</p>
                 </div>
                 <Paper className={classes.paper}>
                     <div className={classes.title}>
@@ -173,12 +173,24 @@ export function RoomReport({ adminService }: DependencyContainer) {
                         <table className={styles['form-item-table']}>
                             <tbody>
                                 <tr>
-                                    <td colSpan={1}>{room_report.room_name_label}{totalData?.room_id}</td>
-                                    <td colSpan={1}>{room_report.boot_shutdown_times_label}{totalData?.count}</td>
+                                    <td colSpan={1}>
+                                        {room_report.room_name_label}
+                                        {totalData?.room_id}
+                                    </td>
+                                    <td colSpan={1}>
+                                        {room_report.boot_shutdown_times_label}
+                                        {totalData?.count}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={1}>{room_report.total_consumed_energy_label}{totalData?.total_energy.toFixed(2)}</td>
-                                    <td colSpan={1}>{room_report.total_cost_label}{totalData?.total_cost.toFixed(2)}</td>
+                                    <td colSpan={1}>
+                                        {room_report.total_consumed_energy_label}
+                                        {totalData?.total_energy.toFixed(2)}
+                                    </td>
+                                    <td colSpan={1}>
+                                        {room_report.total_cost_label}
+                                        {totalData?.total_cost.toFixed(2)}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

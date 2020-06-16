@@ -74,7 +74,8 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
             weekly_button_title: 'week',
             monthly_button_title: 'month',
             slave_report_table_name: 'Slave Report',
-            slave_report_ps: 'The id of virtual table will be zero.' +
+            slave_report_ps:
+                'The id of virtual table will be zero.' +
                 'Otherwise it comes from a frozen table in a database instance.',
             room_name_label: 'room name: ',
             boot_shutdown_times_label: 'boot and shutdown times: ',
@@ -88,7 +89,7 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
                 stop_temperature: 'Stop Temperature',
                 consumed_energy: 'Consumed Energy',
                 cost: 'Cost',
-            }
-        }
+            },
+        },
     },
 };

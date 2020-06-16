@@ -173,14 +173,27 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                 <table className={styles['form-item-table']}>
                                     <tbody>
                                         <tr>
-                                            <td colSpan={1}>{room_inspect.room_number_label}{connection?.id}</td>
-                                            <td colSpan={1}>{room_inspect.room_name_label}{connection?.room_id}</td>
+                                            <td colSpan={1}>
+                                                {room_inspect.room_number_label}
+                                                {connection?.id}
+                                            </td>
+                                            <td colSpan={1}>
+                                                {room_inspect.room_name_label}
+                                                {connection?.room_id}
+                                            </td>
                                         </tr>
                                         <tr>
-                                            <td colSpan={1}>{room_inspect.is_connected_label}{connection?.connected ? i18n.statics.global.general.yes : i18n.statics.global.general.no}</td>
+                                            <td colSpan={1}>
+                                                {room_inspect.is_connected_label}
+                                                {connection?.connected
+                                                    ? i18n.statics.global.general.yes
+                                                    : i18n.statics.global.general.no}
+                                            </td>
                                             <td colSpan={1}>
                                                 {room_inspect.current_temperature_label}
-                                                {connection?.connected ? connection?.current_temperature : i18n.statics.global.general.not_available}
+                                                {connection?.connected
+                                                    ? connection?.current_temperature
+                                                    : i18n.statics.global.general.not_available}
                                             </td>
                                         </tr>
                                         <tr>
@@ -193,7 +206,10 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                                     : i18n.statics.global.general.not_available}
                                             </td>
                                             <td colSpan={1}>
-                                                {room_inspect.scheduling_fan_speed_label}{connection?.connected ? connection?.fan_speed : i18n.statics.global.general.not_available}
+                                                {room_inspect.scheduling_fan_speed_label}
+                                                {connection?.connected
+                                                    ? connection?.fan_speed
+                                                    : i18n.statics.global.general.not_available}
                                             </td>
                                         </tr>
                                     </tbody>

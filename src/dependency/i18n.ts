@@ -87,8 +87,8 @@ export interface I18nStaticVars {
                 consumed_energy: string;
                 cost: string;
                 fan_speed: string;
-            }
-        },
+            };
+        };
         room_report: {
             daily_button_title: string;
             weekly_button_title: string;
@@ -107,8 +107,8 @@ export interface I18nStaticVars {
                 stop_temperature: string;
                 consumed_energy: string;
                 cost: string;
-            }
-        }
+            };
+        };
     };
 }
 export interface I18nProvider {
