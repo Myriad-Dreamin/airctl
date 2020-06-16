@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function RoomReport({ adminService }: DependencyContainer) {
     return (props: RouteComponentProps) => {
         const { I18nContext: i18n } = context;
+        const room_report = i18n.statics.global.room_report;
         const classes = useStyles();
 
         const [query, setQuery] = useState<QueryState>({});
@@ -138,23 +139,23 @@ export function RoomReport({ adminService }: DependencyContainer) {
                 <ButtonGroup
                     variant="text"
                     color="primary"
-                    style={{ margin: '0 auto', display: 'block', width: '140px' }}
+                    style={{ margin: '0 auto', display: 'block', width: i18n.statics.global.general.yes == 'Yes' ? '180px' : '140px' }}
                     aria-label="text primary button group"
                     onClick={onChange}
                 >
-                    <Button value={'day'}>日报</Button>
-                    <Button value={'week'}>周报</Button>
-                    <Button value={'month'}>月报</Button>
+                    <Button value={'day'}>{room_report.daily_button_title}</Button>
+                    <Button value={'week'}>{room_report.weekly_button_title}</Button>
+                    <Button value={'month'}>{room_report.monthly_button_title}</Button>
                 </ButtonGroup>
 
                 <div>
                     <p style={{ margin: '20px 0' }}>
-                        &nbsp;&nbsp;&nbsp;&nbsp;ID如果为0，说明是虚表数据；如果不为零说明该项数据来自经过压缩的数据库中冷数据存储。
+                        &nbsp;&nbsp;&nbsp;&nbsp;{room_report.slave_report_ps}
                     </p>
                 </div>
                 <Paper className={classes.paper}>
                     <div className={classes.title}>
-                        从控报表
+                        {room_report.slave_report_table_name}
                         <Button
                             variant="outlined"
                             color="primary"
@@ -172,12 +173,12 @@ export function RoomReport({ adminService }: DependencyContainer) {
                         <table className={styles['form-item-table']}>
                             <tbody>
                                 <tr>
-                                    <td colSpan={1}>房间名称：{totalData?.room_id}</td>
-                                    <td colSpan={1}>开关机次数：{totalData?.count}</td>
+                                    <td colSpan={1}>{room_report.room_name_label}{totalData?.room_id}</td>
+                                    <td colSpan={1}>{room_report.boot_shutdown_times_label}{totalData?.count}</td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={1}>能量总消耗：{totalData?.total_energy.toFixed(2)}</td>
-                                    <td colSpan={1}>花费总金额：{totalData?.total_cost.toFixed(2)}</td>
+                                    <td colSpan={1}>{room_report.total_consumed_energy_label}{totalData?.total_energy.toFixed(2)}</td>
+                                    <td colSpan={1}>{room_report.total_cost_label}{totalData?.total_cost.toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -186,13 +187,13 @@ export function RoomReport({ adminService }: DependencyContainer) {
                         localization={i18n.statics.global.material_table_localization}
                         title={''}
                         columns={[
-                            { title: 'ID', field: 'report_no' },
-                            { title: '开始时间', field: 'start_time', type: 'datetime' },
-                            { title: '停止时间', field: 'stop_time', type: 'datetime' },
-                            { title: '开始温度', field: 'start_temperature' },
-                            { title: '停止温度', field: 'end_temperature' },
-                            { title: '花费金额', field: 'cost' },
-                            { title: '能量消耗', field: 'energy' },
+                            { title: room_report.table.id, field: 'report_no' },
+                            { title: room_report.table.start_time, field: 'start_time', type: 'datetime' },
+                            { title: room_report.table.stop_time, field: 'stop_time', type: 'datetime' },
+                            { title: room_report.table.start_temperature, field: 'start_temperature' },
+                            { title: room_report.table.stop_temperature, field: 'end_temperature' },
+                            { title: room_report.table.cost, field: 'cost' },
+                            { title: room_report.table.consumed_energy, field: 'energy' },
                         ]}
                         data={tableData}
                         options={{

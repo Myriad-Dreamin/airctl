@@ -417,7 +417,7 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                             float: 'right',
                         }}
                     >
-                        {airState?.is_on ? '关机' : '开机'}
+                        {airState?.is_on ? dashboard.shutdown : dashboard.boot}
                     </Button>
                 </Grid>
                 {/*<Grid item xs={6} sm={3}>*/}

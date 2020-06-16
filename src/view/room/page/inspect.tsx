@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function RoomInspect({ adminService }: DependencyContainer) {
     return (props: RouteComponentProps) => {
         const { I18nContext: i18n } = context;
+        const room_inspect = i18n.statics.global.room_inspect;
         const classes = useStyles();
         const [roomID, setRoomID] = useState(0);
         const [connection, setConnection] = useState<Connection | undefined>(undefined);
@@ -158,7 +159,7 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                     >
                                         &nbsp;
                                     </span>
-                                    <span>从控状态</span>
+                                    <span>{room_inspect.slave_state_title}</span>
                                     {/*<antd.Button*/}
                                     {/*    onClick={swapEdit}*/}
                                     {/*    type="link"*/}
@@ -172,22 +173,27 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                 <table className={styles['form-item-table']}>
                                     <tbody>
                                         <tr>
-                                            <td colSpan={1}>房间编号：{connection?.id}</td>
-                                            <td colSpan={1}>房间名称：{connection?.room_id}</td>
+                                            <td colSpan={1}>{room_inspect.room_number_label}{connection?.id}</td>
+                                            <td colSpan={1}>{room_inspect.room_name_label}{connection?.room_id}</td>
                                         </tr>
                                         <tr>
-                                            <td colSpan={1}>当前是否已连接：{connection?.connected ? '是' : '否'}</td>
+                                            <td colSpan={1}>{room_inspect.is_connected_label}{connection?.connected ? i18n.statics.global.general.yes : i18n.statics.global.general.no}</td>
                                             <td colSpan={1}>
-                                                当前温度：
-                                                {connection?.connected ? connection?.current_temperature : '不可用'}
+                                                {room_inspect.current_temperature_label}
+                                                {connection?.connected ? connection?.current_temperature : i18n.statics.global.general.not_available}
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colSpan={1}>
-                                                是否需要调度：{connection?.connected ? (connection?.need_fan ? '是' : '否') : '不可用'}
+                                                {room_inspect.is_waiting_scheduling_label}
+                                                {connection?.connected
+                                                    ? connection?.need_fan
+                                                        ? i18n.statics.global.general.yes
+                                                        : i18n.statics.global.general.no
+                                                    : i18n.statics.global.general.not_available}
                                             </td>
                                             <td colSpan={1}>
-                                                正在调度风速：{connection?.connected ? connection?.fan_speed : '不可用'}
+                                                {room_inspect.scheduling_fan_speed_label}{connection?.connected ? connection?.fan_speed : i18n.statics.global.general.not_available}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -195,7 +201,7 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                 {/*<antd.Divider />*/}
                                 <Divider style={{ margin: '2vh 0' }} />
                                 <div className={styles['form-sub-title']}>
-                                    最近更新详单
+                                    {room_inspect.latest_table_name}
                                     <Button
                                         variant="outlined"
                                         color="primary"
@@ -213,12 +219,12 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                     localization={i18n.statics.global.material_table_localization}
                                     title={''}
                                     columns={[
-                                        { title: 'id', field: 'room_id' },
-                                        { title: '开始时间', field: 'start_time', type: 'datetime' },
-                                        { title: '停止时间', field: 'stop_time', type: 'datetime' },
-                                        { title: '消耗能量', field: 'energy' },
-                                        { title: '消耗金额', field: 'cost' },
-                                        { title: '风速', field: 'fan_speed' },
+                                        { title: room_inspect.table.id, field: 'room_id' },
+                                        { title: room_inspect.table.start_time, field: 'start_time', type: 'datetime' },
+                                        { title: room_inspect.table.stop_time, field: 'stop_time', type: 'datetime' },
+                                        { title: room_inspect.table.consumed_energy, field: 'energy' },
+                                        { title: room_inspect.table.cost, field: 'cost' },
+                                        { title: room_inspect.table.fan_speed, field: 'fan_speed' },
                                     ]}
                                     data={queryHandler}
                                     options={{
@@ -228,42 +234,6 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                         paging: false,
                                     }}
                                 />
-                                {/*<antd.Divider />*/}
-                                {/*<div className={styles['form-sub-title']}>*/}
-                                {/*    <span>保修信息</span>*/}
-                                {/*    <a*/}
-                                {/*        onClick={modify}*/}
-                                {/*        style={{*/}
-                                {/*            marginRight: '1em',*/}
-                                {/*            float: 'right',*/}
-                                {/*        }}*/}
-                                {/*    >*/}
-                                {/*        [报修]*/}
-                                {/*    </a>*/}
-                                {/*</div>*/}
-                                {/*<table className={styles['form-item-table']}>*/}
-                                {/*    <tbody>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={1}>保修政策：全国联保，享受三包服务</td>*/}
-                                {/*            <td colSpan={1}>*/}
-                                {/*                质保到期时间：{new Date(Date.now() + 233333333333).toISOString()}*/}
-                                {/*            </td>*/}
-                                {/*        </tr>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={1}>质保备注：目前可保主要部件，整机已经不能保修</td>*/}
-                                {/*            <td colSpan={1}>客服电话：233-333-3333</td>*/}
-                                {/*        </tr>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={1}>电话备注：24小时电话服务</td>*/}
-                                {/*            <td colSpan={1}>负责人：老王</td>*/}
-                                {/*        </tr>*/}
-                                {/*        <tr>*/}
-                                {/*            <td colSpan={2}>*/}
-                                {/*                详细说明：2010年1月1日以后购买的无氟空调，其保修期为10年；保修期会因购买地区的不同以及购买时间的不同而有一定的差异，如您有疑问，请详询海尔公司客服电话；售后服务由品牌厂商提供，支持全国联保，可享有三包服务。如出现产品质量问题或故障，您可查询最近的维修点，由厂商的售后解决。您也可以电话咨询海尔24小时电话服务热线。*/}
-                                {/*            </td>*/}
-                                {/*        </tr>*/}
-                                {/*    </tbody>*/}
-                                {/*</table>*/}
                             </div>
                         )}
                     </Paper>

@@ -6,6 +6,8 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
         general: {
             yes: '是',
             no: '否',
+            available: '可用',
+            not_available: '不可用',
         },
         material_table_localization: {
             body: {
@@ -59,7 +61,7 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
             admin: { profile: '个人中心', resources: '资源表单' },
             air: { inspect: '详情页', list: '列表', report_repair: '报修', title: '空调服务清单' },
             overview: { dashboard: 'Dashboard', forms: '表单汇总', lists: '列表汇总' },
-            room: { inspect: '详情页', title: '房间服务清单', report: 'Report' },
+            room: { inspect: '详情页', title: '房间服务清单', report: '房间报表' },
             user: {
                 list: '列表',
                 payment: '预缴服务费',
@@ -93,6 +95,46 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
             slave_push_metrics_delay_label: '从控更新周期(ms)：',
             set_slave_update_statistics_delay_label: '设置从控拉取周期(ms)：',
             slave_update_statistics_delay_label: '从控拉取周期(ms)：',
+            shutdown: '关机',
+            boot: '开机',
         },
+        room_inspect: {
+            slave_state_title: '从控状态',
+            room_number_label: '房间编号：',
+            room_name_label: '房间名称：',
+            is_connected_label: '当前是否已连接：',
+            current_temperature_label: '当前温度：',
+            is_waiting_scheduling_label: '是否需要调度：',
+            scheduling_fan_speed_label: '正在调度风速：',
+            latest_table_name: '最近更新详单',
+            table: {
+                id: 'id',
+                start_time: '开始时间',
+                stop_time: '停止时间',
+                consumed_energy: '消耗能量',
+                cost: '消耗金额',
+                fan_speed: '风速',
+            },
+        },
+        room_report: {
+            daily_button_title: '日报',
+            weekly_button_title: '周报',
+            monthly_button_title: '年报',
+            slave_report_table_name: '从控报表',
+            slave_report_ps: 'ID如果为0，说明是虚表数据；如果不为零说明该项数据来自经过压缩的数据库中冷数据存储。',
+            room_name_label: '房间名称：',
+            boot_shutdown_times_label: '开关机次数：',
+            total_consumed_energy_label: '能量总消耗：',
+            total_cost_label: '花费总金额：',
+            table: {
+                id: 'id',
+                start_time: '开始时间',
+                stop_time: '停止时间',
+                start_temperature: '开始温度',
+                stop_temperature: '停止温度',
+                consumed_energy: '能量消耗',
+                cost: '花费金额',
+            }
+        }
     },
 };
