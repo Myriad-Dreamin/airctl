@@ -56,7 +56,11 @@ export function RoomInspect({ adminService }: DependencyContainer) {
             if (query.id !== undefined) {
                 id = Number.parseInt(query.id);
                 if (id === undefined) {
-                    console.log('error');
+                    reportError({
+                        code: 0,
+                        message: '需要一个房间数据库序号(id)',
+                        name: '不合法的参数',
+                    });
                 }
             }
             //     if (query.room_id !== undefined)
@@ -93,7 +97,7 @@ export function RoomInspect({ adminService }: DependencyContainer) {
 
         const queryHandler = useCallback(() => {
             return adminService
-                .GetSlaveStatistics(roomID, new Date(Date.now() - 2000000), new Date(Date.now()))
+                .GetSlaveStatistics(roomID, new Date(2000, 0), new Date(Date.now()))
                 .then((resp) => {
                     const data = unwrap(resp);
                     setExportData(data);

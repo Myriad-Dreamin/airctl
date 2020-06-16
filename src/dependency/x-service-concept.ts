@@ -24,8 +24,23 @@ export interface SlaveStatistics {
 
 export type todo = undefined;
 
+export interface ReportItem {
+    report_no: number;
+    room_id: string;
+    start_time: Date;
+    stop_time: Date;
+    start_temperature: number;
+    end_temperature: number;
+    cost: number;
+    energy: number;
+}
+
 export interface Report {
-    room_list: todo;
+    count: number;
+    room_id: string;
+    total_cost: number;
+    total_energy: number;
+    items: ReportItem[];
 }
 
 export interface DaemonAdminService {

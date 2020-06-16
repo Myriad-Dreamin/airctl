@@ -242,6 +242,21 @@ export function Dashboard({ daemonAdminService, adminService }: DependencyContai
                                     }
                                 },
                             },
+                            {
+                                icon: 'assessment',
+                                tooltip: dashboard.report_slave_tooltip,
+                                onClick: (
+                                    _: any,
+                                    rowData:
+                                        | Pick<Connection, 'id' | 'room_id' | 'connected'>
+                                        | Pick<Connection, 'id' | 'room_id' | 'connected'>[]
+                                ) => {
+                                    if (rowData instanceof Array) {
+                                    } else {
+                                        props.history.push(`/app/room/report?id=${rowData.id}`);
+                                    }
+                                },
+                            },
                         ]}
                         options={{
                             sorting: true,

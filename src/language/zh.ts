@@ -79,6 +79,7 @@ export const I18nSimplifiedChineseDataProvider: I18nStaticVars = {
             room_id: '房间名',
             slave_connected: '从控连接',
             inspect_slave_tooltip: '查看详情',
+            report_slave_tooltip: '查看报表',
             master_state_title: '主控状态',
             server_open_label: '服务器是否开启：',
             server_available_label: '服务器是否可用：',

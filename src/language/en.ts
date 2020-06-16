@@ -32,6 +32,7 @@ export const I18nEnglishDataProvider: I18nStaticVars = {
             room_id: 'RoomID',
             slave_connected: 'Connected',
             inspect_slave_tooltip: 'Inspect Slave',
+            report_slave_tooltip: 'Slave Report',
             master_state_title: 'Master State',
             server_open_label: 'Server Opened:',
             server_available_label: 'Server Available:',

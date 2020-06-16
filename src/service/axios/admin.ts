@@ -37,13 +37,34 @@ export class AdminServiceAxiosImpl implements AdminService {
 
     async GetReport(
         room_id: number,
-        report_type: 'day' | 'week' | 'month',
+        type: 'day' | 'week' | 'month',
         stop_time: Date
     ): Promise<Response<Report>> {
-        const res = await this.sender.get<Response<Report>>(this.url_provider['GetReport'], {
-            params: {},
-        });
-        return res.data;
+        if (room_id == 0) {
+            console.error('bad room_id', room_id);
+            return {code:999};
+        }
+
+        const res = (await this.sender.get<Response<Report>>(this.url_provider['GetReport'], {
+            params: {
+                type,
+                stop_time,
+                room_id,
+            },
+        })).data;
+
+        if (res.code === 0) {
+            if (res.data === undefined) {
+                (res as any).code = 10040;
+                res.data = 'nothing was return';
+                return res;
+            }
+            for (const d of res.data.items) {
+                d.start_time = new Date(Date.parse(d.start_time));
+                d.stop_time = new Date(Date.parse(d.stop_time));
+            }
+        }
+        return res;
     }
 
     async GetServerStatus(): Promise<Response<ServerStatus>> {
@@ -62,10 +83,11 @@ export class AdminServiceAxiosImpl implements AdminService {
                 stop_time,
             },
         });
-
-        for (const d of res.data.data) {
-            d.start_time = new Date(Date.parse(d.start_time));
-            d.stop_time = new Date(Date.parse(d.stop_time));
+        if (res.data.code === 0) {
+            for (const d of res.data.data) {
+                d.start_time = new Date(Date.parse(d.start_time));
+                d.stop_time = new Date(Date.parse(d.stop_time));
+            }
         }
         return res.data;
     }

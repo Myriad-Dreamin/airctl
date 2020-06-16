@@ -52,6 +52,7 @@ export interface I18nStaticVars {
             room_id: string;
             slave_connected: string;
             inspect_slave_tooltip: string;
+            report_slave_tooltip: string;
             master_state_title: string;
             server_open_label: string;
             server_available_label: string;

@@ -21,13 +21,13 @@ config.urlProvider = {
     GetServerStatus: MasterURL + '/v1/admin/status',
     SetCurrentTemperature: MasterURL + '/v1/admin/current-temp',
     SetMode: MasterURL + '/v1/admin/mode',
-    GetSlaveStatistics: MasterURL + '/v1/admin/slave/statistics',
+    GetSlaveStatistics: MasterURL + '/v2/admin/slave/statistics',
     GetRoomCount: MasterURL + '/v1/admin/slave/pool-list-count',
     MasterBootMaster: MasterURL + '/v1/admin/boot',
     MasterShutdownMaster: MasterURL + '/v1/admin/shutdown',
     SetMetricsDelay: MasterURL + '/v1/admin/metrics-delay',
     SetUpdateDelay: MasterURL + '/v1/admin/update-delay',
-    GetReport: MasterURL + '/v1/'
+    GetReport: MasterURL + '/v1/admin/report'
 };
 
 export default config;

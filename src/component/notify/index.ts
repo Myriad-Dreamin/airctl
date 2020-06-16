@@ -46,3 +46,7 @@ export function reportError(err: ErrorWithData) {
 
     return reportErrorS(`${err.name}: ${err.message}${err.data === undefined ? '' : ', ' + JSON.stringify(err.data)}`);
 }
+
+export function reportErrorC(code: number, error: any) {
+    return reportErrorS(`Code(${code}): ${JSON.stringify(error)}`);
+}
