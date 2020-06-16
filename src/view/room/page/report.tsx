@@ -51,7 +51,6 @@ export function RoomReport({ adminService }: DependencyContainer) {
         }
 
         useEffect(() => {
-
             let id: number;
             if (query.id !== undefined) {
                 id = Number.parseInt(query.id);
@@ -62,8 +61,7 @@ export function RoomReport({ adminService }: DependencyContainer) {
                         name: '不合法的参数',
                     });
                 }
-            }
-            else {
+            } else {
                 reportError({
                     code: 0,
                     message: '需要一个房间数据库序号(id)',
@@ -75,7 +73,7 @@ export function RoomReport({ adminService }: DependencyContainer) {
             setRoomID(id);
         }, [query.raw]);
 
-        const [totalData, setTotalData] = useState<Report|undefined>(undefined);
+        const [totalData, setTotalData] = useState<Report | undefined>(undefined);
         const [tableData, setTableData] = useState([]);
 
         useEffect(() => {
@@ -86,19 +84,17 @@ export function RoomReport({ adminService }: DependencyContainer) {
                 return;
             }
 
-            adminService
-                .GetReport(roomID, reportType, new Date(Date.now()))
-                .then((resp) => {
-                    const data = matchResponse(resp, data => data, reportErrorC);
-                    // setExportData(data);
-                    if (data === undefined) {
-                        setTotalData(undefined);
-                        setTableData([]);
-                        return;
-                    }
-                    setTotalData(data);
-                    setTableData(data.items);
-                });
+            adminService.GetReport(roomID, reportType, new Date(Date.now())).then((resp) => {
+                const data = matchResponse(resp, (data) => data, reportErrorC);
+                // setExportData(data);
+                if (data === undefined) {
+                    setTotalData(undefined);
+                    setTableData([]);
+                    return;
+                }
+                setTotalData(data);
+                setTableData(data.items);
+            });
         }, [roomID, reportType]);
 
         const [exportData] = useState<SlaveStatistics[] | undefined>(undefined);
@@ -126,29 +122,35 @@ export function RoomReport({ adminService }: DependencyContainer) {
             }
         }, [exportData]);
 
-        const onChange = useCallback((event) => {
-            let button = event.target;
-            if (button.tagName === 'SPAN') {
-                button = button.parentNode;
-            }
-            setReportType(button.value);
-        }, [reportType]);
+        const onChange = useCallback(
+            (event) => {
+                let button = event.target;
+                if (button.tagName === 'SPAN') {
+                    button = button.parentNode;
+                }
+                setReportType(button.value);
+            },
+            [reportType]
+        );
 
         return (
             <React.Fragment>
-                <ButtonGroup variant="text" color="primary"
-                             style={{margin: '0 auto', display: 'block', width: '140px'}}
-                             aria-label="text primary button group"
-                             onClick={onChange}>
-                    <Button value={"day"}>日报</Button>
-                    <Button value={"week"}>周报</Button>
-                    <Button value={"month"}>月报</Button>
+                <ButtonGroup
+                    variant="text"
+                    color="primary"
+                    style={{ margin: '0 auto', display: 'block', width: '140px' }}
+                    aria-label="text primary button group"
+                    onClick={onChange}
+                >
+                    <Button value={'day'}>日报</Button>
+                    <Button value={'week'}>周报</Button>
+                    <Button value={'month'}>月报</Button>
                 </ButtonGroup>
 
-
                 <div>
-                    <p style={{margin:"20px 0"}}>
-                        &nbsp;&nbsp;&nbsp;&nbsp;ID如果为0，说明是虚表数据；如果不为零说明该项数据来自经过压缩的数据库中冷数据存储。</p>
+                    <p style={{ margin: '20px 0' }}>
+                        &nbsp;&nbsp;&nbsp;&nbsp;ID如果为0，说明是虚表数据；如果不为零说明该项数据来自经过压缩的数据库中冷数据存储。
+                    </p>
                 </div>
                 <Paper className={classes.paper}>
                     <div className={classes.title}>
@@ -166,21 +168,21 @@ export function RoomReport({ adminService }: DependencyContainer) {
                             Export
                         </Button>
                     </div>
-                    {totalData && <table className={styles['form-item-table']}>
-                        <tbody>
-                        <tr>
-                            <td colSpan={1}>房间名称：{totalData?.room_id}</td>
-                            <td colSpan={1}>开关机次数：{totalData?.count}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan={1}>能量总消耗：{totalData?.total_energy.toFixed(2)}</td>
-                            <td colSpan={1}>花费总金额：{totalData?.total_cost.toFixed(2)}</td>
-                        </tr>
-                        </tbody>
-                    </table>}
+                    {totalData && (
+                        <table className={styles['form-item-table']}>
+                            <tbody>
+                                <tr>
+                                    <td colSpan={1}>房间名称：{totalData?.room_id}</td>
+                                    <td colSpan={1}>开关机次数：{totalData?.count}</td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={1}>能量总消耗：{totalData?.total_energy.toFixed(2)}</td>
+                                    <td colSpan={1}>花费总金额：{totalData?.total_cost.toFixed(2)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    )}
                     <MaterialTable
-
-
                         localization={i18n.statics.global.material_table_localization}
                         title={''}
                         columns={[
@@ -190,8 +192,8 @@ export function RoomReport({ adminService }: DependencyContainer) {
                             { title: '开始温度', field: 'start_temperature' },
                             { title: '停止温度', field: 'end_temperature' },
                             { title: '花费金额', field: 'cost' },
-                            { title: '能量消耗', field: 'energy' }
-                            ]}
+                            { title: '能量消耗', field: 'energy' },
+                        ]}
                         data={tableData}
                         options={{
                             sorting: true,

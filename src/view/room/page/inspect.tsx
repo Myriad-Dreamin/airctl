@@ -96,17 +96,15 @@ export function RoomInspect({ adminService }: DependencyContainer) {
         const [exportData, setExportData] = useState<SlaveStatistics[] | undefined>(undefined);
 
         const queryHandler = useCallback(() => {
-            return adminService
-                .GetSlaveStatistics(roomID, new Date(2000, 0), new Date(Date.now()))
-                .then((resp) => {
-                    const data = unwrap(resp);
-                    setExportData(data);
-                    return {
-                        data: data,
-                        page: 0,
-                        totalCount: data.length,
-                    };
-                });
+            return adminService.GetSlaveStatistics(roomID, new Date(2000, 0), new Date(Date.now())).then((resp) => {
+                const data = unwrap(resp);
+                setExportData(data);
+                return {
+                    data: data,
+                    page: 0,
+                    totalCount: data.length,
+                };
+            });
         }, [roomID]);
 
         const onExport = useCallback(() => {
@@ -186,7 +184,7 @@ export function RoomInspect({ adminService }: DependencyContainer) {
                                         </tr>
                                         <tr>
                                             <td colSpan={1}>
-                                                是否需要调度：{connection?.connected ? connection?.need_fan : '不可用'}
+                                                是否需要调度：{connection?.connected ? (connection?.need_fan ? '是' : '否') : '不可用'}
                                             </td>
                                             <td colSpan={1}>
                                                 正在调度风速：{connection?.connected ? connection?.fan_speed : '不可用'}

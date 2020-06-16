@@ -35,23 +35,21 @@ export class AdminServiceAxiosImpl implements AdminService {
         ).data;
     }
 
-    async GetReport(
-        room_id: number,
-        type: 'day' | 'week' | 'month',
-        stop_time: Date
-    ): Promise<Response<Report>> {
+    async GetReport(room_id: number, type: 'day' | 'week' | 'month', stop_time: Date): Promise<Response<Report>> {
         if (room_id == 0) {
             console.error('bad room_id', room_id);
-            return {code:999};
+            return { code: 999 };
         }
 
-        const res = (await this.sender.get<Response<Report>>(this.url_provider['GetReport'], {
-            params: {
-                type,
-                stop_time,
-                room_id,
-            },
-        })).data;
+        const res = (
+            await this.sender.get<Response<Report>>(this.url_provider['GetReport'], {
+                params: {
+                    type,
+                    stop_time,
+                    room_id,
+                },
+            })
+        ).data;
 
         if (res.code === 0) {
             if (res.data === undefined) {
